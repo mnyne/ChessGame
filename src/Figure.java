@@ -1,11 +1,15 @@
 import java.awt.Color;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.awt.Graphics;
 
 import acm.graphics.GObject;
 import acm.graphics.GRectangle;
 import acm.graphics.GImage;
 
-public class Figure extends GObject {
+public abstract class Figure extends GObject {
+	CoordinateHelper ch = new CoordinateHelper();
 	private String id;
 	private int figureType;
 	private int startX;
@@ -30,13 +34,19 @@ public class Figure extends GObject {
 		currentY = startY;
 		figureType = in_figureType;
 		color = convertColorStringToInteger(s_color);
-		id = generateID(color);
+		id = generateID();
 		sp = new Sprite(this.figureType, this.color);
 		sprite = sp.getSprite();
 	}
 
-	private String generateID(int in_color) {
-		String newid = in_color + "" + figureType + "" + startX;
+	public Figure(int in_figureType, int in_color) {
+		figureType = in_figureType;
+		color = in_color;
+		id = generateID();
+	}
+
+	private String generateID() {
+		String newid = color + "" + figureType + "" + startX;
 		return newid;
 	}
 
@@ -53,14 +63,6 @@ public class Figure extends GObject {
 		return convertX;
 	}
 
-	private Color convertIntegerToColor(int in_color) {
-		if (in_color == 1) {
-			return Color.BLACK;
-		} else {
-			return Color.WHITE;
-		}
-	}
-
 	public int convertColorStringToInteger(String s_color) {
 		int int_color;
 		if (s_color.equals("black")) {
@@ -71,43 +73,99 @@ public class Figure extends GObject {
 
 		return int_color;
 	}
-	
+
 	public GImage getSprite() {
 		return sprite;
 	}
-	
+
 	public double getGraphicX() {
 		double graphicX = currentX * 42;
 		return graphicX;
 	}
-	
+
 	public double getGraphicY() {
 		double graphicY = currentY * 42;
 		return graphicY;
 	}
-	
+
 	public int getXPosition() {
 		return currentX;
 	}
-	
+
 	public int getYPosition() {
 		return currentY;
 	}
-	
+
 	public void setNewPosition(int newx, int newy) {
 		currentX = newx;
 		currentY = newy;
 	}
-	
-	
+
 	public String toString() {
-		String ts = "id: " + id + ", figureType: " + figureType + ", currentX: " + currentX + ", currentY: " + currentY + ", SpriteID: " + sp.getSpriteID();
+		String ts = "id: " + id + ", figureType: " + figureType
+				+ ", currentX: " + currentX + ", currentY: " + currentY
+				+ ", SpriteID: " + sp.getSpriteID();
 		return ts;
 	}
-	
+
 	public String toShortString() {
 		String ts = figureType + "";
 		return ts;
 	}
+
+	public boolean hasMoved() {
+		String logFilePath = "chess_board_log.txt";
+
+		try (BufferedReader reader = new BufferedReader(new FileReader(
+				logFilePath))) {
+			String line;
+			while ((line = reader.readLine()) != null) {
+				if (line.contains("ID=" + id)) {
+					// Die ID wurde in der Log-Datei gefunden, was darauf
+					// hinweist, dass die Figur bewegt wurde
+					return true;
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		// Die ID wurde nicht gefunden, die Figur wurde also noch nicht bewegt
+		return false;
+	}
+
+	public int getFigureColor() {
+		return color;
+	}
+
+	public String getFigureID() {
+		return id;
+	}
+
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (obj == null || getClass() != obj.getClass()) {
+			return false;
+		}
+
+		Figure otherFigure = (Figure) obj;
+		// Vergleiche die relevanten Eigenschaften der Figuren
+		return this.getXPosition() == otherFigure.getXPosition()
+				&& this.getYPosition() == otherFigure.getYPosition();
+	}
+
+	public int getFigureType() {
+		return figureType;
+	}
 	
+	public abstract boolean isEligibleForShitMove();
+
+	public abstract boolean moveIsLegal(int potentialX, int potentialY,
+			int currentX, int currentY, int color, ChessBoard currentBoard);
+
+	public abstract Figure deepCopy();
+
 }
