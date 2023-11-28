@@ -1,5 +1,3 @@
-import java.awt.Image;
-
 import acm.graphics.GCompound;
 import acm.graphics.GImage;
 

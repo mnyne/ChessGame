@@ -1,6 +1,50 @@
-public class LogHelper {
-	public LogHelper() {
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 
+//update when LogArray is ready
+public class LogHelper {
+	CoordinateHelper coordinateHelper = new CoordinateHelper();
+	
+	public LogHelper() {
+		
+	}
+	
+	public String readLastLine(String filePath) {
+		try (BufferedReader reader = new BufferedReader(
+				new FileReader(filePath))) {
+			String currentLine;
+			String lastLine = null;
+
+			while ((currentLine = reader.readLine()) != null) {
+				lastLine = currentLine;
+			}
+
+			return lastLine;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public String readSecondToLastLine(String filePath) {
+		String lastLine = null;
+		String secondToLastLine = null;
+
+		try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+			String line;
+			while ((line = br.readLine()) != null) {
+				secondToLastLine = lastLine;
+				lastLine = line;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return secondToLastLine;
 	}
 
 	public String getFigureIDfromLog(String line) {
@@ -90,5 +134,35 @@ public class LogHelper {
 			newY = chara - 48;
 		}
 		return newY;
+	}
+	
+	public void logMove(Figure figure, int targetIndex) {
+		try (PrintWriter writer = new PrintWriter(new FileWriter("chess_board_log.txt", true))) {
+            int oldX = figure.getXPosition();
+            int oldY = figure.getYPosition();
+            String id = figure.getFigureID();
+            int type = figure.getFigureType();
+            int color = figure.getFigureColor();
+            int newX = coordinateHelper.convertIndextoX(targetIndex);
+            int newY = coordinateHelper.convertIndextoY(targetIndex);
+
+            // Schreibe die Informationen in die Textdatei
+            writer.println(String.format("Move: ID=%s, Type=%d, Color=%d, OldX=%d, OldY=%d, NewX=%d, NewY=%d",
+                    id, type, color, oldX, oldY, newX, newY));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+	}
+	
+	public void clearLogFile() {
+		try {
+			File file = new File("chess_board_log.txt");
+			if (file.exists()) {
+				file.delete();
+				file.createNewFile();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

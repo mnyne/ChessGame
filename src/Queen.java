@@ -10,8 +10,8 @@ public class Queen extends Figure {
 	public boolean moveIsLegal(int potentialX, int potentialY, int currentX,
 			int currentY, int color, ChessBoard currentBoard) {
 		boolean bool;
-		int xDiff = ch.getAdjustedDiff(potentialX, currentX);
-		int yDiff = ch.getAdjustedDiff(potentialY, currentY);
+		int xDiff = coordinateHelper.getAdjustedDiff(potentialX, currentX);
+		int yDiff = coordinateHelper.getAdjustedDiff(potentialY, currentY);
 		if (xDiff == 0 || yDiff == 0 || xDiff == yDiff) {
 			bool = true;
 		} else {
@@ -114,7 +114,7 @@ public class Queen extends Figure {
 		return copy;
 	}
 	
-	public boolean isEligibleForShitMove() {
+	public boolean isEligibleForEnPassant() {
 		return false;
 	}
 }

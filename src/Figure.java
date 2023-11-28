@@ -1,4 +1,3 @@
-import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -9,7 +8,8 @@ import acm.graphics.GRectangle;
 import acm.graphics.GImage;
 
 public abstract class Figure extends GObject {
-	CoordinateHelper ch = new CoordinateHelper();
+	CoordinateHelper coordinateHelper = new CoordinateHelper();
+	LogHelper logHelper = new LogHelper();
 	private String id;
 	private int figureType;
 	private int startX;
@@ -26,7 +26,8 @@ public abstract class Figure extends GObject {
 
 	public void paint(Graphics arg0) {
 	}
-
+// update to grab color, x and y as is instead of using strings to allow for easier copying
+// remove starting X from ID or find way to keep ID when trading in a pawn
 	public Figure(int in_figureType, String s_color, String startingPosition) {
 		startX = convertStringPositionToX(startingPosition);
 		startY = convertStringPositionToY(startingPosition);
@@ -38,7 +39,7 @@ public abstract class Figure extends GObject {
 		sp = new Sprite(this.figureType, this.color);
 		sprite = sp.getSprite();
 	}
-
+// update for each class to include x and y coords to enable logging for copy
 	public Figure(int in_figureType, int in_color) {
 		figureType = in_figureType;
 		color = in_color;
@@ -78,14 +79,12 @@ public abstract class Figure extends GObject {
 		return sprite;
 	}
 
-	public double getGraphicX() {
-		double graphicX = currentX * 42;
-		return graphicX;
+	public int getOpticalX() {
+		return coordinateHelper.convertCoordToOptical(currentX);
 	}
 
-	public double getGraphicY() {
-		double graphicY = currentY * 42;
-		return graphicY;
+	public int getOpticalY() {
+		return coordinateHelper.convertCoordToOptical(currentY);
 	}
 
 	public int getXPosition() {
@@ -114,6 +113,7 @@ public abstract class Figure extends GObject {
 	}
 
 	public boolean hasMoved() {
+		//update when LogArray is ready
 		String logFilePath = "chess_board_log.txt";
 
 		try (BufferedReader reader = new BufferedReader(new FileReader(
@@ -161,7 +161,7 @@ public abstract class Figure extends GObject {
 		return figureType;
 	}
 	
-	public abstract boolean isEligibleForShitMove();
+	public abstract boolean isEligibleForEnPassant();
 
 	public abstract boolean moveIsLegal(int potentialX, int potentialY,
 			int currentX, int currentY, int color, ChessBoard currentBoard);

@@ -1,7 +1,3 @@
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-
 public class ChessBoard {
 	CoordinateHelper ch = new CoordinateHelper();
 	private Figure[] figures;
@@ -52,25 +48,7 @@ public class ChessBoard {
 		figure.setNewPosition(targetX, targetY);
 	}
 
-	public void logMove(Figure figure, int targetIndex) {
-		try (PrintWriter writer = new PrintWriter(new FileWriter("chess_board_log.txt", true))) {
-            int oldX = figure.getXPosition();
-            int oldY = figure.getYPosition();
-            String id = figure.getFigureID();
-            int type = figure.getFigureType();
-            int color = figure.getFigureColor();
-            int newX = ch.convertIndextoX(targetIndex);
-            int newY = ch.convertIndextoY(targetIndex);
-
-            // Schreibe die Informationen in die Textdatei
-            writer.println(String.format("Move: ID=%s, Type=%d, Color=%d, OldX=%d, OldY=%d, NewX=%d, NewY=%d",
-                    id, type, color, oldX, oldY, newX, newY));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-	}
-
-	public void removeOldFigure(int xCache, int yCache) {
+	public void removeFigure(int xCache, int yCache) {
 		int oldindex = ch.convertXYtoIndex(xCache, yCache);
 		figures[oldindex] = null;
 	}

@@ -1,48 +1,40 @@
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 
-import acm.graphics.GImage;
 import acm.graphics.GRect;
 import acm.program.GraphicsProgram;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-
 public class ChessGame extends GraphicsProgram {
+	
+	private final int TILE_SIZE = 42;
+	private final int MOVE_INDICATOR_SIZE = TILE_SIZE/2-1;
+	private final int BOARD_LENGTH = 8;
+	private final int CANVAS_SIZE = 500;
+	private final int FIGURES_PER_PLAYER = 16;
 
-	ChessBoard chessBoard = new ChessBoard(64);
-	Movement movement;
+	MovementArray potentialMoves;
+	MovementHandler movementHandler = new MovementHandler();
+	CoordinateHelper coordinateHelper = new CoordinateHelper();
+	LogHelper logHelper = new LogHelper();
+	
+	ChessBoard chessBoard = new ChessBoard(BOARD_LENGTH * BOARD_LENGTH);
 	Figure selectedFigure;
+	int currentTurn = 0;
+	
 	GRect selectionIndicator;
 	boolean clicked = false;
 	int mouseX;
 	int mouseY;
-	int currentTurn = 0;
-	CoordinateHelper ch = new CoordinateHelper();
-	LogHelper lh = new LogHelper();
+
 
 	public void run() {
-		clearLogFile();
+		logHelper.clearLogFile();
 		drawGame();
 		addMouseListeners();
 	}
 
-	private void clearLogFile() {
-		try {
-			File file = new File("chess_board_log.txt");
-			if (file.exists()) {
-				file.delete();
-				file.createNewFile();
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
 	private void drawGame() {
-		setSize(500, 500);
+		setSize(CANVAS_SIZE, CANVAS_SIZE);
 		drawBackground();
 		initializeBoard();
 		drawFigures();
@@ -61,192 +53,28 @@ public class ChessGame extends GraphicsProgram {
 	private void runSecondClick() {
 		int xCache = selectedFigure.getXPosition();
 		int yCache = selectedFigure.getYPosition();
-		int targetIndex = ch.convertOpticalXYtoIndex(mouseX, mouseY);
-		if (movement.isIndexAllowed(targetIndex)) {
-			chessBoard.logMove(selectedFigure, targetIndex);
+		int targetIndex = coordinateHelper.convertOpticalXYtoIndex(mouseX, mouseY);
+		if (potentialMoves.isIndexAllowed(targetIndex)) {
+			logHelper.logMove(selectedFigure, targetIndex);
 			chessBoard.makeMove(selectedFigure,
-					ch.convertIndextoX(targetIndex),
-					ch.convertIndextoY(targetIndex));
-			chessBoard.removeOldFigure(xCache, yCache);
-			currentTurn = currentTurn + 1;
+					coordinateHelper.convertIndextoX(targetIndex),
+					coordinateHelper.convertIndextoY(targetIndex));
+			chessBoard.removeFigure(xCache, yCache);
+			currentTurn += 1;
 			// println("current turn ingame: " + currentTurn);
 		}
-		setCanvasForNextRound();
+		setCanvasForNextTurn();
 	}
 
-	private void setCanvasForNextRound() {
+	private void setCanvasForNextTurn() {
 		removeAll();
-		handleEnPassant();
-		handleCastling();
-		handlePawnAtBorder();
+		movementHandler.handleEnPassant(chessBoard);
+		movementHandler.handleCastling(chessBoard);
+		movementHandler.handlePawnAtBorder(chessBoard);
 		drawBackground();
 		drawFigures();
 		deselectObject();
 		clicked = false;
-	}
-
-	private void handlePawnAtBorder() {
-		String logFilePath = "chess_board_log.txt";
-		String lastLine = readLastLine(logFilePath);
-		int type = lh.getFigureTypefromLog(lastLine);
-		int color = lh.getColorfromLog(lastLine);
-		int newX = lh.getNewXfromLog(lastLine);
-		int newY = lh.getNewYfromLog(lastLine);
-		
-		if (type == 3 && color == 0 && newY == 0) {
-			Figure pawn = chessBoard.getFigureAt(newX, newY);
-			transformPawn(pawn);
-		}
-		if (type == 3 && color == 1 && newY == 7) {
-			Figure pawn = chessBoard.getFigureAt(newX, newY);
-			transformPawn(pawn);
-		}
-
-	}
-
-	private void transformPawn(Figure pawn) {
-		//code for selection maybe later, why would you want anything but a queen in 99% of cases...
-		int x = pawn.getXPosition();
-		int y = pawn.getYPosition();
-		int color = pawn.getFigureColor();
-		int index = ch.convertXYtoIndex(x, y);
-		chessBoard.removeOldFigure(x,y);
-		if (color == 0) {
-//			GImage whiteSelector = new GImage("graphics/selection_white.png");
-//			add(whiteSelector,80,80);
-//			switch(mouseInput) {
-//			case 0:
-//				chessBoard.addFigure(index, new Queen("white", ch.convertCoordsToNotationString(x,y)));
-//				break;
-//			case 1:
-//				chessBoard.addFigure(index, new Rook("white", ch.convertCoordsToNotationString(x,y)));
-//				break;
-//			case 2:
-//				chessBoard.addFigure(index, new Bishop("white", ch.convertCoordsToNotationString(x,y)));
-//				break;
-//			case 3:
-//				chessBoard.addFigure(index, new Knight("white", ch.convertCoordsToNotationString(x,y)));
-//				break;
-//			default:
-//				break;
-//			}
-			
-		chessBoard.addFigure(index, new Queen("white", ch.convertCoordsToNotationString(x,y)));
-		}
-		if (color == 1) {
-		chessBoard.addFigure(index, new Queen("black", ch.convertCoordsToNotationString(x,y)));
-		}
-	}
-
-	private void handleCastling() {
-		String logFilePath = "chess_board_log.txt";
-		String lastLine = readLastLine(logFilePath);
-		int type = lh.getFigureTypefromLog(lastLine);
-		int xMovement = lh.getXMovementfromLog(lastLine);
-		int Y = lh.getNewYfromLog(lastLine);
-		if (type == 1) {
-			if (xMovement == -2 && Y == 0) {
-				// topleft
-				selectedFigure = chessBoard.getFigureAt(0, 0);
-				int targetIndex = ch.convertXYtoIndex(3, 0);
-				chessBoard.logMove(selectedFigure, targetIndex);
-				chessBoard.makeMove(selectedFigure,
-						ch.convertIndextoX(targetIndex),
-						ch.convertIndextoY(targetIndex));
-				chessBoard.removeOldFigure(0, 0);
-			}
-			if (xMovement == 2 && Y == 0) {
-				// topright
-				selectedFigure = chessBoard.getFigureAt(7, 0);
-				int targetIndex = ch.convertXYtoIndex(5, 0);
-				chessBoard.logMove(selectedFigure, targetIndex);
-				chessBoard.makeMove(selectedFigure,
-						ch.convertIndextoX(targetIndex),
-						ch.convertIndextoY(targetIndex));
-				chessBoard.removeOldFigure(7, 0);
-			}
-			if (xMovement == -2 && Y == 7) {
-				// bottomleft
-				selectedFigure = chessBoard.getFigureAt(0, 7);
-				int targetIndex = ch.convertXYtoIndex(3, 7);
-				chessBoard.logMove(selectedFigure, targetIndex);
-				chessBoard.makeMove(selectedFigure,
-						ch.convertIndextoX(targetIndex),
-						ch.convertIndextoY(targetIndex));
-				chessBoard.removeOldFigure(0, 7);
-			}
-			if (xMovement == 2 && Y == 7) {
-				// bottomright
-				selectedFigure = chessBoard.getFigureAt(7, 7);
-				int targetIndex = ch.convertXYtoIndex(5, 7);
-				chessBoard.logMove(selectedFigure, targetIndex);
-				chessBoard.makeMove(selectedFigure,
-						ch.convertIndextoX(targetIndex),
-						ch.convertIndextoY(targetIndex));
-				chessBoard.removeOldFigure(7, 7);
-			}
-		}
-
-	}
-
-	private String readLastLine(String filePath) {
-		try (BufferedReader reader = new BufferedReader(
-				new FileReader(filePath))) {
-			String currentLine;
-			String lastLine = null;
-
-			while ((currentLine = reader.readLine()) != null) {
-				lastLine = currentLine;
-			}
-
-			return lastLine;
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	public String readSecondToLastLine(String filePath) {
-		String lastLine = null;
-		String secondToLastLine = null;
-
-		try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
-			String line;
-			while ((line = br.readLine()) != null) {
-				secondToLastLine = lastLine;
-				lastLine = line;
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		return secondToLastLine;
-
-	}
-
-	private void handleEnPassant() {
-		String logFilePath = "chess_board_log.txt";
-		String secondToLastLine = readSecondToLastLine(logFilePath);
-		String lastLine = readLastLine(logFilePath);
-		int type1 = lh.getFigureTypefromLog(secondToLastLine);
-		int type2 = lh.getFigureTypefromLog(lastLine);
-		int color1 = lh.getColorfromLog(secondToLastLine);
-		int color2 = lh.getColorfromLog(lastLine);
-		int yMovement1 = lh.getYMovementfromLog(secondToLastLine);
-		int newX1 = lh.getNewXfromLog(secondToLastLine);
-		int newX2 = lh.getNewXfromLog(lastLine);
-		int newY1 = lh.getNewYfromLog(secondToLastLine);
-		int newY2 = lh.getNewYfromLog(lastLine);
-		System.out.println(lastLine);
-		System.out.println(secondToLastLine);
-		if (type1 == 3 && type2 == 3 && color1 == 1 && color2 == 0
-				&& yMovement1 == 2 && newX1 == newX2 && newY2 == newY1 - 1) {
-			chessBoard.removeOldFigure(newX1, newY1);
-		}
-		if (type1 == 3 && type2 == 3 && color2 == 1 && color1 == 0
-				&& yMovement1 == -2 && newX1 == newX2 && newY2 == newY1 + 1) {
-			chessBoard.removeOldFigure(newX1, newY1);
-		}
 	}
 
 	private void deselectObject() {
@@ -263,18 +91,18 @@ public class ChessGame extends GraphicsProgram {
 	}
 
 	private void showLegalMoves() {
-		movement = new Movement(chessBoard, currentTurn);
-		for (int indexFirstPass = 0; indexFirstPass < 64; indexFirstPass++) {
-			movement.isLegal(indexFirstPass, selectedFigure);
-			if (movement.isIndexAllowed(indexFirstPass)) {
+		potentialMoves = new MovementArray(chessBoard, currentTurn);
+		for (int indexFirstPass = 0; indexFirstPass < chessBoard.getLength(); indexFirstPass++) {
+			potentialMoves.isLegal(indexFirstPass, selectedFigure);
+			if (potentialMoves.isIndexAllowed(indexFirstPass)) {
 				CheckIfKingIsInDanger(indexFirstPass);
 			}
-			if (movement.isIndexAllowed(indexFirstPass)) {
-				GRect validMoveIndicator = new GRect(20, 20);
+			if (potentialMoves.isIndexAllowed(indexFirstPass)) {
+				GRect validMoveIndicator = new GRect(MOVE_INDICATOR_SIZE, MOVE_INDICATOR_SIZE);
 				validMoveIndicator.setColor(Color.GREEN);
 				add(validMoveIndicator,
-						ch.convertIndextoOpticalX(indexFirstPass) + 11,
-						ch.convertIndextoOpticalY(indexFirstPass) + 11);
+						coordinateHelper.convertIndextoOpticalX(indexFirstPass) + ((TILE_SIZE - MOVE_INDICATOR_SIZE) / 2),
+						coordinateHelper.convertIndextoOpticalY(indexFirstPass) + ((TILE_SIZE - MOVE_INDICATOR_SIZE) / 2));
 			}
 		}
 	}
@@ -282,20 +110,20 @@ public class ChessGame extends GraphicsProgram {
 	private void CheckIfKingIsInDanger(int indexFirstPass) {
 		// temporarily make move
 		ChessBoard tempMove = chessBoard.deepCopy();
-		int selectedIndex = ch.convertXYtoIndex(selectedFigure.getXPosition(),
+		int selectedIndex = coordinateHelper.convertXYtoIndex(selectedFigure.getXPosition(),
 				selectedFigure.getYPosition());
 		Figure selectedFigureTemp = tempMove.getFigureAtIndex(selectedIndex);
 		int xCache = selectedFigureTemp.getXPosition();
 		int yCache = selectedFigureTemp.getYPosition();
-		if (movement.isIndexAllowed(indexFirstPass)) {
-			int newX = ch.convertIndextoX(indexFirstPass);
-			int newY = ch.convertIndextoY(indexFirstPass);
+		if (potentialMoves.isIndexAllowed(indexFirstPass)) {
+			int newX = coordinateHelper.convertIndextoX(indexFirstPass);
+			int newY = coordinateHelper.convertIndextoY(indexFirstPass);
 			tempMove.makeMove(selectedFigureTemp, newX, newY);
-			tempMove.removeOldFigure(xCache, yCache);
+			tempMove.removeFigure(xCache, yCache);
 		}
 
 		// find opponent figures in second pass
-		ChessBoard enemyFigures = new ChessBoard(16);
+		ChessBoard enemyFigures = new ChessBoard(FIGURES_PER_PLAYER);
 		int enemyIndex = 0;
 		for (int boardIndex = 0; boardIndex < tempMove.getLength(); boardIndex++) {
 			Figure tempSecondPass = tempMove.getFigureAtIndex(boardIndex);
@@ -307,11 +135,11 @@ public class ChessGame extends GraphicsProgram {
 		}
 
 		// check every opponent figures' possible moves in third pass
-		Movement kingCheck = new Movement(tempMove, currentTurn + 1);
+		MovementArray kingCheck = new MovementArray(tempMove, currentTurn + 1);
 		for (int i = 0; i < enemyIndex; i++) {
 			Figure tempThirdPass = enemyFigures.getFigureAtIndex(i);
 
-			for (int indexThirdPass = 0; indexThirdPass < 64; indexThirdPass++) {
+			for (int indexThirdPass = 0; indexThirdPass < chessBoard.getLength(); indexThirdPass++) {
 				int kingIndex = 0;
 				kingCheck.isLegal(indexThirdPass, tempThirdPass);
 				// get king index of current player (figuretype = 1, figureColor
@@ -327,12 +155,12 @@ public class ChessGame extends GraphicsProgram {
 				}
 
 				if (kingCheck.isIndexAllowed(kingIndex)) {
-					movement.setIndexToFalse(indexFirstPass);
-					GRect validMoveIndicator = new GRect(20, 20);
+					potentialMoves.setIndexToFalse(indexFirstPass);
+					GRect validMoveIndicator = new GRect(MOVE_INDICATOR_SIZE, MOVE_INDICATOR_SIZE);
 					validMoveIndicator.setColor(Color.RED);
 					add(validMoveIndicator,
-							ch.convertIndextoOpticalX(indexFirstPass) + 11,
-							ch.convertIndextoOpticalY(indexFirstPass) + 11);
+							coordinateHelper.convertIndextoOpticalX(indexFirstPass) + ((TILE_SIZE - MOVE_INDICATOR_SIZE) / 2),
+							coordinateHelper.convertIndextoOpticalY(indexFirstPass) + ((TILE_SIZE - MOVE_INDICATOR_SIZE) / 2));
 				}
 			}
 		}
@@ -340,23 +168,24 @@ public class ChessGame extends GraphicsProgram {
 
 	private void highlightSelection() {
 		selectedFigure = chessBoard.getClickedFigure(mouseX, mouseY);
-		selectionIndicator = new GRect(42, 42);
+		selectionIndicator = new GRect(TILE_SIZE, TILE_SIZE);
 		selectionIndicator.setColor(Color.BLUE);
-		add(selectionIndicator, selectedFigure.getGraphicX(),
-				selectedFigure.getGraphicY());
+		add(selectionIndicator, selectedFigure.getOpticalX(),
+				selectedFigure.getOpticalY());
 	}
 
 	private void drawFigures() {
 		for (int i = 0; i < chessBoard.getLength(); i++) {
 			if (chessBoard.getFigureAtIndex(i) != null) {
 				add(chessBoard.getFigureAtIndex(i).getSprite(), chessBoard
-						.getFigureAtIndex(i).getGraphicX(), chessBoard
-						.getFigureAtIndex(i).getGraphicY());
+						.getFigureAtIndex(i).getOpticalX(), chessBoard
+						.getFigureAtIndex(i).getOpticalY());
 			}
 		}
 	}
 
 	private void initializeBoard() {
+		// try to get index from XY coords, get rid of strings, maybe find way to read starting grid from a file or smth
 		chessBoard.addFigure(0, new Rook("black", "a8"));
 		chessBoard.addFigure(1, new Knight("black", "b8"));
 		chessBoard.addFigure(2, new Bishop("black", "c8"));
@@ -395,16 +224,16 @@ public class ChessGame extends GraphicsProgram {
 		GRect[][] background_board = generatedBoardTiles();
 		for (int x = 0; x < background_board.length; x++) {
 			for (int y = 0; y < background_board.length; y++) {
-				add(background_board[x][y], x * 42, y * 42);
+				add(background_board[x][y], x * TILE_SIZE, y * TILE_SIZE);
 			}
 		}
 	}
 
 	private GRect[][] generatedBoardTiles() {
-		GRect[][] tileArray = new GRect[8][8];
+		GRect[][] tileArray = new GRect[BOARD_LENGTH][BOARD_LENGTH];
 		for (int x = 0; x < tileArray.length; x++) {
 			for (int y = 0; y < tileArray.length; y++) {
-				tileArray[x][y] = new GRect(42, 42);
+				tileArray[x][y] = new GRect(TILE_SIZE, TILE_SIZE);
 				if (x % 2 == y % 2) {
 					tileArray[x][y].setColor(Color.GRAY);
 				} else {

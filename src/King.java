@@ -10,8 +10,8 @@ public class King extends Figure {
 	public boolean moveIsLegal(int potentialX, int potentialY, int currentX,
 			int currentY, int color, ChessBoard currentBoard) {
 		boolean bool;
-		int xDiff = ch.getAdjustedDiff(potentialX, currentX);
-		int yDiff = ch.getAdjustedDiff(potentialY, currentY);
+		int xDiff = coordinateHelper.getAdjustedDiff(potentialX, currentX);
+		int yDiff = coordinateHelper.getAdjustedDiff(potentialY, currentY);
 		if (xDiff == 1 || yDiff == 1) {
 			bool = true;
 		} else {
@@ -53,7 +53,7 @@ public class King extends Figure {
 		return bool;
 	}
 	
-	public boolean isEligibleForShitMove() {
+	public boolean isEligibleForEnPassant() {
 		return false;
 	}
 

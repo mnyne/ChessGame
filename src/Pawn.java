@@ -1,9 +1,5 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-
 public class Pawn extends Figure {
-	LogHelper lh = new LogHelper();
+
 	public Pawn(String s_color, String startingPosition) {
 		super(3, s_color, startingPosition);
 	}
@@ -17,8 +13,8 @@ public class Pawn extends Figure {
 	public boolean moveIsLegal(int potentialX, int potentialY, int currentX,
 			int currentY, int color, ChessBoard currentBoard) {
 		boolean bool = false;
-		int xDiff = ch.getAdjustedDiff(potentialX, currentX);
-		int yDiffRaw = ch.getRawDiff(potentialY, currentY);
+		int xDiff = coordinateHelper.getAdjustedDiff(potentialX, currentX);
+		int yDiffRaw = coordinateHelper.getRawDiff(potentialY, currentY);
 		//blackpawn
 		if (color == 1) {
 			if (xDiff == 0 && -yDiffRaw > 0 && -yDiffRaw < 2) {
@@ -26,29 +22,29 @@ public class Pawn extends Figure {
 			} else {
 				bool = false;
 			}
-			int index = ch.convertXYtoIndex(potentialX, potentialY);
+			int index = coordinateHelper.convertXYtoIndex(potentialX, potentialY);
 			if (currentY == 1 && xDiff == 0 && -yDiffRaw > 0 && -yDiffRaw == 2 && currentBoard.getFigureAtIndex(index) == null) {
 				bool = true;
 			}
 			if (potentialY == currentY + 1) {
-				index = ch.convertXYtoIndex(potentialX, potentialY);
+				index = coordinateHelper.convertXYtoIndex(potentialX, potentialY);
 				if (currentBoard.getFigureAtIndex(index) != null) {
 					bool = false;
 				}
 			}
 			if (potentialY == currentY + 2 && currentY == 1) {
-				index = ch.convertXYtoIndex(potentialX, potentialY-1);
+				index = coordinateHelper.convertXYtoIndex(potentialX, potentialY-1);
 				if (currentBoard.getFigureAtIndex(index) != null) {
 					bool = false;
 				}
 			}
 			if (potentialY == currentY + 1) {
 				if (potentialX == currentX - 1 || potentialX == currentX + 1) {
-					index = ch.convertXYtoIndex(potentialX, potentialY);
+					index = coordinateHelper.convertXYtoIndex(potentialX, potentialY);
 					if (currentBoard.getFigureAtIndex(index) != null) {
 						bool = true;
 					}
-					if(currentBoard.getFigureAt(potentialX, potentialY-1) != null && currentBoard.getFigureAt(potentialX, potentialY-1).isEligibleForShitMove()) {
+					if(currentBoard.getFigureAt(potentialX, potentialY-1) != null && currentBoard.getFigureAt(potentialX, potentialY-1).isEligibleForEnPassant()) {
 						bool = true;
 					}
 				}
@@ -61,29 +57,29 @@ public class Pawn extends Figure {
 			} else {
 				bool = false;
 			}
-			int index = ch.convertXYtoIndex(potentialX, potentialY);
+			int index = coordinateHelper.convertXYtoIndex(potentialX, potentialY);
 			if (currentY == 6 && xDiff == 0 && -yDiffRaw < 0 && -yDiffRaw == -2 && currentBoard.getFigureAtIndex(index) == null) {
 				bool = true;
 			}
 			if (potentialY == currentY - 1) {
-				index = ch.convertXYtoIndex(potentialX, potentialY);
+				index = coordinateHelper.convertXYtoIndex(potentialX, potentialY);
 				if (currentBoard.getFigureAtIndex(index) != null) {
 					bool = false;
 				}
 			}
 			if (potentialY == currentY - 2 && currentY == 6) {
-				index = ch.convertXYtoIndex(potentialX, potentialY+1);
+				index = coordinateHelper.convertXYtoIndex(potentialX, potentialY+1);
 				if (currentBoard.getFigureAtIndex(index) != null) {
 					bool = false;
 				}
 			}
 			if (potentialY == currentY - 1) {
 				if (potentialX == currentX - 1 || potentialX == currentX + 1) {
-					index = ch.convertXYtoIndex(potentialX, potentialY);
+					index = coordinateHelper.convertXYtoIndex(potentialX, potentialY);
 					if (currentBoard.getFigureAtIndex(index) != null) {
 						bool = true;
 					}
-					if(currentBoard.getFigureAt(potentialX, potentialY+1) != null && currentBoard.getFigureAt(potentialX, potentialY+1).isEligibleForShitMove()) {
+					if(currentBoard.getFigureAt(potentialX, potentialY+1) != null && currentBoard.getFigureAt(potentialX, potentialY+1).isEligibleForEnPassant()) {
 						bool = true;
 					}
 				}
@@ -98,12 +94,13 @@ public class Pawn extends Figure {
 		return copy;
 	}
 	
-	public boolean isEligibleForShitMove() {
+	public boolean isEligibleForEnPassant() {
+		//update when logArray is done
 		boolean bool = false;
 		String logFilePath = "chess_board_log.txt";
-        String lastLine = readLastLine(logFilePath);
-        String logID = lh.getFigureIDfromLog(lastLine);
-        int yMovement = lh.getYMovementfromLog(lastLine);
+        String lastLine = logHelper.readLastLine(logFilePath);
+        String logID = logHelper.getFigureIDfromLog(lastLine);
+        int yMovement = logHelper.getYMovementfromLog(lastLine);
         if(logID.equals(this.getFigureID())) {
         	if(yMovement == 2 || yMovement == -2) {
         		bool = true;
@@ -113,19 +110,4 @@ public class Pawn extends Figure {
 		return bool;
 	}
 	
-	 private String readLastLine(String filePath) {
-	        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-	            String currentLine;
-	            String lastLine = null;
-
-	            while ((currentLine = reader.readLine()) != null) {
-	                lastLine = currentLine;
-	            }
-
-	            return lastLine;
-	        } catch (IOException e) {
-	            e.printStackTrace();
-	            return null;
-	        }
-	    }
 }

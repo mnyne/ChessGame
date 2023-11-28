@@ -10,8 +10,8 @@ public class Bishop extends Figure {
 	public boolean moveIsLegal(int potentialX, int potentialY, int currentX,
 			int currentY, int color, ChessBoard currentBoard) {
 		boolean bool = false;
-		int xDiff = ch.getAdjustedDiff(potentialX, currentX);
-		int yDiff = ch.getAdjustedDiff(potentialY, currentY);
+		int xDiff = coordinateHelper.getAdjustedDiff(potentialX, currentX);
+		int yDiff = coordinateHelper.getAdjustedDiff(potentialY, currentY);
 		if (xDiff == 0 || yDiff == 0 || xDiff == yDiff) {
 			if (xDiff == yDiff) {
 				bool = true;
@@ -67,7 +67,7 @@ public class Bishop extends Figure {
 
 	}
 	
-	public boolean isEligibleForShitMove() {
+	public boolean isEligibleForEnPassant() {
 		return false;
 	}
 
