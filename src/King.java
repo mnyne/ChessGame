@@ -7,8 +7,11 @@ public class King extends Figure {
 		super(1, color);
 	}
 
-	public boolean moveIsLegal(int potentialX, int potentialY, int currentX,
-			int currentY, int color, ChessBoard currentBoard) {
+	public boolean moveIsLegal(ChessBoard currentBoard, Figure selectedFigure, int targetIndex) {
+		int potentialX = coordinateHelper.convertIndextoX(targetIndex);
+		int potentialY = coordinateHelper.convertIndextoY(targetIndex);
+		int currentX = selectedFigure.getXPosition();
+		int currentY = selectedFigure.getYPosition();
 		boolean bool;
 		int xDiff = coordinateHelper.getAdjustedDiff(potentialX, currentX);
 		int yDiff = coordinateHelper.getAdjustedDiff(potentialY, currentY);

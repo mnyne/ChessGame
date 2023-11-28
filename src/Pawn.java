@@ -10,8 +10,12 @@ public class Pawn extends Figure {
 	
 	boolean doubleMove = false;
 
-	public boolean moveIsLegal(int potentialX, int potentialY, int currentX,
-			int currentY, int color, ChessBoard currentBoard) {
+	public boolean moveIsLegal(ChessBoard currentBoard, Figure selectedFigure, int targetIndex) {
+		int potentialX = coordinateHelper.convertIndextoX(targetIndex);
+		int potentialY = coordinateHelper.convertIndextoY(targetIndex);
+		int currentX = selectedFigure.getXPosition();
+		int currentY = selectedFigure.getYPosition();
+		int color = selectedFigure.getFigureColor();
 		boolean bool = false;
 		int xDiff = coordinateHelper.getAdjustedDiff(potentialX, currentX);
 		int yDiffRaw = coordinateHelper.getRawDiff(potentialY, currentY);

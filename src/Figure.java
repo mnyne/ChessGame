@@ -163,8 +163,7 @@ public abstract class Figure extends GObject {
 	
 	public abstract boolean isEligibleForEnPassant();
 
-	public abstract boolean moveIsLegal(int potentialX, int potentialY,
-			int currentX, int currentY, int color, ChessBoard currentBoard);
+	public abstract boolean moveIsLegal(ChessBoard currentBoard, Figure selectedFigure, int targetIndex);
 
 	public abstract Figure deepCopy();
 

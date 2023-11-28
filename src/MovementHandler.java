@@ -6,30 +6,69 @@ public class MovementHandler {
 	public MovementHandler() {
 
 	}
-
-	public boolean moveIsLegal(ChessBoard currentBoard, Figure selectedFigure,
-			int targetIndex, int currentTurn) {
-		boolean moveIsLegal = true;
-		// MovementArray trueArray
-		// MovementArray playerTurnArray
-		// MovementArray figureColorArray
-		// MovementArray figureMovementArray
-		// MovementArray kinginCheckArray
-		// overwrite trueArray
-
-		return moveIsLegal;
+	
+	public MovementArray legalMoveArray(ChessBoard currentBoard, Figure selectedFigure, int currentTurn) {
+		MovementArray legalMoveArray = possibleMoveArray(currentBoard, selectedFigure, currentTurn);
+		MovementArray kingInCheckArray = kingInCheckArray(currentBoard, selectedFigure, currentTurn);
+		for (int arrayIndex = 0; arrayIndex < legalMoveArray.getLength(); arrayIndex++) {
+			if(!kingInCheckArray.moveAtIndexAllowed(arrayIndex)) {
+				legalMoveArray.setIndexToFalse(arrayIndex);
+			}
+		}
+	return legalMoveArray;
+	}
+	
+	public MovementArray kingInCheckArray(ChessBoard currentBoard, Figure selectedFigure, int currentTurn) {
+		
+		MoveSimulator moveSimulator = new MoveSimulator(currentBoard.deepCopy(), selectedFigure, currentTurn);
+		MovementArray possibleMoveArray = possibleMoveArray(currentBoard, selectedFigure, currentTurn);
+		MovementArray kingInCheckArray = emptyTrueArray();
+		
+		for (int arrayIndex = 0; arrayIndex < kingInCheckArray.getLength(); arrayIndex++) {
+			if(possibleMoveArray.moveAtIndexAllowed(arrayIndex)) {
+				moveSimulator.simulateMove(arrayIndex);
+				if (moveSimulator.possiblePlayerMoves().moveAtIndexAllowed(moveSimulator.getSimulatedKingIndex())) {
+					kingInCheckArray.setIndexToFalse(arrayIndex);
+				}
+			}
+		}
+		
+		return kingInCheckArray;
 	}
 
-	public MovementArray trueArray() {
-		MovementArray trueArray = new MovementArray();
-		for (int arrayIndex = 0; arrayIndex < trueArray.getLength(); arrayIndex++) {
-			trueArray.setIndexToTrue(arrayIndex);
+	public MovementArray possibleMoveArray(ChessBoard currentBoard, Figure selectedFigure, int currentTurn) {
+		
+		MovementArray playerTurnArray = playerTurnArray(selectedFigure, currentTurn);
+		MovementArray figureColorArray = figureColorArray(currentBoard, selectedFigure);
+		MovementArray figureMovementArray = figureMovementArray(currentBoard, selectedFigure);
+		MovementArray possibleMoveArray = emptyTrueArray();
+		
+		for (int arrayIndex = 0; arrayIndex < possibleMoveArray.getLength(); arrayIndex++) {
+			if(!playerTurnArray.moveAtIndexAllowed(arrayIndex) || !figureColorArray.moveAtIndexAllowed(arrayIndex) || !figureMovementArray.moveAtIndexAllowed(arrayIndex)) {
+				possibleMoveArray.setIndexToFalse(arrayIndex);
+			}
 		}
-		return trueArray;
+		return possibleMoveArray;
+	}
+	
+	public MovementArray emptyFalseArray() {
+		MovementArray emptyFalseArray = new MovementArray();
+		for (int arrayIndex = 0; arrayIndex < emptyFalseArray.getLength(); arrayIndex++) {
+			emptyFalseArray.setIndexToFalse(arrayIndex);
+		}
+		return emptyFalseArray;
+	}
+
+	public MovementArray emptyTrueArray() {
+		MovementArray emptyTrueArray = new MovementArray();
+		for (int arrayIndex = 0; arrayIndex < emptyTrueArray.getLength(); arrayIndex++) {
+			emptyTrueArray.setIndexToTrue(arrayIndex);
+		}
+		return emptyTrueArray;
 	}
 
 	public MovementArray playerTurnArray(Figure selectedFigure, int currentTurn) {
-		MovementArray playerTurnArray = new MovementArray();
+		MovementArray playerTurnArray = emptyTrueArray();
 		for (int arrayIndex = 0; arrayIndex < playerTurnArray.getLength(); arrayIndex++) {
 			if (currentTurn % 2 != selectedFigure.getFigureColor()) {
 				playerTurnArray.setIndexToFalse(arrayIndex);
@@ -40,29 +79,30 @@ public class MovementHandler {
 
 	public MovementArray figureColorArray(ChessBoard currentBoard,
 			Figure selectedFigure) {
-		MovementArray figureColorArray = new MovementArray();
+		MovementArray figureColorArray = emptyTrueArray();
 		for (int arrayIndex = 0; arrayIndex < figureColorArray.getLength(); arrayIndex++) {
 			if (currentBoard.getFigureAtIndex(arrayIndex) != null
-					&& currentBoard.getFigureAtIndex(arrayIndex).getFigureColor() != selectedFigure
+					&& currentBoard.getFigureAtIndex(arrayIndex)
+							.getFigureColor() == selectedFigure
 							.getFigureColor()) {
 				figureColorArray.setIndexToFalse(arrayIndex);
 			}
 		}
 		return figureColorArray;
 	}
-	
-	public MovementArray figureMovementArray(ChessBoard currentBoard, Figure selectedFigure) {
-		MovementArray figureMovementArray = new MovementArray();
+
+	public MovementArray figureMovementArray(ChessBoard currentBoard,
+			Figure selectedFigure) {
+		MovementArray figureMovementArray = emptyTrueArray();
 		for (int arrayIndex = 0; arrayIndex < figureMovementArray.getLength(); arrayIndex++) {
-			//continue from here
+			if (!selectedFigure.moveIsLegal(currentBoard, selectedFigure,
+					arrayIndex)) {
+				figureMovementArray.setIndexToFalse(arrayIndex);
+			}
 		}
-		
 		return figureMovementArray;
 	}
-	
-	
-	
-	
+
 	// update when LogArray is done
 	public void handleEnPassant(ChessBoard currentBoard) {
 		String logFilePath = "chess_board_log.txt";
@@ -100,7 +140,7 @@ public class MovementHandler {
 				selectedFigure = currentBoard.getFigureAt(0, 0);
 				int targetIndex = coordinateHelper.convertXYtoIndex(3, 0);
 				logHelper.logMove(selectedFigure, targetIndex);
-				currentBoard.makeMove(selectedFigure,
+				currentBoard.moveFigure(selectedFigure,
 						coordinateHelper.convertIndextoX(targetIndex),
 						coordinateHelper.convertIndextoY(targetIndex));
 				currentBoard.removeFigure(0, 0);
@@ -110,7 +150,7 @@ public class MovementHandler {
 				selectedFigure = currentBoard.getFigureAt(7, 0);
 				int targetIndex = coordinateHelper.convertXYtoIndex(5, 0);
 				logHelper.logMove(selectedFigure, targetIndex);
-				currentBoard.makeMove(selectedFigure,
+				currentBoard.moveFigure(selectedFigure,
 						coordinateHelper.convertIndextoX(targetIndex),
 						coordinateHelper.convertIndextoY(targetIndex));
 				currentBoard.removeFigure(7, 0);
@@ -120,7 +160,7 @@ public class MovementHandler {
 				selectedFigure = currentBoard.getFigureAt(0, 7);
 				int targetIndex = coordinateHelper.convertXYtoIndex(3, 7);
 				logHelper.logMove(selectedFigure, targetIndex);
-				currentBoard.makeMove(selectedFigure,
+				currentBoard.moveFigure(selectedFigure,
 						coordinateHelper.convertIndextoX(targetIndex),
 						coordinateHelper.convertIndextoY(targetIndex));
 				currentBoard.removeFigure(0, 7);
@@ -130,7 +170,7 @@ public class MovementHandler {
 				selectedFigure = currentBoard.getFigureAt(7, 7);
 				int targetIndex = coordinateHelper.convertXYtoIndex(5, 7);
 				logHelper.logMove(selectedFigure, targetIndex);
-				currentBoard.makeMove(selectedFigure,
+				currentBoard.moveFigure(selectedFigure,
 						coordinateHelper.convertIndextoX(targetIndex),
 						coordinateHelper.convertIndextoY(targetIndex));
 				currentBoard.removeFigure(7, 7);

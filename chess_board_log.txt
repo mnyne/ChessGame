@@ -1,2 +1,12 @@
-Move: ID=036, Type=3, Color=0, OldX=6, OldY=6, NewX=6, NewY=4
-Move: ID=135, Type=3, Color=1, OldX=5, OldY=1, NewX=5, NewY=3
+Move: ID=035, Type=3, Color=0, OldX=5, OldY=6, NewX=5, NewY=4
+Move: ID=134, Type=3, Color=1, OldX=4, OldY=1, NewX=4, NewY=3
+Move: ID=035, Type=3, Color=0, OldX=5, OldY=4, NewX=4, NewY=3
+Move: ID=114, Type=1, Color=1, OldX=4, OldY=0, NewX=4, NewY=1
+Move: ID=035, Type=3, Color=0, OldX=4, OldY=3, NewX=4, NewY=2
+Move: ID=114, Type=1, Color=1, OldX=4, OldY=1, NewX=4, NewY=2
+Move: ID=032, Type=3, Color=0, OldX=2, OldY=6, NewX=2, NewY=5
+Move: ID=132, Type=3, Color=1, OldX=2, OldY=1, NewX=2, NewY=2
+Move: ID=043, Type=4, Color=0, OldX=3, OldY=7, NewX=1, NewY=5
+Move: ID=114, Type=1, Color=1, OldX=4, OldY=2, NewX=3, NewY=2
+Move: ID=043, Type=4, Color=0, OldX=1, OldY=5, NewX=3, NewY=3
+Move: ID=114, Type=1, Color=1, OldX=3, OldY=2, NewX=3, NewY=3
