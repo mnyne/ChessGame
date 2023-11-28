@@ -1,3 +1,2 @@
-Move: ID=035, Type=3, Color=0, OldX=5, OldY=6, NewX=5, NewY=4
-Move: ID=134, Type=3, Color=1, OldX=4, OldY=1, NewX=4, NewY=3
-Move: ID=035, Type=3, Color=0, OldX=5, OldY=4, NewX=4, NewY=3
+Move: ID=036, Type=3, Color=0, OldX=6, OldY=6, NewX=6, NewY=4
+Move: ID=135, Type=3, Color=1, OldX=5, OldY=1, NewX=5, NewY=3

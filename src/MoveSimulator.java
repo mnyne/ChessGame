@@ -1,3 +1,5 @@
+//for later; get your movement code into MovementHandler first
+
 public class MoveSimulator {
 
 	CoordinateHelper coordinateHelper = new CoordinateHelper();

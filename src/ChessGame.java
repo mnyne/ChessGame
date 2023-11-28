@@ -54,7 +54,11 @@ public class ChessGame extends GraphicsProgram {
 		int xCache = selectedFigure.getXPosition();
 		int yCache = selectedFigure.getYPosition();
 		int targetIndex = coordinateHelper.convertOpticalXYtoIndex(mouseX, mouseY);
-		if (potentialMoves.isIndexAllowed(targetIndex)) {
+		//if (movementHandler.moveIsLegal() {;
+		//movementHandler.makeMove()
+		//currentTurn += 1;
+		//}
+		if (potentialMoves.moveToIndexAllowed(targetIndex)) {
 			logHelper.logMove(selectedFigure, targetIndex);
 			chessBoard.makeMove(selectedFigure,
 					coordinateHelper.convertIndextoX(targetIndex),
@@ -94,10 +98,10 @@ public class ChessGame extends GraphicsProgram {
 		potentialMoves = new MovementArray(chessBoard, currentTurn);
 		for (int indexFirstPass = 0; indexFirstPass < chessBoard.getLength(); indexFirstPass++) {
 			potentialMoves.isLegal(indexFirstPass, selectedFigure);
-			if (potentialMoves.isIndexAllowed(indexFirstPass)) {
+			if (potentialMoves.moveToIndexAllowed(indexFirstPass)) {
 				CheckIfKingIsInDanger(indexFirstPass);
 			}
-			if (potentialMoves.isIndexAllowed(indexFirstPass)) {
+			if (potentialMoves.moveToIndexAllowed(indexFirstPass)) {
 				GRect validMoveIndicator = new GRect(MOVE_INDICATOR_SIZE, MOVE_INDICATOR_SIZE);
 				validMoveIndicator.setColor(Color.GREEN);
 				add(validMoveIndicator,
@@ -108,6 +112,7 @@ public class ChessGame extends GraphicsProgram {
 	}
 
 	private void CheckIfKingIsInDanger(int indexFirstPass) {
+		//move to MoveSimulator
 		// temporarily make move
 		ChessBoard tempMove = chessBoard.deepCopy();
 		int selectedIndex = coordinateHelper.convertXYtoIndex(selectedFigure.getXPosition(),
@@ -115,7 +120,7 @@ public class ChessGame extends GraphicsProgram {
 		Figure selectedFigureTemp = tempMove.getFigureAtIndex(selectedIndex);
 		int xCache = selectedFigureTemp.getXPosition();
 		int yCache = selectedFigureTemp.getYPosition();
-		if (potentialMoves.isIndexAllowed(indexFirstPass)) {
+		if (potentialMoves.moveToIndexAllowed(indexFirstPass)) {
 			int newX = coordinateHelper.convertIndextoX(indexFirstPass);
 			int newY = coordinateHelper.convertIndextoY(indexFirstPass);
 			tempMove.makeMove(selectedFigureTemp, newX, newY);
@@ -154,7 +159,7 @@ public class ChessGame extends GraphicsProgram {
 					}
 				}
 
-				if (kingCheck.isIndexAllowed(kingIndex)) {
+				if (kingCheck.moveToIndexAllowed(kingIndex)) {
 					potentialMoves.setIndexToFalse(indexFirstPass);
 					GRect validMoveIndicator = new GRect(MOVE_INDICATOR_SIZE, MOVE_INDICATOR_SIZE);
 					validMoveIndicator.setColor(Color.RED);

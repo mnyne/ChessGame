@@ -1,30 +1,36 @@
 public class MovementArray {
-	private boolean[] moveAllowed;
+	private final int BOARD_LENGTH = 8;
+	private boolean[] moveAtIndexAllowed;
 	int figureIndex;
 	int turn;
 	Figure currentFigure;
 	ChessBoard currentBoard;
-	CoordinateHelper ch = new CoordinateHelper();
-	LogHelper lh = new LogHelper();
+	CoordinateHelper coordinateHelper = new CoordinateHelper();
+	LogHelper logHelper = new LogHelper();
 
 	public MovementArray(ChessBoard in_currentBoard, int in_turn) {
 		currentBoard = in_currentBoard;
-		moveAllowed = new boolean[64];
+		moveAtIndexAllowed = new boolean[BOARD_LENGTH * BOARD_LENGTH];
 		turn = in_turn;
 	}
-
+	
+	public MovementArray() {
+		moveAtIndexAllowed = new boolean[BOARD_LENGTH * BOARD_LENGTH];
+	}
+	//move to MovementHandler
 	public void isLegal(int index, Figure figure) {
 		currentFigure = figure;
-		moveAllowed[index] = isAllowed(index);
+		moveAtIndexAllowed[index] = isAllowed(index);
 	}
-
+	//move to MovementHandler
+	//rewrite as separate bool arrays
 	public boolean isAllowed(int index) {
 		Figure indexfigure = currentBoard.getFigureAtIndex(index);
 		boolean allowed = true;
 		if (wrongTurn(index)) {
 			allowed = false;
 		}
-		if (isSame(index, indexfigure)) {
+		if (isSameFigure(index, indexfigure)) {
 			allowed = false;
 		}
 		if (isSameColor(index, indexfigure)) {
@@ -35,7 +41,8 @@ public class MovementArray {
 		}
 		return allowed;
 	}
-
+	//move to MovementHandler
+	//rewrite as playerTurnArray
 	private boolean wrongTurn(int index) {
 		boolean bool = false;
 		if(turn % 2 != currentFigure.getFigureColor()) {
@@ -43,11 +50,12 @@ public class MovementArray {
 		}
 		return bool;
 	}
-
+	//move to MovementHandler
+	//rewrite as figureMovementArray
 	private boolean isInMovement(int index) {
 		boolean bool = true;
-		int potentialX = ch.convertIndextoX(index);
-		int potentialY = ch.convertIndextoY(index);
+		int potentialX = coordinateHelper.convertIndextoX(index);
+		int potentialY = coordinateHelper.convertIndextoY(index);
 		int currentX = currentFigure.getXPosition();
 		int currentY = currentFigure.getYPosition();
 		int color = currentFigure.getFigureColor();
@@ -55,7 +63,8 @@ public class MovementArray {
 		bool = currentFigure.moveIsLegal(potentialX, potentialY, currentX, currentY, color, currentBoard);
 		return bool;
 	}
-
+	//move to MovementHandler
+	//rewrite as figureColorArray
 	private boolean isSameColor(int index, Figure indexfigure) {
 		boolean bool = false;
 		if (indexfigure != null
@@ -65,8 +74,8 @@ public class MovementArray {
 		}
 		return bool;
 	}
-
-	public boolean isSame(int index, Figure indexfigure) {
+	//unnecessary, checks for color anyway
+	public boolean isSameFigure(int index, Figure indexfigure) {
 		boolean bool = false;
 		if (currentFigure.equals(indexfigure)) {
 			bool = true;
@@ -74,11 +83,18 @@ public class MovementArray {
 		return bool;
 	}
 
-	public boolean isIndexAllowed(int index) {
-		return moveAllowed[index];
+	public boolean moveToIndexAllowed(int index) {
+		return moveAtIndexAllowed[index];
+	}
+	
+	public void setIndexToTrue(int index) {
+		moveAtIndexAllowed[index] = false;
 	}
 
 	public void setIndexToFalse(int index) {
-		moveAllowed[index] = false;
+		moveAtIndexAllowed[index] = false;
+	}
+	public int getLength() {
+		return moveAtIndexAllowed.length;
 	}
 }
