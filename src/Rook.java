@@ -70,10 +70,10 @@ public class Rook extends Figure {
 	public Figure deepCopy() {
 		Rook copy = new Rook(this.getFigureColor());
 		copy.setNewPosition(this.getXPosition(), this.getYPosition());
+		copy.updateMovedStatus(this.hasMovedStatus());
 		return copy;
 	}
 	
-	public boolean isEligibleForEnPassant() {
-		return false;
+	public void updateEnPassantEligibility(GameLog gameLog) {
 	}
 }

@@ -9,7 +9,6 @@ import acm.graphics.GImage;
 
 public abstract class Figure extends GObject {
 	CoordinateHelper coordinateHelper = new CoordinateHelper();
-	LogHelper logHelper = new LogHelper();
 	private String id;
 	private int figureType;
 	private int startX;
@@ -19,6 +18,8 @@ public abstract class Figure extends GObject {
 	private int color;
 	private GImage sprite;
 	private Sprite sp;
+	private boolean hasMoved = false;
+	private boolean enPassantable = false;
 
 	public GRectangle getBounds() {
 		return new GRectangle(this.getX(), this.getY(), 42, 42);
@@ -111,29 +112,7 @@ public abstract class Figure extends GObject {
 		String ts = figureType + "";
 		return ts;
 	}
-
-	public boolean hasMoved() {
-		//update when LogArray is ready
-		String logFilePath = "chess_board_log.txt";
-
-		try (BufferedReader reader = new BufferedReader(new FileReader(
-				logFilePath))) {
-			String line;
-			while ((line = reader.readLine()) != null) {
-				if (line.contains("ID=" + id)) {
-					// Die ID wurde in der Log-Datei gefunden, was darauf
-					// hinweist, dass die Figur bewegt wurde
-					return true;
-				}
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		// Die ID wurde nicht gefunden, die Figur wurde also noch nicht bewegt
-		return false;
-	}
-
+ 
 	public int getFigureColor() {
 		return color;
 	}
@@ -152,7 +131,6 @@ public abstract class Figure extends GObject {
 		}
 
 		Figure otherFigure = (Figure) obj;
-		// Vergleiche die relevanten Eigenschaften der Figuren
 		return this.getXPosition() == otherFigure.getXPosition()
 				&& this.getYPosition() == otherFigure.getYPosition();
 	}
@@ -161,7 +139,23 @@ public abstract class Figure extends GObject {
 		return figureType;
 	}
 	
-	public abstract boolean isEligibleForEnPassant();
+	public void updateMovedStatus(boolean hasMoved) {
+		this.hasMoved = hasMoved;
+	}
+	
+	public boolean hasMovedStatus() {
+		return this.hasMoved;
+	}
+	
+	public void setEnPassantStatus(boolean enPassantable) {
+		this.enPassantable = enPassantable;
+	}
+	
+	public boolean getEnPassantStatus() {
+		return enPassantable;
+	}
+	
+	public abstract void updateEnPassantEligibility(GameLog gameLog);
 
 	public abstract boolean moveIsLegal(ChessBoard currentBoard, Figure selectedFigure, int targetIndex);
 

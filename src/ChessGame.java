@@ -11,7 +11,6 @@ public class ChessGame extends GraphicsProgram {
 	private final int MOVE_INDICATOR_SIZE = TILE_SIZE / 2 - 1;
 	private final int CANVAS_SIZE = 500;
 
-	LogHelper logHelper = new LogHelper();
 	CoordinateHelper coordinateHelper = new CoordinateHelper();
 	Game game = new Game();
 
@@ -21,7 +20,7 @@ public class ChessGame extends GraphicsProgram {
 	int mouseY;
 
 	// code that does shit
-
+	
 	public void run() {
 		game.initializeGame();
 		drawGame();
@@ -80,6 +79,7 @@ public class ChessGame extends GraphicsProgram {
 	}
 
 	// graphical code
+	
 
 	private void showCheckMoves() {
 		MovementArray checkMoveArray = game.getMovementHandler()

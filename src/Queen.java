@@ -114,10 +114,10 @@ public class Queen extends Figure {
 	public Figure deepCopy() {
 		Queen copy = new Queen(this.getFigureColor());
 		copy.setNewPosition(this.getXPosition(), this.getYPosition());
+		copy.updateMovedStatus(this.hasMovedStatus());
 		return copy;
 	}
 	
-	public boolean isEligibleForEnPassant() {
-		return false;
+	public void updateEnPassantEligibility(GameLog gameLog) {
 	}
 }

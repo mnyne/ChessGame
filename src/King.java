@@ -24,10 +24,10 @@ public class King extends Figure {
 			bool = false;
 		}
 		// checkForCastling
-		if (!this.hasMoved()) {
+		if (!this.hasMovedStatus()) {
 			if (potentialY == currentY && potentialX == currentX - 2) {
 				Figure fig1 = currentBoard.getFigureAt(currentX - 4, currentY);
-				if (fig1 != null && !fig1.hasMoved()) {
+				if (fig1 != null && !fig1.hasMovedStatus()) {
 					bool = true;
 				}
 				for (int i = currentX - 1; i > 0; i--) {
@@ -38,10 +38,11 @@ public class King extends Figure {
 				}
 			}
 		}
-		if (!this.hasMoved()) {
+		if (!this.hasMovedStatus()) {
 			if (potentialY == currentY && potentialX == currentX + 2) {
-				Figure fig3 = currentBoard.getFigureAt(currentX + 3, currentY);
-				if (fig3 != null && !fig3.hasMoved()) {
+				targetIndex = coordinateHelper.convertXYtoIndex(currentX + 3, currentY);
+				Figure fig3 = currentBoard.getFigureAtIndex(targetIndex);
+				if (fig3 != null && !fig3.hasMovedStatus()) {
 					bool = true;
 				}
 
@@ -56,13 +57,13 @@ public class King extends Figure {
 		return bool;
 	}
 	
-	public boolean isEligibleForEnPassant() {
-		return false;
+	public void updateEnPassantEligibility(GameLog gameLog) {
 	}
 
 	public Figure deepCopy() {
 		King copy = new King(this.getFigureColor());
 		copy.setNewPosition(this.getXPosition(), this.getYPosition());
+		copy.updateMovedStatus(this.hasMovedStatus());
 		return copy;
 	}
 }

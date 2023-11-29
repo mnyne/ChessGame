@@ -48,7 +48,7 @@ public class Pawn extends Figure {
 					if (currentBoard.getFigureAtIndex(index) != null) {
 						bool = true;
 					}
-					if(currentBoard.getFigureAt(potentialX, potentialY-1) != null && currentBoard.getFigureAt(potentialX, potentialY-1).isEligibleForEnPassant()) {
+					if(currentBoard.getFigureAt(potentialX, potentialY-1) != null && currentBoard.getFigureAt(potentialX, potentialY-1).getEnPassantStatus()) {
 						bool = true;
 					}
 				}
@@ -83,7 +83,7 @@ public class Pawn extends Figure {
 					if (currentBoard.getFigureAtIndex(index) != null) {
 						bool = true;
 					}
-					if(currentBoard.getFigureAt(potentialX, potentialY+1) != null && currentBoard.getFigureAt(potentialX, potentialY+1).isEligibleForEnPassant()) {
+					if(currentBoard.getFigureAt(potentialX, potentialY+1) != null && currentBoard.getFigureAt(potentialX, potentialY+1).getEnPassantStatus()) {
 						bool = true;
 					}
 				}
@@ -95,23 +95,21 @@ public class Pawn extends Figure {
 	public Figure deepCopy() {
 		Pawn copy = new Pawn(this.getFigureColor());
 		copy.setNewPosition(this.getXPosition(), this.getYPosition());
+		copy.updateMovedStatus(this.hasMovedStatus());
+		copy.setEnPassantStatus(this.getEnPassantStatus());
 		return copy;
 	}
 	
-	public boolean isEligibleForEnPassant() {
-		//update when logArray is done
-		boolean bool = false;
-		String logFilePath = "chess_board_log.txt";
-        String lastLine = logHelper.readLastLine(logFilePath);
-        String logID = logHelper.getFigureIDfromLog(lastLine);
-        int yMovement = logHelper.getYMovementfromLog(lastLine);
+	public void updateEnPassantEligibility(GameLog gameLog) {
+		setEnPassantStatus(false);
+        String lastEntry = gameLog.getLastEntry();
+        String logID = gameLog.getFigureIDfromEntry(lastEntry);
+        int yMovement = gameLog.getYMovementfromEntry(lastEntry);
         if(logID.equals(this.getFigureID())) {
         	if(yMovement == 2 || yMovement == -2) {
-        		bool = true;
-        		System.out.println("En Passant!");
+        		setEnPassantStatus(true);
         	}
         }
-		return bool;
 	}
 	
 }

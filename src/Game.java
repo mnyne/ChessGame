@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class Game {
 	
 	private final int BOARD_LENGTH = 8;
@@ -9,10 +11,14 @@ public class Game {
 	
 	MovementHandler movementHandler = new MovementHandler();
 	CoordinateHelper coordinateHelper = new CoordinateHelper();
-	LogHelper logHelper = new LogHelper();
+	GameLog gameLog = new GameLog();
 
 	public Game() {
 
+	}
+	
+	public GameLog getGameLog() {
+		return gameLog;
 	}
 	
 	public MovementHandler getMovementHandler() {
@@ -52,24 +58,24 @@ public class Game {
 		int xCache = selectedFigure.getXPosition();
 		int yCache = selectedFigure.getYPosition();
 		if (legalMoveArray.moveAtIndexAllowed(targetIndex)) {
-			logHelper.logMove(selectedFigure, targetIndex);
+			gameLog.logMove(selectedFigure, targetIndex);
 			chessBoard.moveFigure(selectedFigure,
 					coordinateHelper.convertIndextoX(targetIndex),
 					coordinateHelper.convertIndextoY(targetIndex));
 			chessBoard.removeFigure(xCache, yCache);
 			currentTurn += 1;
 		}
+		chessBoard.updateMovedStatusForFigures(gameLog);
 	}
 	
 	public void handleSpecialCasesAfterMove() {
-		movementHandler.handleEnPassant(chessBoard);
-		movementHandler.handleCastling(chessBoard);
-		movementHandler.handlePawnAtBorder(chessBoard);
+		movementHandler.handleEnPassant(chessBoard, gameLog);
+		movementHandler.handleCastling(chessBoard, gameLog);
+		movementHandler.handlePawnAtBorder(chessBoard, gameLog);
 	}
 
 	public void initializeGame() {
 		// try to get index from XY coords, get rid of strings, maybe find way to read starting grid from a file or smth
-		logHelper.clearLogFile();
 		chessBoard.addFigure(0, new Rook("black", "a8"));
 		chessBoard.addFigure(1, new Knight("black", "b8"));
 		chessBoard.addFigure(2, new Bishop("black", "c8"));

@@ -1,6 +1,5 @@
 public class MovementHandler {
-
-	LogHelper logHelper = new LogHelper();
+	
 	CoordinateHelper coordinateHelper = new CoordinateHelper();
 
 	public MovementHandler() {
@@ -20,12 +19,13 @@ public class MovementHandler {
 	
 	public MovementArray kingInCheckArray(ChessBoard currentBoard, Figure selectedFigure, int currentTurn) {
 		
-		MoveSimulator moveSimulator = new MoveSimulator(currentBoard.deepCopy(), selectedFigure, currentTurn);
+		
 		MovementArray possibleMoveArray = possibleMoveArray(currentBoard, selectedFigure, currentTurn);
 		MovementArray kingInCheckArray = emptyTrueArray();
 		
 		for (int arrayIndex = 0; arrayIndex < kingInCheckArray.getLength(); arrayIndex++) {
 			if(possibleMoveArray.moveAtIndexAllowed(arrayIndex)) {
+				MoveSimulator moveSimulator = new MoveSimulator(currentBoard.deepCopy(), selectedFigure, currentTurn);
 				moveSimulator.simulateMove(arrayIndex);
 				if (moveSimulator.possiblePlayerMoves().moveAtIndexAllowed(moveSimulator.getSimulatedKingIndex())) {
 					kingInCheckArray.setIndexToFalse(arrayIndex);
@@ -104,19 +104,18 @@ public class MovementHandler {
 	}
 
 	// update when LogArray is done
-	public void handleEnPassant(ChessBoard currentBoard) {
-		String logFilePath = "chess_board_log.txt";
-		String secondToLastLine = logHelper.readSecondToLastLine(logFilePath);
-		String lastLine = logHelper.readLastLine(logFilePath);
-		int type1 = logHelper.getFigureTypefromLog(secondToLastLine);
-		int type2 = logHelper.getFigureTypefromLog(lastLine);
-		int color1 = logHelper.getColorfromLog(secondToLastLine);
-		int color2 = logHelper.getColorfromLog(lastLine);
-		int yMovement1 = logHelper.getYMovementfromLog(secondToLastLine);
-		int newX1 = logHelper.getNewXfromLog(secondToLastLine);
-		int newX2 = logHelper.getNewXfromLog(lastLine);
-		int newY1 = logHelper.getNewYfromLog(secondToLastLine);
-		int newY2 = logHelper.getNewYfromLog(lastLine);
+	public void handleEnPassant(ChessBoard currentBoard, GameLog gameLog) {
+		String secondToLastEntry = gameLog.getSecondToLastEntry();
+		String lastEntry = gameLog.getLastEntry();
+		int type1 = gameLog.getFigureTypefromEntry(secondToLastEntry);
+		int type2 = gameLog.getFigureTypefromEntry(lastEntry);
+		int color1 = gameLog.getColorfromEntry(secondToLastEntry);
+		int color2 = gameLog.getColorfromEntry(lastEntry);
+		int yMovement1 = gameLog.getYMovementfromEntry(secondToLastEntry);
+		int newX1 = gameLog.getNewXfromEntry(secondToLastEntry);
+		int newX2 = gameLog.getNewXfromEntry(lastEntry);
+		int newY1 = gameLog.getNewYfromEntry(secondToLastEntry);
+		int newY2 = gameLog.getNewYfromEntry(lastEntry);
 		if (type1 == 3 && type2 == 3 && color1 == 1 && color2 == 0
 				&& yMovement1 == 2 && newX1 == newX2 && newY2 == newY1 - 1) {
 			currentBoard.removeFigure(newX1, newY1);
@@ -127,19 +126,18 @@ public class MovementHandler {
 		}
 	}
 
-	public void handleCastling(ChessBoard currentBoard) {
+	public void handleCastling(ChessBoard currentBoard, GameLog gameLog) {
 		Figure selectedFigure;
-		String logFilePath = "chess_board_log.txt";
-		String lastLine = logHelper.readLastLine(logFilePath);
-		int type = logHelper.getFigureTypefromLog(lastLine);
-		int xMovement = logHelper.getXMovementfromLog(lastLine);
-		int Y = logHelper.getNewYfromLog(lastLine);
+		String lastEntry = gameLog.getLastEntry();
+		int type = gameLog.getFigureTypefromEntry(lastEntry);
+		int xMovement = gameLog.getXMovementfromEntry(lastEntry);
+		int Y = gameLog.getNewYfromEntry(lastEntry);
 		if (type == 1) {
 			if (xMovement == -2 && Y == 0) {
 				// topleft
 				selectedFigure = currentBoard.getFigureAt(0, 0);
 				int targetIndex = coordinateHelper.convertXYtoIndex(3, 0);
-				logHelper.logMove(selectedFigure, targetIndex);
+				gameLog.logMove(selectedFigure, targetIndex);
 				currentBoard.moveFigure(selectedFigure,
 						coordinateHelper.convertIndextoX(targetIndex),
 						coordinateHelper.convertIndextoY(targetIndex));
@@ -149,7 +147,7 @@ public class MovementHandler {
 				// topright
 				selectedFigure = currentBoard.getFigureAt(7, 0);
 				int targetIndex = coordinateHelper.convertXYtoIndex(5, 0);
-				logHelper.logMove(selectedFigure, targetIndex);
+				gameLog.logMove(selectedFigure, targetIndex);
 				currentBoard.moveFigure(selectedFigure,
 						coordinateHelper.convertIndextoX(targetIndex),
 						coordinateHelper.convertIndextoY(targetIndex));
@@ -159,7 +157,7 @@ public class MovementHandler {
 				// bottomleft
 				selectedFigure = currentBoard.getFigureAt(0, 7);
 				int targetIndex = coordinateHelper.convertXYtoIndex(3, 7);
-				logHelper.logMove(selectedFigure, targetIndex);
+				gameLog.logMove(selectedFigure, targetIndex);
 				currentBoard.moveFigure(selectedFigure,
 						coordinateHelper.convertIndextoX(targetIndex),
 						coordinateHelper.convertIndextoY(targetIndex));
@@ -169,7 +167,7 @@ public class MovementHandler {
 				// bottomright
 				selectedFigure = currentBoard.getFigureAt(7, 7);
 				int targetIndex = coordinateHelper.convertXYtoIndex(5, 7);
-				logHelper.logMove(selectedFigure, targetIndex);
+				gameLog.logMove(selectedFigure, targetIndex);
 				currentBoard.moveFigure(selectedFigure,
 						coordinateHelper.convertIndextoX(targetIndex),
 						coordinateHelper.convertIndextoY(targetIndex));
@@ -180,13 +178,12 @@ public class MovementHandler {
 	}
 
 	// update when LogArray is done
-	public void handlePawnAtBorder(ChessBoard currentBoard) {
-		String logFilePath = "chess_board_log.txt";
-		String lastLine = logHelper.readLastLine(logFilePath);
-		int type = logHelper.getFigureTypefromLog(lastLine);
-		int color = logHelper.getColorfromLog(lastLine);
-		int newX = logHelper.getNewXfromLog(lastLine);
-		int newY = logHelper.getNewYfromLog(lastLine);
+	public void handlePawnAtBorder(ChessBoard currentBoard, GameLog gameLog) {
+		String lastEntry = gameLog.getLastEntry();
+		int type = gameLog.getFigureTypefromEntry(lastEntry);
+		int color = gameLog.getColorfromEntry(lastEntry);
+		int newX = gameLog.getNewXfromEntry(lastEntry);
+		int newY = gameLog.getNewYfromEntry(lastEntry);
 
 		if (type == 3 && color == 0 && newY == 0) {
 			Figure pawn = currentBoard.getFigureAt(newX, newY);

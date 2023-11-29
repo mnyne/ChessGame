@@ -70,13 +70,13 @@ public class Bishop extends Figure {
 
 	}
 	
-	public boolean isEligibleForEnPassant() {
-		return false;
+	public void updateEnPassantEligibility(GameLog gameLog) {
 	}
 
 	public Figure deepCopy() {
 		Bishop copy = new Bishop(this.getFigureColor());
 		copy.setNewPosition(this.getXPosition(), this.getYPosition());
+		copy.updateMovedStatus(this.hasMovedStatus());
 		return copy;
 	}
 

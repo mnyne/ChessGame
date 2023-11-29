@@ -1,31 +1,31 @@
 public class ChessBoard {
 	CoordinateHelper coordinateHelper = new CoordinateHelper();
-	private Figure[] figures;
+	private Figure[] chessBoard;
 
 	public ChessBoard(int numberOfFigures) {
-		figures = new Figure[numberOfFigures];
+		chessBoard = new Figure[numberOfFigures];
 	}
 
 	public void addFigure(int index, Figure figure) {
-		figures[index] = figure;
+		chessBoard[index] = figure;
 	}
 
 	public Figure getFigureAtIndex(int index) {
-		return figures[index];
+		return chessBoard[index];
 	}
 
 	public int getLength() {
-		return figures.length;
+		return chessBoard.length;
 	}
 
 	public Figure getFigureAt(int x, int y) {
 		int index = coordinateHelper.convertXYtoIndex(x, y);
-		return figures[index];
+		return chessBoard[index];
 	}
 
 	public Figure getClickedFigure(int x, int y) {
 		int index = coordinateHelper.convertOpticalXYtoIndex(x, y);
-		return figures[index];
+		return chessBoard[index];
 	}
 
 	public String toString() {
@@ -44,24 +44,35 @@ public class ChessBoard {
 
 	public void moveFigure(Figure figure, int targetX, int targetY) {
 		int index = coordinateHelper.convertXYtoIndex(targetX, targetY);
-		figures[index] = figure;
+		chessBoard[index] = figure;
 		figure.setNewPosition(targetX, targetY);
 	}
 
 	public void removeFigure(int xCache, int yCache) {
 		int oldindex = coordinateHelper.convertXYtoIndex(xCache, yCache);
-		figures[oldindex] = null;
+		chessBoard[oldindex] = null;
 	}
 
 	public ChessBoard deepCopy() {
-		ChessBoard copy = new ChessBoard(this.figures.length);
+		ChessBoard copy = new ChessBoard(this.chessBoard.length);
 
-		for (int i = 0; i < this.figures.length; i++) {
-			if (this.figures[i] != null) {
-				copy.figures[i] = this.figures[i].deepCopy();
+		for (int i = 0; i < this.chessBoard.length; i++) {
+			if (this.chessBoard[i] != null) {
+				copy.chessBoard[i] = this.chessBoard[i].deepCopy();
 			}
 		}
 
 		return copy;
+	}
+	
+	public void updateMovedStatusForFigures(GameLog gameLog) {
+		for (int i = 0; i < this.chessBoard.length; i++) {
+			Figure figureToUpdate = getFigureAtIndex(i);
+			if(figureToUpdate != null) {
+				figureToUpdate.updateMovedStatus(gameLog.hasFigureMoved(figureToUpdate));
+				figureToUpdate.updateEnPassantEligibility(gameLog);
+			}
+
+		}
 	}
 }
