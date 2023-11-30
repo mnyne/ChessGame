@@ -69,8 +69,8 @@ public class Game {
 	}
 	
 	public void handleSpecialCasesAfterMove() {
-		movementHandler.handleEnPassant(chessBoard, gameLog);
-		movementHandler.handleCastling(chessBoard, gameLog);
+		movementHandler.removePawnAfterEnPassant(chessBoard, gameLog);
+		movementHandler.moveTowerAfterCastling(chessBoard, gameLog);
 		movementHandler.handlePawnAtBorder(chessBoard, gameLog);
 	}
 

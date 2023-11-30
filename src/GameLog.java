@@ -24,9 +24,6 @@ public class GameLog {
 		addEntry("Move: ID=" + id + ", Type=" + type + ", Color=" + color
 				+ ", OldX=" + oldX + ", OldY=" + oldY + ", NewX=" + newX
 				+ ", NewY=" + newY);
-		System.out.println("Move: ID=" + id + ", Type=" + type + ", Color=" + color
-				+ ", OldX=" + oldX + ", OldY=" + oldY + ", NewX=" + newX
-				+ ", NewY=" + newY);
 	}
 
 	public boolean hasFigureMoved(Figure figure) {
@@ -40,7 +37,6 @@ public class GameLog {
 			String entry = gameLog.get(index);
 			if (entry.contains(figureID)) {
 				hasMoved = true;
-				System.out.println("figure with id " + figureID + " has moved!");
 			}
 		}
 		return hasMoved;

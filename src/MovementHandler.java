@@ -7,18 +7,21 @@ public class MovementHandler {
 	}
 	
 	public MovementArray legalMoveArray(ChessBoard currentBoard, Figure selectedFigure, int currentTurn) {
+		
 		MovementArray legalMoveArray = possibleMoveArray(currentBoard, selectedFigure, currentTurn);
 		MovementArray kingInCheckArray = kingInCheckArray(currentBoard, selectedFigure, currentTurn);
+		
 		for (int arrayIndex = 0; arrayIndex < legalMoveArray.getLength(); arrayIndex++) {
 			if(!kingInCheckArray.moveAtIndexAllowed(arrayIndex)) {
 				legalMoveArray.setIndexToFalse(arrayIndex);
 			}
 		}
+		
 	return legalMoveArray;
+	
 	}
 	
 	public MovementArray kingInCheckArray(ChessBoard currentBoard, Figure selectedFigure, int currentTurn) {
-		
 		
 		MovementArray possibleMoveArray = possibleMoveArray(currentBoard, selectedFigure, currentTurn);
 		MovementArray kingInCheckArray = emptyTrueArray();
@@ -48,63 +51,74 @@ public class MovementHandler {
 				possibleMoveArray.setIndexToFalse(arrayIndex);
 			}
 		}
+		
 		return possibleMoveArray;
 	}
 	
 	public MovementArray emptyFalseArray() {
+		
 		MovementArray emptyFalseArray = new MovementArray();
+		
 		for (int arrayIndex = 0; arrayIndex < emptyFalseArray.getLength(); arrayIndex++) {
 			emptyFalseArray.setIndexToFalse(arrayIndex);
 		}
+		
 		return emptyFalseArray;
 	}
 
 	public MovementArray emptyTrueArray() {
+		
 		MovementArray emptyTrueArray = new MovementArray();
+		
 		for (int arrayIndex = 0; arrayIndex < emptyTrueArray.getLength(); arrayIndex++) {
 			emptyTrueArray.setIndexToTrue(arrayIndex);
 		}
+		
 		return emptyTrueArray;
 	}
 
 	public MovementArray playerTurnArray(Figure selectedFigure, int currentTurn) {
+		
 		MovementArray playerTurnArray = emptyTrueArray();
+		
 		for (int arrayIndex = 0; arrayIndex < playerTurnArray.getLength(); arrayIndex++) {
 			if (currentTurn % 2 != selectedFigure.getFigureColor()) {
 				playerTurnArray.setIndexToFalse(arrayIndex);
 			}
 		}
+		
 		return playerTurnArray;
 	}
 
-	public MovementArray figureColorArray(ChessBoard currentBoard,
-			Figure selectedFigure) {
+	public MovementArray figureColorArray(ChessBoard currentBoard, Figure selectedFigure) {
+		
 		MovementArray figureColorArray = emptyTrueArray();
+		
 		for (int arrayIndex = 0; arrayIndex < figureColorArray.getLength(); arrayIndex++) {
-			if (currentBoard.getFigureAtIndex(arrayIndex) != null
-					&& currentBoard.getFigureAtIndex(arrayIndex)
-							.getFigureColor() == selectedFigure
-							.getFigureColor()) {
+			if (currentBoard.getFigureAtIndex(arrayIndex) != null && currentBoard.getFigureAtIndex(arrayIndex).getFigureColor() == selectedFigure.getFigureColor()) {
 				figureColorArray.setIndexToFalse(arrayIndex);
 			}
 		}
+		
 		return figureColorArray;
 	}
 
-	public MovementArray figureMovementArray(ChessBoard currentBoard,
-			Figure selectedFigure) {
+	public MovementArray figureMovementArray(ChessBoard currentBoard, Figure selectedFigure) {
+		
 		MovementArray figureMovementArray = emptyTrueArray();
+		
 		for (int arrayIndex = 0; arrayIndex < figureMovementArray.getLength(); arrayIndex++) {
 			if (!selectedFigure.moveIsLegal(currentBoard, selectedFigure,
 					arrayIndex)) {
 				figureMovementArray.setIndexToFalse(arrayIndex);
 			}
 		}
+		
 		return figureMovementArray;
 	}
 
 	// update when LogArray is done
-	public void handleEnPassant(ChessBoard currentBoard, GameLog gameLog) {
+	public void removePawnAfterEnPassant(ChessBoard currentBoard, GameLog gameLog) {
 		String secondToLastEntry = gameLog.getSecondToLastEntry();
 		String lastEntry = gameLog.getLastEntry();
 		int type1 = gameLog.getFigureTypefromEntry(secondToLastEntry);
@@ -126,7 +140,7 @@ public class MovementHandler {
 		}
 	}
 
-	public void handleCastling(ChessBoard currentBoard, GameLog gameLog) {
+	public void moveTowerAfterCastling(ChessBoard currentBoard, GameLog gameLog) {
 		Figure selectedFigure;
 		String lastEntry = gameLog.getLastEntry();
 		int type = gameLog.getFigureTypefromEntry(lastEntry);
@@ -187,16 +201,16 @@ public class MovementHandler {
 
 		if (type == 3 && color == 0 && newY == 0) {
 			Figure pawn = currentBoard.getFigureAt(newX, newY);
-			transformPawn(pawn, currentBoard);
+			tradeInPawn(pawn, currentBoard);
 		}
 		if (type == 3 && color == 1 && newY == 7) {
 			Figure pawn = currentBoard.getFigureAt(newX, newY);
-			transformPawn(pawn, currentBoard);
+			tradeInPawn(pawn, currentBoard);
 		}
 
 	}
 
-	private void transformPawn(Figure pawn, ChessBoard currentBoard) {
+	private void tradeInPawn(Figure pawn, ChessBoard currentBoard) {
 		// code for selection maybe later, why would you want anything but a
 		// queen in 99% of cases...
 		int x = pawn.getXPosition();

@@ -15,12 +15,15 @@ public class Knight extends Figure {
 		boolean bool;
 		int xDiff = coordinateHelper.getAdjustedDiff(potentialX, currentX);
 		int yDiff = coordinateHelper.getAdjustedDiff(potentialY, currentY);	
+		bool = checkForLShapedMovement(xDiff, yDiff);
+		return bool;
+	}
+
+	private boolean checkForLShapedMovement(int xDiff, int yDiff) {
+		boolean bool;
 		if (xDiff + yDiff == 3 && xDiff < 3 && yDiff < 3) {
 			bool = true;
 		} else {
-			bool = false;
-		}
-		if (xDiff == 0 && yDiff == 0) {
 			bool = false;
 		}
 		return bool;

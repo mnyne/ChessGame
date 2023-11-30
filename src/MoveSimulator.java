@@ -26,9 +26,6 @@ public class MoveSimulator {
 		int newY = coordinateHelper.convertIndextoY(simulatedTargetIndex);
 		simulatedBoard.moveFigure(simulatedFigure, newX, newY);
 		simulatedBoard.removeFigure(xCache, yCache);
-		System.out.println("simulated " + simulatedFigure.getFigureType() + " "
-				+ simulatedFigure.getFigureID() + " move from " + xCache + ", "
-				+ yCache + " to " + newX + ", " + newY);
 	}
 
 	public ChessBoard simulatedPlayerFigures() {
@@ -76,7 +73,6 @@ public class MoveSimulator {
 			if (potentialKing != null && potentialKing.getFigureType() == 1
 					&& potentialKing.getFigureColor() != simulatedTurn % 2) {
 				simulatedKingIndex = boardIndex;
-				System.out.println("King index found at " + simulatedKingIndex);
 			}
 		}
 
