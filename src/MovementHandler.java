@@ -6,6 +6,8 @@ public class MovementHandler {
 
 	}
 	
+	//get rid of unnecessary player turn and figure color arrays and just do an if instead
+	
 	public MovementArray legalMoveArray(ChessBoard currentBoard, Figure selectedFigure, int currentTurn) {
 		
 		MovementArray legalMoveArray = possibleMoveArray(currentBoard, selectedFigure, currentTurn);
@@ -117,7 +119,8 @@ public class MovementHandler {
 		return figureMovementArray;
 	}
 
-	// update when LogArray is done
+	// move to separate capturing method, probably within ChessBoard class
+	//probably easier to just do a Figure oldEntry = getFigureFromEntry and then use methods from within Figure class instead of doing all this 
 	public void removePawnAfterEnPassant(ChessBoard currentBoard, GameLog gameLog) {
 		String secondToLastEntry = gameLog.getSecondToLastEntry();
 		String lastEntry = gameLog.getLastEntry();
@@ -140,6 +143,8 @@ public class MovementHandler {
 		}
 	}
 
+	// move to separate capturing method, probably within ChessBoard class
+	//probably easier to just do a Figure oldEntry = getFigureFromEntry and then use methods from within Figure class instead of doing all this 
 	public void moveTowerAfterCastling(ChessBoard currentBoard, GameLog gameLog) {
 		Figure selectedFigure;
 		String lastEntry = gameLog.getLastEntry();
@@ -191,7 +196,7 @@ public class MovementHandler {
 
 	}
 
-	// update when LogArray is done
+	// move to ChessBoard class
 	public void handlePawnAtBorder(ChessBoard currentBoard, GameLog gameLog) {
 		String lastEntry = gameLog.getLastEntry();
 		int type = gameLog.getFigureTypefromEntry(lastEntry);
@@ -210,6 +215,7 @@ public class MovementHandler {
 
 	}
 
+	// move to ChessBoard class, try to figure out how to work that into a GUI...
 	private void tradeInPawn(Figure pawn, ChessBoard currentBoard) {
 		// code for selection maybe later, why would you want anything but a
 		// queen in 99% of cases...

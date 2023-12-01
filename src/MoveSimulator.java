@@ -27,7 +27,8 @@ public class MoveSimulator {
 		simulatedBoard.moveFigure(simulatedFigure, newX, newY);
 		simulatedBoard.removeFigure(xCache, yCache);
 	}
-
+	
+//try to clean up that mess
 	public ChessBoard simulatedPlayerFigures() {
 		ChessBoard simulatedPlayerFigures = new ChessBoard(FIGURES_PER_PLAYER);
 		int figureIndex = 0;

@@ -2,8 +2,8 @@ public class ChessBoard {
 	CoordinateHelper coordinateHelper = new CoordinateHelper();
 	private Figure[] chessBoard;
 
-	public ChessBoard(int numberOfFigures) {
-		chessBoard = new Figure[numberOfFigures];
+	public ChessBoard(int chessBoardLength) {
+		chessBoard = new Figure[chessBoardLength];
 	}
 
 	public void addFigure(int index, Figure figure) {

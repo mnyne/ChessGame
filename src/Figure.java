@@ -31,7 +31,7 @@ public abstract class Figure extends GObject {
 	}
 	
 // update to grab color, x and y as is instead of using strings to allow for easier copying
-// remove starting X from ID or find way to keep ID when trading in a pawn
+// find way to keep ID when trading in a pawn
 	public Figure(int in_figureType, String s_color, String startingPosition) {
 		startX = convertStringPositionToX(startingPosition);
 		startY = convertStringPositionToY(startingPosition);
@@ -49,25 +49,25 @@ public abstract class Figure extends GObject {
 		color = in_color;
 		id = generateID();
 	}
-
+// do an int instead... color+1 * 100 + figureType * 10 + startX
 	private String generateID() {
 		String newid = color + "" + figureType + "" + startX;
 		return newid;
 	}
-
+// move to coordinateHelper, use x and y from the get go
 	private int convertStringPositionToY(String startingPosition) {
 		char c = startingPosition.charAt(1);
 		int i = (int) c - 48;
 		int convertY = 8 - i;
 		return convertY;
 	}
-
+// move to coordinateHelper, use x and y from the get go
 	private int convertStringPositionToX(String startingPosition) {
 		char c = startingPosition.charAt(0);
 		int convertX = (int) c - 97;
 		return convertX;
 	}
-
+// use integer from the get go
 	public int convertColorStringToInteger(String s_color) {
 		int int_color;
 		if (s_color.equals("black")) {
@@ -145,7 +145,7 @@ public abstract class Figure extends GObject {
 	public void updateMovedStatus(boolean hasMoved) {
 		this.hasMoved = hasMoved;
 	}
-	
+	// rename to hasMoved
 	public boolean hasMovedStatus() {
 		return this.hasMoved;
 	}
@@ -154,6 +154,7 @@ public abstract class Figure extends GObject {
 		this.enPassantable = enPassantable;
 	}
 	
+	//ranem to eligibleForEnPassant
 	public boolean getEnPassantStatus() {
 		return enPassantable;
 	}

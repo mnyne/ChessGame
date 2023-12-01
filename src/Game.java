@@ -75,7 +75,7 @@ public class Game {
 	}
 
 	public void initializeGame() {
-		// try to get index from XY coords, get rid of strings, maybe find way to read starting grid from a file or smth
+		// get index from XY coords, get rid of strings, make starting grid more flexible
 		chessBoard.addFigure(0, new Rook("black", "a8"));
 		chessBoard.addFigure(1, new Knight("black", "b8"));
 		chessBoard.addFigure(2, new Bishop("black", "c8"));

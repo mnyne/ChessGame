@@ -18,6 +18,8 @@ public class Sprite extends GCompound {
 	// 9 white pawn
 	// 10 white queen
 	// 11 white rook
+	
+	//use ID instead of spriteID to determine which graphic to use
 
 	public Sprite(int figureType, int color) {
 		spriteid = figureType;

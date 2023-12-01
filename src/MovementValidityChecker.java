@@ -4,7 +4,6 @@ public class MovementValidityChecker {
 
 	private ChessBoard currentBoard;
 	private Figure currentFigure;
-	private int targetIndex;
 
 	private int currentX;
 	private int currentY;
@@ -19,7 +18,6 @@ public class MovementValidityChecker {
 			int targetIndex) {
 		this.currentBoard = chessBoard;
 		this.currentFigure = currentFigure;
-		this.targetIndex = targetIndex;
 
 		currentX = currentFigure.getXPosition();
 		currentY = currentFigure.getYPosition();

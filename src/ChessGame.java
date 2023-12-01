@@ -78,7 +78,7 @@ public class ChessGame extends GraphicsProgram {
 		remove(selectionIndicator);
 	}
 
-	// graphical code
+	// rather messy graphical code, clean up at some point
 	
 
 	private void showCheckMoves() {

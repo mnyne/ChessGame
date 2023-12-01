@@ -7,7 +7,7 @@ public class CoordinateHelper {
 	public CoordinateHelper() {
 		
 	}
-
+// shorten functions, update code to use indexes whenever possible and get rid of unnecessary functions
 	public int convertXYtoIndex(int x, int y) {
 		int index = 0;
 		index = (y * BOARD_SIZE) + x;

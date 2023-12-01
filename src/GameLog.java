@@ -12,7 +12,8 @@ public class GameLog {
 	public void addEntry(String entry) {
 		gameLog.add(entry);
 	}
-
+//string as int instead, remove temp variables
+//log positions as index instead, do everything else with coordinatehelper
 	public void logMove(Figure figure, int targetIndex) {
 		int oldX = figure.getXPosition();
 		int oldY = figure.getYPosition();
@@ -44,7 +45,7 @@ public class GameLog {
 	
 	
 	
-
+//probably easier to just do a Figure oldEntry = getFigureFromEntry and then use methods from within Figure class instead of doing all this 
 	public String getLastEntry() {
 		String entry = "DUMY: ID=000, TYPE=0, COLOR=0, OLDX=0, OLDY=0, NEWX=0, NEWY=0";
 		if (gameLog.size() > 0) {
@@ -61,7 +62,7 @@ public class GameLog {
 		}
 		return entry;
 	}
-
+//do int instead
 	public String getFigureIDfromEntry(String entry) {
 		String id = "000";
 		if (entry != null) {
@@ -90,7 +91,7 @@ public class GameLog {
 		}
 		return type;
 	}
-
+//duplicate code to coordinateHelper
 	public int getXMovementfromEntry(String entry) {
 		int xMovement = 0;
 		if (entry != null) {
@@ -102,7 +103,7 @@ public class GameLog {
 		}
 		return xMovement;
 	}
-
+//duplicate code to coordinateHelper
 	public int getYMovementfromEntry(String entry) {
 		int yMovement = 0;
 		if (entry != null) {
@@ -114,7 +115,7 @@ public class GameLog {
 		}
 		return yMovement;
 	}
-
+//vvv do oldIndex newIndex and everything else with coordinateHelper
 	public int getOldXfromEntry(String entry) {
 		int oldX = 0;
 		if (entry != null) {
