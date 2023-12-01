@@ -30,92 +30,18 @@ public class MovementValidityChecker {
 		yDiff = coordinateHelper.getAdjustedDiff(targetY, currentY);
 		yDiffRaw = coordinateHelper.getRawDiff(targetY, currentY);
 	}
+		
+	public boolean canCapture() {
+		if (currentBoard.getFigureAt(targetX, targetY) != null) {
+			return true;
+		}
+		return false;
+	}
 	
-	public boolean pawnMove() {
-		if (currentFigure.getFigureColor() == 0) {
-			return whitePawnMove();
-		} else {
-			return blackPawnMove();
-		}
-	}
-
-	private boolean whitePawnMove() {
-		if (whitePawnDiagonalCapture() || whitePawnDoubleMove()
-				|| whitePawnSingleMove()) {
-			return true;
-		}
-		return false;
-	}
-
-	private boolean blackPawnMove() {
-		if (blackPawnDiagonalCapture() || blackPawnDoubleMove()
-				|| blackPawnSingleMove()) {
-			return true;
-		}
-		return false;
-	}
-
-	private boolean whitePawnDiagonalCapture() {
-		if (targetY == currentY - 1) {
-			if (targetX == currentX - 1 || targetX == currentX + 1) {
-				if (currentBoard.getFigureAt(targetX, targetY) != null) {
-					return true;
-				}
-				if (currentBoard.getFigureAt(targetX, targetY + 1) != null
-						&& currentBoard.getFigureAt(targetX, targetY + 1)
-								.getEnPassantStatus()) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-
-	private boolean blackPawnDiagonalCapture() {
-		if (targetY == currentY + 1) {
-			if (targetX == currentX - 1 || targetX == currentX + 1) {
-				if (currentBoard.getFigureAt(targetX, targetY) != null) {
-					return true;
-				}
-				if (currentBoard.getFigureAt(targetX, targetY - 1) != null
-						&& currentBoard.getFigureAt(targetX, targetY - 1)
-								.getEnPassantStatus()) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-
-	private boolean whitePawnDoubleMove() {
-		if (targetY == currentY - 2 && !currentFigure.hasMovedStatus()
-				&& currentBoard.getFigureAtIndex(targetIndex) == null
-				&& !orthogonalCollision() && targetX == currentX)  {
-			return true;
-		}
-		return false;
-	}
-
-	private boolean blackPawnDoubleMove() {
-		if (targetY == currentY + 2 && !currentFigure.hasMovedStatus()
-				&& currentBoard.getFigureAtIndex(targetIndex) == null
-				&& !orthogonalCollision() && targetX == currentX) {
-			return true;
-		}
-		return false;
-	}
-
-	private boolean whitePawnSingleMove() {
-		if (xDiff == 0 && -yDiffRaw < 0 && -yDiffRaw > -2
-				&& currentBoard.getFigureAtIndex(targetIndex) == null) {
-			return true;
-		}
-		return false;
-	}
-
-	private boolean blackPawnSingleMove() {
-		if (xDiff == 0 && -yDiffRaw > 0 && -yDiffRaw < 2
-				&& currentBoard.getFigureAtIndex(targetIndex) == null) {
+	public boolean canEnPassant() {
+		if (currentBoard.getFigureAt(targetX, currentY) != null
+				&& currentBoard.getFigureAt(targetX, currentY)
+						.getEnPassantStatus()) {
 			return true;
 		}
 		return false;
@@ -133,7 +59,6 @@ public class MovementValidityChecker {
 			if (!orthogonalCollision()) {
 				return true;
 			}
-
 		}
 		return false;
 	}
@@ -321,6 +246,16 @@ public class MovementValidityChecker {
 					return true;
 				}
 			}
+		}
+		return false;
+	}
+
+	public boolean isForwardMove(int figureColor) {
+		if (yDiffRaw > 0 && figureColor == 0) {
+			return true;
+		}
+		if (yDiffRaw < 0 && figureColor == 1) {
+			return true;
 		}
 		return false;
 	}

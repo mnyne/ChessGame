@@ -8,13 +8,13 @@ public class King extends Figure {
 	}
 
 	public boolean moveIsLegal(ChessBoard currentBoard, Figure selectedFigure, int targetIndex) {
-		MovementValidityChecker moveCheck = new MovementValidityChecker (currentBoard, selectedFigure, targetIndex);
+		MovementValidityChecker move = new MovementValidityChecker (currentBoard, selectedFigure, targetIndex);
 		
-		if (moveCheck.hasLength(1)) {
+		if (move.hasLength(1)) {
 			return true;
 		}
 		
-		if (moveCheck.canCastle()) {
+		if (move.canCastle()) {
 			return true;
 		}
 		return false;

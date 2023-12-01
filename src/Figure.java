@@ -22,11 +22,14 @@ public abstract class Figure extends GObject {
 	private boolean enPassantable = false;
 
 	public GRectangle getBounds() {
+		// in because GObject stuff...
 		return new GRectangle(this.getX(), this.getY(), 42, 42);
 	}
 
 	public void paint(Graphics arg0) {
+		// in because GObject stuff...
 	}
+	
 // update to grab color, x and y as is instead of using strings to allow for easier copying
 // remove starting X from ID or find way to keep ID when trading in a pawn
 	public Figure(int in_figureType, String s_color, String startingPosition) {
