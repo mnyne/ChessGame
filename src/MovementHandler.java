@@ -6,7 +6,7 @@ public class MovementHandler {
 
 	}
 	
-	//get rid of unnecessary player turn and figure color arrays and just do an if instead
+	//todo: get rid of unnecessary player turn and figure color arrays and just do an if instead
 	
 	public MovementArray legalMoveArray(ChessBoard currentBoard, Figure selectedFigure, int currentHalfMove) {
 		

@@ -15,7 +15,7 @@ public class GameLog {
 		gameLog.add(entry);
 	}
 // remove temp variables
-//log positions as index instead, do everything else with coordinatehelper
+//todo: log positions as index instead, do everything else with coordinatehelper
 	public void logMove(Figure figure, int targetIndex) {
 		int oldX = figure.getXPosition();
 		int oldY = figure.getYPosition();
@@ -40,7 +40,6 @@ public class GameLog {
 	}
 	
 
-//update en passant and castling logic (pawn, movementhandler)
 	public String getPriorEntry(int steps) {
 		String entry = "DUMY: ID=0000, TYPE=0, COLOR=0, OLDX=0, OLDY=0, NEWX=0, NEWY=0";
 		if (gameLog.size() > steps-1) {
@@ -103,7 +102,7 @@ public class GameLog {
 		}
 		return yMovement;
 	}
-//vvv do oldIndex newIndex and everything else with coordinateHelper
+
 	public int getOldXfromEntry(String entry) {
 		int oldX = 0;
 		if (entry != null) {

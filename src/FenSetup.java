@@ -122,7 +122,7 @@ public class FenSetup {
 	}
 
 	public void generateLogEntry() {
-		//todo...
+		//todo: generate log entries
 	}
 	
 }

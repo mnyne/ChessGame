@@ -9,6 +9,7 @@ public abstract class Figure extends GObject {
 	private int id;
 	private int figureType;
 	private int startIndex;
+	//todo: check if you actually need startIndex, if not just pass to ID directly
 	private int currentX;
 	private int currentY;
 	private int color;
@@ -85,11 +86,6 @@ public abstract class Figure extends GObject {
 				+ ", SpriteID: " + sp.getSpriteID();
 		return ts;
 	}
-
-	public String toShortString() {
-		String ts = figureType + "";
-		return ts;
-	}
  
 	public int getFigureColor() {
 		return color;
@@ -112,6 +108,7 @@ public abstract class Figure extends GObject {
 		return this.getXPosition() == otherFigure.getXPosition()
 				&& this.getYPosition() == otherFigure.getYPosition();
 	}
+	//todo: see if you can get away with less here
 
 	public int getFigureType() {
 		return figureType;

@@ -4,7 +4,7 @@ public class Game {
 	
 	private int currentHalfMove = 0;
 	private int currentFullMove = 1 + (currentHalfMove / 2);
-	//halfmove clock yet to be implemented
+	//todo: implement halfmove clock, add function to update full moves whenever halfmoves change
 	private int halfMoveClock = 0;
 	
 	private ChessBoard chessBoard;
@@ -62,6 +62,7 @@ public class Game {
 	
 	public void makeMove(int targetIndex) {
 		//maybe circumvent the cache stuff with log once thats done
+		//todo: actual method and logging for captures
 		int xCache = selectedFigure.getXPosition();
 		int yCache = selectedFigure.getYPosition();
 		if (legalMoveArray.moveAtIndexAllowed(targetIndex)) {

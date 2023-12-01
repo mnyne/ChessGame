@@ -238,8 +238,7 @@ public class MovementValidityChecker {
 	private boolean canCastleQueenside() {
 		if (!currentFigure.hasMoved() && !castlingCollisionQueenside()) {
 			if (targetY == currentY && targetX == currentX - 2) {
-				Figure towerFigure = currentBoard.getFigureAt(currentX - 4,
-						currentY);
+				Figure towerFigure = currentBoard.getFigureAt(currentX - 4, currentY);
 				if (towerFigure != null && !towerFigure.hasMoved()) {
 					return true;
 				}

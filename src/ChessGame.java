@@ -19,8 +19,6 @@ public class ChessGame extends GraphicsProgram {
 	int mouseX;
 	int mouseY;
 
-	// code that does shit
-	
 	public void run() {
 		game.initializeGame();
 		drawGame();
@@ -128,9 +126,9 @@ public class ChessGame extends GraphicsProgram {
 			for (int y = 0; y < tileArray.length; y++) {
 				tileArray[x][y] = new GRect(TILE_SIZE, TILE_SIZE);
 				if (x % 2 == y % 2) {
-					tileArray[x][y].setColor(Color.GRAY);
-				} else {
 					tileArray[x][y].setColor(Color.WHITE);
+				} else {
+					tileArray[x][y].setColor(Color.GRAY);
 				}
 				tileArray[x][y].setFilled(true);
 			}
