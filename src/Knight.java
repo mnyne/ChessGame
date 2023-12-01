@@ -8,25 +8,13 @@ public class Knight extends Figure {
 	}
 	
 	public boolean moveIsLegal(ChessBoard currentBoard, Figure selectedFigure, int targetIndex) {
-		int potentialX = coordinateHelper.convertIndextoX(targetIndex);
-		int potentialY = coordinateHelper.convertIndextoY(targetIndex);
-		int currentX = selectedFigure.getXPosition();
-		int currentY = selectedFigure.getYPosition();
-		boolean bool;
-		int xDiff = coordinateHelper.getAdjustedDiff(potentialX, currentX);
-		int yDiff = coordinateHelper.getAdjustedDiff(potentialY, currentY);	
-		bool = checkForLShapedMovement(xDiff, yDiff);
-		return bool;
-	}
-
-	private boolean checkForLShapedMovement(int xDiff, int yDiff) {
-		boolean bool;
-		if (xDiff + yDiff == 3 && xDiff < 3 && yDiff < 3) {
-			bool = true;
-		} else {
-			bool = false;
+		MovementValidityChecker moveCheck = new MovementValidityChecker (currentBoard, selectedFigure, targetIndex);
+		
+		if (moveCheck.lShapedMove()) {
+			return true;
 		}
-		return bool;
+		
+		return false;
 	}
 	
 	public Figure deepCopy() {
