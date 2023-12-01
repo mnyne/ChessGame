@@ -9,10 +9,9 @@ import acm.graphics.GImage;
 
 public abstract class Figure extends GObject {
 	CoordinateHelper coordinateHelper = new CoordinateHelper();
-	private String id;
+	private int id;
 	private int figureType;
-	private int startX;
-	private int startY;
+	private int startIndex;
 	private int currentX;
 	private int currentY;
 	private int color;
@@ -30,53 +29,32 @@ public abstract class Figure extends GObject {
 		// in because GObject stuff...
 	}
 	
-// update to grab color, x and y as is instead of using strings to allow for easier copying
-// find way to keep ID when trading in a pawn
-	public Figure(int in_figureType, String s_color, String startingPosition) {
-		startX = convertStringPositionToX(startingPosition);
-		startY = convertStringPositionToY(startingPosition);
-		currentX = startX;
-		currentY = startY;
-		figureType = in_figureType;
-		color = convertColorStringToInteger(s_color);
-		id = generateID();
-		sp = new Sprite(this.figureType, this.color);
-		sprite = sp.getSprite();
+	public Figure(int in_figureType, int color, int startIndex) {
+		this.startIndex = startIndex;
+		this.currentX = coordinateHelper.convertIndextoX(startIndex);
+		this.currentY = coordinateHelper.convertIndextoY(startIndex);
+		this.color = color;
+		this.figureType = in_figureType;
+		this.id = generateID();
+		this.sp = new Sprite(this.figureType, this.color);
+		this.sprite = sp.getSprite();
 	}
-// update for each class to include x and y coords to enable logging for copy
-	public Figure(int in_figureType, int in_color) {
+	
+// constructor for copying
+	public Figure(int in_figureType, int in_color, int in_id, int currentIndex) {
 		figureType = in_figureType;
 		color = in_color;
-		id = generateID();
+		id = in_id;
+		currentX = coordinateHelper.convertIndextoX(currentIndex);
+		currentY = coordinateHelper.convertIndextoY(currentIndex);
 	}
-// do an int instead... color+1 * 100 + figureType * 10 + startX
-	private String generateID() {
-		String newid = color + "" + figureType + "" + startX;
-		return newid;
+	
+	private int generateID() { 
+		return (color+1) * 1000 + (figureType * 100) + startIndex;
 	}
-// move to coordinateHelper, use x and y from the get go
-	private int convertStringPositionToY(String startingPosition) {
-		char c = startingPosition.charAt(1);
-		int i = (int) c - 48;
-		int convertY = 8 - i;
-		return convertY;
-	}
-// move to coordinateHelper, use x and y from the get go
-	private int convertStringPositionToX(String startingPosition) {
-		char c = startingPosition.charAt(0);
-		int convertX = (int) c - 97;
-		return convertX;
-	}
-// use integer from the get go
-	public int convertColorStringToInteger(String s_color) {
-		int int_color;
-		if (s_color.equals("black")) {
-			int_color = 1;
-		} else {
-			int_color = 0;
-		}
-
-		return int_color;
+	
+	public int getCurrentIndex() {
+		return coordinateHelper.convertXYtoIndex(currentX, currentY);
 	}
 
 	public GImage getSprite() {
@@ -120,7 +98,7 @@ public abstract class Figure extends GObject {
 		return color;
 	}
 
-	public String getFigureID() {
+	public int getFigureID() {
 		return id;
 	}
 
@@ -146,7 +124,7 @@ public abstract class Figure extends GObject {
 		this.hasMoved = hasMoved;
 	}
 	// rename to hasMoved
-	public boolean hasMovedStatus() {
+	public boolean hasMoved() {
 		return this.hasMoved;
 	}
 	
@@ -154,8 +132,7 @@ public abstract class Figure extends GObject {
 		this.enPassantable = enPassantable;
 	}
 	
-	//ranem to eligibleForEnPassant
-	public boolean getEnPassantStatus() {
+	public boolean eligibleForEnPassant() {
 		return enPassantable;
 	}
 	

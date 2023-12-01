@@ -122,8 +122,8 @@ public class MovementHandler {
 	// move to separate capturing method, probably within ChessBoard class
 	//probably easier to just do a Figure oldEntry = getFigureFromEntry and then use methods from within Figure class instead of doing all this 
 	public void removePawnAfterEnPassant(ChessBoard currentBoard, GameLog gameLog) {
-		String secondToLastEntry = gameLog.getSecondToLastEntry();
-		String lastEntry = gameLog.getLastEntry();
+		String secondToLastEntry = gameLog.getPriorEntry(2);
+		String lastEntry = gameLog.getPriorEntry(1);
 		int type1 = gameLog.getFigureTypefromEntry(secondToLastEntry);
 		int type2 = gameLog.getFigureTypefromEntry(lastEntry);
 		int color1 = gameLog.getColorfromEntry(secondToLastEntry);
@@ -147,7 +147,7 @@ public class MovementHandler {
 	//probably easier to just do a Figure oldEntry = getFigureFromEntry and then use methods from within Figure class instead of doing all this 
 	public void moveTowerAfterCastling(ChessBoard currentBoard, GameLog gameLog) {
 		Figure selectedFigure;
-		String lastEntry = gameLog.getLastEntry();
+		String lastEntry = gameLog.getPriorEntry(1);
 		int type = gameLog.getFigureTypefromEntry(lastEntry);
 		int xMovement = gameLog.getXMovementfromEntry(lastEntry);
 		int Y = gameLog.getNewYfromEntry(lastEntry);
@@ -198,7 +198,7 @@ public class MovementHandler {
 
 	// move to ChessBoard class
 	public void handlePawnAtBorder(ChessBoard currentBoard, GameLog gameLog) {
-		String lastEntry = gameLog.getLastEntry();
+		String lastEntry = gameLog.getPriorEntry(1);
 		int type = gameLog.getFigureTypefromEntry(lastEntry);
 		int color = gameLog.getColorfromEntry(lastEntry);
 		int newX = gameLog.getNewXfromEntry(lastEntry);
@@ -251,14 +251,14 @@ public class MovementHandler {
 
 			currentBoard.addFigure(
 					index,
-					new Queen("white", coordinateHelper
-							.convertCoordsToNotationString(x, y)));
+					new Queen(0, coordinateHelper
+							.convertXYtoIndex(x, y)));
 		}
 		if (color == 1) {
 			currentBoard.addFigure(
 					index,
-					new Queen("black", coordinateHelper
-							.convertCoordsToNotationString(x, y)));
+					new Queen(1, coordinateHelper
+							.convertXYtoIndex(x, y)));
 		}
 	}
 

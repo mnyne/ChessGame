@@ -1,10 +1,10 @@
 public class Bishop extends Figure {
-	public Bishop(String s_color, String startingPosition) {
-		super(0, s_color, startingPosition);
+	public Bishop(int color, int startIndex) {
+		super(0, color, startIndex);
 	}
 
-	public Bishop(int color) {
-		super(0, color);
+	public Bishop(int color, int currentID, int currentIndex) {
+		super(0, color, currentID, currentIndex);
 	}
 
 	public boolean moveIsLegal(ChessBoard currentBoard, Figure selectedFigure, int targetIndex) {
@@ -21,9 +21,8 @@ public class Bishop extends Figure {
 	}
 
 	public Figure deepCopy() {
-		Bishop copy = new Bishop(this.getFigureColor());
-		copy.setNewPosition(this.getXPosition(), this.getYPosition());
-		copy.updateMovedStatus(this.hasMovedStatus());
+		Bishop copy = new Bishop(this.getFigureColor(), this.getFigureID(), this.getCurrentIndex());
+		copy.updateMovedStatus(this.hasMoved());
 		return copy;
 	}
 

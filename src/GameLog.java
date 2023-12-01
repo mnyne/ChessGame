@@ -2,7 +2,9 @@ import java.util.ArrayList;
 
 public class GameLog {
 
+	private final int ASCII_NUMBER_DIFF = 48;
 	CoordinateHelper coordinateHelper = new CoordinateHelper();
+	
 	ArrayList<String> gameLog;
 
 	public GameLog() {
@@ -17,7 +19,7 @@ public class GameLog {
 	public void logMove(Figure figure, int targetIndex) {
 		int oldX = figure.getXPosition();
 		int oldY = figure.getYPosition();
-		String id = figure.getFigureID();
+		int id = figure.getFigureID();
 		int type = figure.getFigureType();
 		int color = figure.getFigureColor();
 		int newX = coordinateHelper.convertIndextoX(targetIndex);
@@ -28,89 +30,75 @@ public class GameLog {
 	}
 
 	public boolean hasFigureMoved(Figure figure) {
-		boolean hasMoved = false;
-		if (gameLog == null) {
-			hasMoved = false;
-		}
-
-		String figureID = figure.getFigureID();
+		int figureID = figure.getFigureID();
 		for (int index = 0; index < gameLog.size(); index++) {
-			String entry = gameLog.get(index);
-			if (entry.contains(figureID)) {
-				hasMoved = true;
+			if (gameLog.get(index).contains(""+ figureID)) {
+				return true;
 			}
 		}
-		return hasMoved;
+		return false;
 	}
 	
-	
-	
-//probably easier to just do a Figure oldEntry = getFigureFromEntry and then use methods from within Figure class instead of doing all this 
-	public String getLastEntry() {
-		String entry = "DUMY: ID=000, TYPE=0, COLOR=0, OLDX=0, OLDY=0, NEWX=0, NEWY=0";
-		if (gameLog.size() > 0) {
-			entry = gameLog.get(gameLog.size()-1);
-		}
-		return entry;
 
-	}
-
-	public String getSecondToLastEntry() {
-		String entry = "DUMY: ID=000, TYPE=0, COLOR=0, OLDX=0, OLDY=0, NEWX=0, NEWY=0";
-		if (gameLog.size() > 1) {
-			entry = gameLog.get(gameLog.size() - 2);
+//update en passant and castling logic (pawn, movementhandler)
+	public String getPriorEntry(int steps) {
+		String entry = "DUMY: ID=0000, TYPE=0, COLOR=0, OLDX=0, OLDY=0, NEWX=0, NEWY=0";
+		if (gameLog.size() > steps-1) {
+			entry = gameLog.get(gameLog.size()-steps);
 		}
 		return entry;
 	}
-//do int instead
-	public String getFigureIDfromEntry(String entry) {
-		String id = "000";
+	
+	public int getFigureIDfromEntry(String entry) {
 		if (entry != null) {
-			char a = entry.charAt(9);
-			char b = entry.charAt(10);
-			char c = entry.charAt(11);
-			id = a + "" + b + "" + c;
+			int int1 = convertCharToInt(entry.charAt(9));
+			int int2 = convertCharToInt(entry.charAt(10));
+			int int3 = convertCharToInt(entry.charAt(11));
+			int int4 = convertCharToInt(entry.charAt(12));
+			return (int1 * 1000) + (int2 * 100) + (int3 * 10) + int4;
 		}
-		return id;
+		return 0;
+	}
+	
+	private int convertCharToInt(char input) {
+		return input - ASCII_NUMBER_DIFF;
 	}
 
 	public int getColorfromEntry(String entry) {
-		int color = -1;
 		if (entry != null) {
-			int chara = (int) entry.charAt(28);
-			color = chara - 48;
+			return convertCharToInt(entry.charAt(29));
 		}
-		return color;
+		return -1;
 	}
 
 	public int getFigureTypefromEntry(String entry) {
-		int type = -1;
 		if (entry != null) {
-			int chara = (int) entry.charAt(19);
-			type = chara - 48;
+			return convertCharToInt(entry.charAt(20));
 		}
-		return type;
+		return -1;
 	}
+	
 //duplicate code to coordinateHelper
 	public int getXMovementfromEntry(String entry) {
 		int xMovement = 0;
 		if (entry != null) {
-			int chara = (int) entry.charAt(36);
-			int charb = (int) entry.charAt(52);
-			int oldX = chara - 48;
-			int newX = charb - 48;
+			int chara = (int) entry.charAt(37);
+			int charb = (int) entry.charAt(53);
+			int oldX = chara - ASCII_NUMBER_DIFF;
+			int newX = charb - ASCII_NUMBER_DIFF;
 			xMovement = newX - oldX;
 		}
 		return xMovement;
 	}
+	
 //duplicate code to coordinateHelper
 	public int getYMovementfromEntry(String entry) {
 		int yMovement = 0;
 		if (entry != null) {
-			int chara = (int) entry.charAt(44);
-			int charb = (int) entry.charAt(60);
-			int oldY = chara - 48;
-			int newY = charb - 48;
+			int chara = (int) entry.charAt(45);
+			int charb = (int) entry.charAt(61);
+			int oldY = chara - ASCII_NUMBER_DIFF;
+			int newY = charb - ASCII_NUMBER_DIFF;
 			yMovement = newY - oldY;
 		}
 		return yMovement;
@@ -119,8 +107,8 @@ public class GameLog {
 	public int getOldXfromEntry(String entry) {
 		int oldX = 0;
 		if (entry != null) {
-			int chara = (int) entry.charAt(36);
-			oldX = chara - 48;
+			int chara = (int) entry.charAt(37);
+			oldX = chara - ASCII_NUMBER_DIFF;
 		}
 		return oldX;
 	}
@@ -128,8 +116,8 @@ public class GameLog {
 	public int getNewXfromEntry(String entry) {
 		int newX = 0;
 		if (entry != null) {
-			int chara = (int) entry.charAt(52);
-			newX = chara - 48;
+			int chara = (int) entry.charAt(53);
+			newX = chara - ASCII_NUMBER_DIFF;
 		}
 		return newX;
 	}
@@ -137,8 +125,8 @@ public class GameLog {
 	public int getOldYfromEntry(String entry) {
 		int oldY = 0;
 		if (entry != null) {
-			int chara = (int) entry.charAt(44);
-			oldY = chara - 48;
+			int chara = (int) entry.charAt(45);
+			oldY = chara - ASCII_NUMBER_DIFF;
 		}
 		return oldY;
 	}
@@ -146,8 +134,8 @@ public class GameLog {
 	public int getNewYfromEntry(String entry) {
 		int newY = 0;
 		if (entry != null) {
-			int chara = (int) entry.charAt(60);
-			newY = chara - 48;
+			int chara = (int) entry.charAt(61);
+			newY = chara - ASCII_NUMBER_DIFF;
 		}
 		return newY;
 	}

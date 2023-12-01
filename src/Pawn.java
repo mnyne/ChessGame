@@ -1,11 +1,11 @@
 public class Pawn extends Figure {
 
-	public Pawn(String s_color, String startingPosition) {
-		super(3, s_color, startingPosition);
+	public Pawn(int color, int startIndex) {
+		super(3, color, startIndex);
 	}
 	
-	public Pawn(int color) {
-		super(3, color);
+	public Pawn(int color, int currentID, int currentIndex) {
+		super(3, color, currentID, currentIndex);
 	}
 	
 	public boolean moveIsLegal(ChessBoard currentBoard, Figure selectedFigure, int targetIndex) {
@@ -29,7 +29,7 @@ public class Pawn extends Figure {
 
 	private boolean forwardMoveLegal(MovementValidityChecker move) {
 		if (move.orthogonalMove() && !move.orthogonalCollision()  && !move.canCapture()) {
-			if (!this.hasMovedStatus() && move.hasLength(2)) {
+			if (!this.hasMoved() && move.hasLength(2)) {
 				return true;
 			} else if (move.hasLength(1)) {
 				return true;
@@ -39,18 +39,15 @@ public class Pawn extends Figure {
 	}
 	
 	public Figure deepCopy() {
-		Pawn copy = new Pawn(this.getFigureColor());
-		copy.setNewPosition(this.getXPosition(), this.getYPosition());
-		copy.updateMovedStatus(this.hasMovedStatus());
-		copy.setEnPassantStatus(this.getEnPassantStatus());
+		Pawn copy = new Pawn(this.getFigureColor(), this.getFigureID(), this.getCurrentIndex());
+		copy.updateMovedStatus(this.hasMoved());
 		return copy;
 	}
 	
 	public void updateEnPassantEligibility(GameLog gameLog) {
 		setEnPassantStatus(false);
-        String logID = gameLog.getFigureIDfromEntry(gameLog.getLastEntry());
-        int yMovement = gameLog.getYMovementfromEntry(gameLog.getLastEntry());
-        if(logID.equals(this.getFigureID())) {
+        int yMovement = gameLog.getYMovementfromEntry(gameLog.getPriorEntry(1));
+        if(gameLog.getFigureIDfromEntry(gameLog.getPriorEntry(1)) == this.getFigureID()) {
         	if(yMovement == 2 || yMovement == -2) {
         		setEnPassantStatus(true);
         	}

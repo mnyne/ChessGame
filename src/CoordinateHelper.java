@@ -1,13 +1,16 @@
 public class CoordinateHelper {
-	
+
 	private final int TILE_SIZE = 42;
 	private final int BOARD_SIZE = 8;
-	private final int ASCII_CHAR_DIFF = 97;
-	
+	private final int ASCII_LETTER_DIFF = 97;
+	private final int ASCII_NUMBER_DIFF = 48;
+
 	public CoordinateHelper() {
-		
+
 	}
-// shorten functions, update code to use indexes whenever possible and get rid of unnecessary functions
+
+	// shorten functions, update code to use indexes whenever possible and get
+	// rid of unnecessary functions
 	public int convertXYtoIndex(int x, int y) {
 		int index = 0;
 		index = (y * BOARD_SIZE) + x;
@@ -35,17 +38,18 @@ public class CoordinateHelper {
 		y = y * TILE_SIZE;
 		return y;
 	}
-	
+
 	public int convertCoordToOptical(int coordinate) {
 		return coordinate * TILE_SIZE;
 	}
-	
+
 	public int convertOpticalToRegular(int coordinate) {
 		return coordinate / TILE_SIZE;
 	}
 
 	public int convertOpticalXYtoIndex(int x, int y) {
-		int index = (convertXYtoIndex(convertOpticalToRegular(x), convertOpticalToRegular(y)));
+		int index = (convertXYtoIndex(convertOpticalToRegular(x),
+				convertOpticalToRegular(y)));
 		return index;
 	}
 
@@ -63,9 +67,22 @@ public class CoordinateHelper {
 	}
 
 	public String convertCoordsToNotationString(int x, int y) {
-		x += ASCII_CHAR_DIFF;
+		x += ASCII_LETTER_DIFF;
 		char convX = (char) x;
 		int convY = BOARD_SIZE - y;
 		return convX + "" + convY;
+	}
+
+	public int convertNotationToY(String notation) {
+		char c = notation.charAt(1);
+		int i = (int) c - ASCII_NUMBER_DIFF;
+		int convertY = BOARD_SIZE - i;
+		return convertY;
+	}
+
+	public int convertNotationToX(String notation) {
+		char c = notation.charAt(0);
+		int convertX = (int) c - ASCII_LETTER_DIFF;
+		return convertX;
 	}
 }

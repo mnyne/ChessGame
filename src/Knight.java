@@ -1,10 +1,10 @@
 public class Knight extends Figure {
-	public Knight(String s_color, String startingPosition) {
-        super(2, s_color, startingPosition);
+	public Knight(int color, int startIndex) {
+        super(2, color, startIndex);
     }
 	
-	public Knight(int color) {
-		super(2, color);
+	public Knight(int color, int currentID, int currentIndex) {
+		super(2, color, currentID, currentIndex);
 	}
 	
 	public boolean moveIsLegal(ChessBoard currentBoard, Figure selectedFigure, int targetIndex) {
@@ -18,9 +18,8 @@ public class Knight extends Figure {
 	}
 	
 	public Figure deepCopy() {
-		Knight copy = new Knight(this.getFigureColor());
-		copy.setNewPosition(this.getXPosition(), this.getYPosition());
-		copy.updateMovedStatus(this.hasMovedStatus());
+		Knight copy = new Knight(this.getFigureColor(), this.getFigureID(), this.getCurrentIndex());
+		copy.updateMovedStatus(this.hasMoved());
 		return copy;
 	}
 	

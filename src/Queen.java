@@ -1,10 +1,10 @@
 public class Queen extends Figure {
-	public Queen(String s_color, String startingPosition) {
-		super(4, s_color, startingPosition);
+	public Queen(int color, int startIndex) {
+		super(4, color, startIndex);
 	}
 
-	public Queen(int color) {
-		super(4, color);
+	public Queen(int color, int currentID, int currentIndex) {
+		super(4, color, currentID, currentIndex);
 	}
 
 	public boolean moveIsLegal(ChessBoard currentBoard, Figure selectedFigure, int targetIndex) {
@@ -20,9 +20,8 @@ public class Queen extends Figure {
 	}
 
 	public Figure deepCopy() {
-		Queen copy = new Queen(this.getFigureColor());
-		copy.setNewPosition(this.getXPosition(), this.getYPosition());
-		copy.updateMovedStatus(this.hasMovedStatus());
+		Queen copy = new Queen(this.getFigureColor(), this.getFigureID(), this.getCurrentIndex());
+		copy.updateMovedStatus(this.hasMoved());
 		return copy;
 	}
 	

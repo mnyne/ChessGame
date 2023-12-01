@@ -1,10 +1,10 @@
 public class Rook extends Figure {
-	public Rook(String s_color, String startingPosition) {
-		super(5, s_color, startingPosition);
+	public Rook(int color, int startIndex) {
+		super(5, color, startIndex);
 	}
 
-	public Rook(int color) {
-		super(5, color);
+	public Rook(int color, int currentID, int currentIndex) {
+		super(5, color, currentID, currentIndex);
 	}
 
 	public boolean moveIsLegal(ChessBoard currentBoard, Figure selectedFigure, int targetIndex) {
@@ -17,9 +17,8 @@ public class Rook extends Figure {
 	}
 
 	public Figure deepCopy() {
-		Rook copy = new Rook(this.getFigureColor());
-		copy.setNewPosition(this.getXPosition(), this.getYPosition());
-		copy.updateMovedStatus(this.hasMovedStatus());
+		Rook copy = new Rook(this.getFigureColor(), this.getFigureID(), this.getCurrentIndex());
+		copy.updateMovedStatus(this.hasMoved());
 		return copy;
 	}
 	

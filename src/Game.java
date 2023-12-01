@@ -76,38 +76,38 @@ public class Game {
 
 	public void initializeGame() {
 		// get index from XY coords, get rid of strings, make starting grid more flexible
-		chessBoard.addFigure(0, new Rook("black", "a8"));
-		chessBoard.addFigure(1, new Knight("black", "b8"));
-		chessBoard.addFigure(2, new Bishop("black", "c8"));
-		chessBoard.addFigure(3, new Queen("black", "d8"));
-		chessBoard.addFigure(4, new King("black", "e8"));
-		chessBoard.addFigure(5, new Bishop("black", "f8"));
-		chessBoard.addFigure(6, new Knight("black", "g8"));
-		chessBoard.addFigure(7, new Rook("black", "h8"));
-		chessBoard.addFigure(8, new Pawn("black", "a7"));
-		chessBoard.addFigure(9, new Pawn("black", "b7"));
-		chessBoard.addFigure(10, new Pawn("black", "c7"));
-		chessBoard.addFigure(11, new Pawn("black", "d7"));
-		chessBoard.addFigure(12, new Pawn("black", "e7"));
-		chessBoard.addFigure(13, new Pawn("black", "f7"));
-		chessBoard.addFigure(14, new Pawn("black", "g7"));
-		chessBoard.addFigure(15, new Pawn("black", "h7"));
-		chessBoard.addFigure(48, new Pawn("white", "a2"));
-		chessBoard.addFigure(49, new Pawn("white", "b2"));
-		chessBoard.addFigure(50, new Pawn("white", "c2"));
-		chessBoard.addFigure(51, new Pawn("white", "d2"));
-		chessBoard.addFigure(52, new Pawn("white", "e2"));
-		chessBoard.addFigure(53, new Pawn("white", "f2"));
-		chessBoard.addFigure(54, new Pawn("white", "g2"));
-		chessBoard.addFigure(55, new Pawn("white", "h2"));
-		chessBoard.addFigure(56, new Rook("white", "a1"));
-		chessBoard.addFigure(57, new Knight("white", "b1"));
-		chessBoard.addFigure(58, new Bishop("white", "c1"));
-		chessBoard.addFigure(59, new Queen("white", "d1"));
-		chessBoard.addFigure(60, new King("white", "e1"));
-		chessBoard.addFigure(61, new Bishop("white", "f1"));
-		chessBoard.addFigure(62, new Knight("white", "g1"));
-		chessBoard.addFigure(63, new Rook("white", "h1"));
+		chessBoard.addFigure(0, new Rook(1, 0));
+		chessBoard.addFigure(1, new Knight(1,1));
+		chessBoard.addFigure(2, new Bishop(1,2));
+		chessBoard.addFigure(3, new Queen(1,3));
+		chessBoard.addFigure(4, new King(1,4));
+		chessBoard.addFigure(5, new Bishop(1,5));
+		chessBoard.addFigure(6, new Knight(1,6));
+		chessBoard.addFigure(7, new Rook(1,7));
+		chessBoard.addFigure(8, new Pawn(1,8));
+		chessBoard.addFigure(9, new Pawn(1,9));
+		chessBoard.addFigure(10, new Pawn(1,10));
+		chessBoard.addFigure(11, new Pawn(1,11));
+		chessBoard.addFigure(12, new Pawn(1,12));
+		chessBoard.addFigure(13, new Pawn(1,13));
+		chessBoard.addFigure(14, new Pawn(1,14));
+		chessBoard.addFigure(15, new Pawn(1,15));
+		chessBoard.addFigure(48, new Pawn(0,48));
+		chessBoard.addFigure(49, new Pawn(0, 49));
+		chessBoard.addFigure(50, new Pawn(0, 50));
+		chessBoard.addFigure(51, new Pawn(0, 51));
+		chessBoard.addFigure(52, new Pawn(0, 52));
+		chessBoard.addFigure(53, new Pawn(0, 53));
+		chessBoard.addFigure(54, new Pawn(0, 54));
+		chessBoard.addFigure(55, new Pawn(0, 55));
+		chessBoard.addFigure(56, new Rook(0, 56));
+		chessBoard.addFigure(57, new Knight(0, 57));
+		chessBoard.addFigure(58, new Bishop(0, 58));
+		chessBoard.addFigure(59, new Queen(0, 59));
+		chessBoard.addFigure(60, new King(0, 60));
+		chessBoard.addFigure(61, new Bishop(0, 61));
+		chessBoard.addFigure(62, new Knight(0, 62));
+		chessBoard.addFigure(63, new Rook(0, 63));
 	}
 	
 	

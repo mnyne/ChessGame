@@ -39,7 +39,7 @@ public class MovementValidityChecker {
 	public boolean canEnPassant() {
 		if (currentBoard.getFigureAt(targetX, currentY) != null
 				&& currentBoard.getFigureAt(targetX, currentY)
-						.getEnPassantStatus()) {
+						.eligibleForEnPassant()) {
 			return true;
 		}
 		return false;
@@ -223,11 +223,11 @@ public class MovementValidityChecker {
 	}
 
 	private boolean canCastleKingside() {
-		if (!currentFigure.hasMovedStatus() && !castlingCollisionKingside()) {
+		if (!currentFigure.hasMoved() && !castlingCollisionKingside()) {
 			if (targetY == currentY && targetX == currentX + 2) {
 				Figure towerFigure = currentBoard.getFigureAt(currentX + 3,
 						currentY);
-				if (towerFigure != null && !towerFigure.hasMovedStatus()) {
+				if (towerFigure != null && !towerFigure.hasMoved()) {
 					return true;
 				}
 			}
@@ -236,11 +236,11 @@ public class MovementValidityChecker {
 	}
 
 	private boolean canCastleQueenside() {
-		if (!currentFigure.hasMovedStatus() && !castlingCollisionQueenside()) {
+		if (!currentFigure.hasMoved() && !castlingCollisionQueenside()) {
 			if (targetY == currentY && targetX == currentX - 2) {
 				Figure towerFigure = currentBoard.getFigureAt(currentX - 4,
 						currentY);
-				if (towerFigure != null && !towerFigure.hasMovedStatus()) {
+				if (towerFigure != null && !towerFigure.hasMoved()) {
 					return true;
 				}
 			}
