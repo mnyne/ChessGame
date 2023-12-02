@@ -1,6 +1,3 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.awt.Graphics;
 
 import acm.graphics.GObject;
@@ -40,7 +37,7 @@ public abstract class Figure extends GObject {
 		this.sprite = sp.getSprite();
 	}
 	
-// constructor for copying
+		// constructor for copying
 	public Figure(int in_figureType, int in_color, int in_id, int currentIndex) {
 		figureType = in_figureType;
 		color = in_color;
@@ -123,7 +120,7 @@ public abstract class Figure extends GObject {
 	public void updateMovedStatus(boolean hasMoved) {
 		this.hasMoved = hasMoved;
 	}
-	// rename to hasMoved
+	
 	public boolean hasMoved() {
 		return this.hasMoved;
 	}

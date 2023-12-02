@@ -9,7 +9,7 @@ public class MoveSimulator {
 	private ChessBoard simulatedBoard;
 	private int simulatedTurn;
 
-	private final int FIGURES_PER_PLAYER = 16;
+	private final int MAX_FIGURES_PER_PLAYER = 16;
 
 	public MoveSimulator(ChessBoard currentBoard, Figure selectedFigure,
 			int currentTurn) {
@@ -28,16 +28,13 @@ public class MoveSimulator {
 		simulatedBoard.removeFigure(xCache, yCache);
 	}
 	
-//try to clean up that mess
+//try to clean up that mess && HANDLE EN PASSANT FIGURE REMOVAL IN HERE
 	public ChessBoard simulatedPlayerFigures() {
-		ChessBoard simulatedPlayerFigures = new ChessBoard(FIGURES_PER_PLAYER);
+		ChessBoard simulatedPlayerFigures = new ChessBoard(MAX_FIGURES_PER_PLAYER);
 		int figureIndex = 0;
 		for (int boardIndex = 0; boardIndex < simulatedBoard.getLength(); boardIndex++) {
-			if (simulatedBoard.getFigureAtIndex(boardIndex) != null
-					&& simulatedBoard.getFigureAtIndex(boardIndex)
-							.getFigureColor() == simulatedTurn % 2) {
-				simulatedPlayerFigures.addFigure(figureIndex,
-						simulatedBoard.getFigureAtIndex(boardIndex));
+			if (simulatedBoard.getFigureAtIndex(boardIndex) != null&& simulatedBoard.getFigureAtIndex(boardIndex).getFigureColor() == simulatedTurn % 2) {
+				simulatedPlayerFigures.addFigure(figureIndex,simulatedBoard.getFigureAtIndex(boardIndex));
 				figureIndex += 1;
 			}
 		}
@@ -47,18 +44,12 @@ public class MoveSimulator {
 	public MovementArray possiblePlayerMoves() {
 		ChessBoard simulatedPlayerFigures = simulatedPlayerFigures();
 		MovementArray possiblePlayerMoves = new MovementArray();
-		for (int arrayIndex = 0; arrayIndex < simulatedPlayerFigures
-				.getLength(); arrayIndex++) {
-			Figure figureAtIndex = simulatedPlayerFigures
-					.getFigureAtIndex(arrayIndex);
+		for (int arrayIndex = 0; arrayIndex < simulatedPlayerFigures.getLength(); arrayIndex++) {
+			Figure figureAtIndex = simulatedPlayerFigures.getFigureAtIndex(arrayIndex);
 			if (figureAtIndex != null) {
-				MovementArray possibleMoveForFigureAtIndex = movementHandler
-						.possibleMoveArray(simulatedBoard, figureAtIndex,
-								simulatedTurn);
-				for (int figureArrayIndex = 0; figureArrayIndex < possibleMoveForFigureAtIndex
-						.getLength(); figureArrayIndex++) {
-					if (possibleMoveForFigureAtIndex
-							.moveAtIndexAllowed(figureArrayIndex)) {
+				MovementArray possibleMoveForFigureAtIndex = movementHandler.possibleMoveArray(simulatedBoard, figureAtIndex,simulatedTurn);
+				for (int figureArrayIndex = 0; figureArrayIndex < possibleMoveForFigureAtIndex.getLength(); figureArrayIndex++) {
+					if (possibleMoveForFigureAtIndex.moveAtIndexAllowed(figureArrayIndex)) {
 						possiblePlayerMoves.setIndexToTrue(figureArrayIndex);
 					}
 				}
@@ -71,8 +62,7 @@ public class MoveSimulator {
 		int simulatedKingIndex = 0;
 		for (int boardIndex = 0; boardIndex < simulatedBoard.getLength(); boardIndex++) {
 			Figure potentialKing = simulatedBoard.getFigureAtIndex(boardIndex);
-			if (potentialKing != null && potentialKing.getFigureType() == 1
-					&& potentialKing.getFigureColor() != simulatedTurn % 2) {
+			if (potentialKing != null && potentialKing.getFigureType() == 1&& potentialKing.getFigureColor() != simulatedTurn % 2) {
 				simulatedKingIndex = boardIndex;
 			}
 		}

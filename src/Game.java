@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-
 public class Game {
 	
 	private final int BOARD_LENGTH = 8;
@@ -66,6 +64,7 @@ public class Game {
 			currentTurn += 1;
 		}
 		chessBoard.updateMovedStatusForFigures(gameLog);
+		handleSpecialCasesAfterMove();
 	}
 	
 	public void handleSpecialCasesAfterMove() {
@@ -75,7 +74,7 @@ public class Game {
 	}
 
 	public void initializeGame() {
-		// get index from XY coords, get rid of strings, make starting grid more flexible
+		// maybe make starting grid more flexible
 		chessBoard.addFigure(0, new Rook(1, 0));
 		chessBoard.addFigure(1, new Knight(1,1));
 		chessBoard.addFigure(2, new Bishop(1,2));

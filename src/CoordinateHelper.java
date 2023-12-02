@@ -12,31 +12,23 @@ public class CoordinateHelper {
 	// shorten functions, update code to use indexes whenever possible and get
 	// rid of unnecessary functions
 	public int convertXYtoIndex(int x, int y) {
-		int index = 0;
-		index = (y * BOARD_SIZE) + x;
-		return index;
+		return (y * BOARD_SIZE) + x;
 	}
 
 	public int convertIndextoX(int index) {
-		int x = (index % BOARD_SIZE);
-		return x;
+		return (index % BOARD_SIZE);
 	}
 
 	public int convertIndextoY(int index) {
-		int y = (index / BOARD_SIZE);
-		return y;
+		return (index / BOARD_SIZE);
 	}
 
 	public int convertIndextoOpticalX(int index) {
-		int x = (index % BOARD_SIZE);
-		x = x * TILE_SIZE;
-		return x;
+		return (index % BOARD_SIZE) * TILE_SIZE;
 	}
 
 	public int convertIndextoOpticalY(int index) {
-		int y = (index / BOARD_SIZE);
-		y = y * TILE_SIZE;
-		return y;
+		return (index / BOARD_SIZE) * TILE_SIZE;
 	}
 
 	public int convertCoordToOptical(int coordinate) {
@@ -48,29 +40,26 @@ public class CoordinateHelper {
 	}
 
 	public int convertOpticalXYtoIndex(int x, int y) {
-		int index = (convertXYtoIndex(convertOpticalToRegular(x),
-				convertOpticalToRegular(y)));
-		return index;
+		return convertXYtoIndex(convertOpticalToRegular(x),convertOpticalToRegular(y));
 	}
 
-	public int getAdjustedDiff(int potential, int current) {
-		int diff = current - potential;
+	public int getAdjustedDiff(int targetCoordinate, int currentCoordinate) {
+		int diff = currentCoordinate - targetCoordinate;
 		if (diff < 0) {
 			diff = -diff;
 		}
 		return diff;
 	}
 
-	public int getRawDiff(int potential, int current) {
-		int diff = current - potential;
-		return diff;
+	public int getRawDiff(int targetCoordiante, int currentCoordinate) {
+		return currentCoordinate - targetCoordiante;
 	}
 
-	public String convertCoordsToNotationString(int x, int y) {
-		x += ASCII_LETTER_DIFF;
-		char convX = (char) x;
-		int convY = BOARD_SIZE - y;
-		return convX + "" + convY;
+	public String convertCoordsToNotationString(int xCoordinate, int yCoordinate) {
+		xCoordinate += ASCII_LETTER_DIFF;
+		char xNotation = (char) xCoordinate;
+		int yNotation = BOARD_SIZE - yCoordinate;
+		return xNotation + "" + yNotation;
 	}
 
 	public int convertNotationToY(String notation) {

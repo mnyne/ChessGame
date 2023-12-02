@@ -44,11 +44,9 @@ public class ChessGame extends GraphicsProgram {
 	}
 
 	private void runFirstClick() {
-		int targetIndex = coordinateHelper.convertOpticalXYtoIndex(mouseX,
-				mouseY);
+		int targetIndex = coordinateHelper.convertOpticalXYtoIndex(mouseX,mouseY);
 		if (game.getChessBoard().getFigureAtIndex(targetIndex) != null) {
-			game.setSelectedFigure(game.getChessBoard().getFigureAtIndex(
-					targetIndex));
+			game.setSelectedFigure(game.getChessBoard().getFigureAtIndex(targetIndex));
 			highlightSelection();
 			game.updateLegalMoveArray();
 			showLegalMoves();
@@ -58,14 +56,12 @@ public class ChessGame extends GraphicsProgram {
 	}
 
 	private void runSecondClick() {
-		int targetIndex = coordinateHelper.convertOpticalXYtoIndex(mouseX,
-				mouseY);
+		int targetIndex = coordinateHelper.convertOpticalXYtoIndex(mouseX, mouseY);
 		game.makeMove(targetIndex);
 		setCanvasForNextTurn();
 	}
 
 	private void setCanvasForNextTurn() {
-		game.handleSpecialCasesAfterMove();
 		removeAll();
 		drawBackground();
 		drawFigures();
@@ -82,38 +78,22 @@ public class ChessGame extends GraphicsProgram {
 	
 
 	private void showCheckMoves() {
-		MovementArray checkMoveArray = game.getMovementHandler()
-				.kingInCheckArray(game.getChessBoard(),
-						game.getSelectedFigure(), game.getCurrentTurn());
-		for (int kingInCheckIndex = 0; kingInCheckIndex < game.getChessBoard()
-				.getLength(); kingInCheckIndex++) {
+		MovementArray checkMoveArray = game.getMovementHandler().kingInCheckArray(game.getChessBoard(),game.getSelectedFigure(), game.getCurrentTurn());
+		for (int kingInCheckIndex = 0; kingInCheckIndex < game.getChessBoard().getLength(); kingInCheckIndex++) {
 			if (!checkMoveArray.moveAtIndexAllowed(kingInCheckIndex)) {
-				GRect checkMoveIndicator = new GRect(MOVE_INDICATOR_SIZE,
-						MOVE_INDICATOR_SIZE);
+				GRect checkMoveIndicator = new GRect(MOVE_INDICATOR_SIZE,MOVE_INDICATOR_SIZE);
 				checkMoveIndicator.setColor(Color.RED);
-				add(checkMoveIndicator,
-						coordinateHelper
-								.convertIndextoOpticalX(kingInCheckIndex)
-								+ ((TILE_SIZE - MOVE_INDICATOR_SIZE) / 2),
-						coordinateHelper
-								.convertIndextoOpticalY(kingInCheckIndex)
-								+ ((TILE_SIZE - MOVE_INDICATOR_SIZE) / 2));
+				add(checkMoveIndicator,coordinateHelper.convertIndextoOpticalX(kingInCheckIndex)+ ((TILE_SIZE - MOVE_INDICATOR_SIZE) / 2),coordinateHelper.convertIndextoOpticalY(kingInCheckIndex)+ ((TILE_SIZE - MOVE_INDICATOR_SIZE) / 2));
 			}
 		}
 	}
 
 	private void showLegalMoves() {
-		for (int legalMoveIndex = 0; legalMoveIndex < game.getChessBoard()
-				.getLength(); legalMoveIndex++) {
+		for (int legalMoveIndex = 0; legalMoveIndex < game.getChessBoard().getLength(); legalMoveIndex++) {
 			if (game.getLegalMoveArray().moveAtIndexAllowed(legalMoveIndex)) {
-				GRect validMoveIndicator = new GRect(MOVE_INDICATOR_SIZE,
-						MOVE_INDICATOR_SIZE);
+				GRect validMoveIndicator = new GRect(MOVE_INDICATOR_SIZE,MOVE_INDICATOR_SIZE);
 				validMoveIndicator.setColor(Color.GREEN);
-				add(validMoveIndicator,
-						coordinateHelper.convertIndextoOpticalX(legalMoveIndex)
-								+ ((TILE_SIZE - MOVE_INDICATOR_SIZE) / 2),
-						coordinateHelper.convertIndextoOpticalY(legalMoveIndex)
-								+ ((TILE_SIZE - MOVE_INDICATOR_SIZE) / 2));
+				add(validMoveIndicator,coordinateHelper.convertIndextoOpticalX(legalMoveIndex)+ ((TILE_SIZE - MOVE_INDICATOR_SIZE) / 2),coordinateHelper.convertIndextoOpticalY(legalMoveIndex)+ ((TILE_SIZE - MOVE_INDICATOR_SIZE) / 2));
 			}
 		}
 	}
@@ -128,9 +108,7 @@ public class ChessGame extends GraphicsProgram {
 	private void drawFigures() {
 		for (int i = 0; i < game.getChessBoard().getLength(); i++) {
 			if (game.getChessBoard().getFigureAtIndex(i) != null) {
-				add(game.getChessBoard().getFigureAtIndex(i).getSprite(), game
-						.getChessBoard().getFigureAtIndex(i).getOpticalX(),
-						game.getChessBoard().getFigureAtIndex(i).getOpticalY());
+				add(game.getChessBoard().getFigureAtIndex(i).getSprite(), game.getChessBoard().getFigureAtIndex(i).getOpticalX(),game.getChessBoard().getFigureAtIndex(i).getOpticalY());
 			}
 		}
 	}

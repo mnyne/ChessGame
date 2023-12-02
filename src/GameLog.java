@@ -14,7 +14,7 @@ public class GameLog {
 	public void addEntry(String entry) {
 		gameLog.add(entry);
 	}
-//string as int instead, remove temp variables
+// remove temp variables
 //log positions as index instead, do everything else with coordinatehelper
 	public void logMove(Figure figure, int targetIndex) {
 		int oldX = figure.getXPosition();
