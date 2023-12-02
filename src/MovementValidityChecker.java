@@ -62,7 +62,7 @@ public class MovementValidityChecker {
 	}
 
 	public boolean lShapedMove() {
-		if (xDiff + yDiff == 3 && xDiff != 0) {
+		if (xDiff + yDiff == 3 && xDiff != 0 && yDiff != 0) {
 			return true;
 		}
 		return false;

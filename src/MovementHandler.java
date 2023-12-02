@@ -8,10 +8,10 @@ public class MovementHandler {
 	
 	//get rid of unnecessary player turn and figure color arrays and just do an if instead
 	
-	public MovementArray legalMoveArray(ChessBoard currentBoard, Figure selectedFigure, int currentTurn) {
+	public MovementArray legalMoveArray(ChessBoard currentBoard, Figure selectedFigure, int currentHalfMove) {
 		
-		MovementArray legalMoveArray = possibleMoveArray(currentBoard, selectedFigure, currentTurn);
-		MovementArray kingInCheckArray = kingInCheckArray(currentBoard, selectedFigure, currentTurn);
+		MovementArray legalMoveArray = possibleMoveArray(currentBoard, selectedFigure, currentHalfMove);
+		MovementArray kingInCheckArray = kingInCheckArray(currentBoard, selectedFigure, currentHalfMove);
 		
 		for (int arrayIndex = 0; arrayIndex < legalMoveArray.getLength(); arrayIndex++) {
 			if(!kingInCheckArray.moveAtIndexAllowed(arrayIndex)) {
@@ -23,14 +23,14 @@ public class MovementHandler {
 	
 	}
 	
-	public MovementArray kingInCheckArray(ChessBoard currentBoard, Figure selectedFigure, int currentTurn) {
+	public MovementArray kingInCheckArray(ChessBoard currentBoard, Figure selectedFigure, int currentHalfMove) {
 		
-		MovementArray possibleMoveArray = possibleMoveArray(currentBoard, selectedFigure, currentTurn);
+		MovementArray possibleMoveArray = possibleMoveArray(currentBoard, selectedFigure, currentHalfMove);
 		MovementArray kingInCheckArray = emptyTrueArray();
 		
 		for (int arrayIndex = 0; arrayIndex < kingInCheckArray.getLength(); arrayIndex++) {
 			if(possibleMoveArray.moveAtIndexAllowed(arrayIndex)) {
-				MoveSimulator moveSimulator = new MoveSimulator(currentBoard.deepCopy(), selectedFigure, currentTurn);
+				MoveSimulator moveSimulator = new MoveSimulator(currentBoard.deepCopy(), selectedFigure, currentHalfMove);
 				moveSimulator.simulateMove(arrayIndex);
 				if (moveSimulator.possiblePlayerMoves().moveAtIndexAllowed(moveSimulator.getSimulatedKingIndex())) {
 					kingInCheckArray.setIndexToFalse(arrayIndex);
@@ -41,9 +41,9 @@ public class MovementHandler {
 		return kingInCheckArray;
 	}
 
-	public MovementArray possibleMoveArray(ChessBoard currentBoard, Figure selectedFigure, int currentTurn) {
+	public MovementArray possibleMoveArray(ChessBoard currentBoard, Figure selectedFigure, int currentHalfMove) {
 		
-		MovementArray playerTurnArray = playerTurnArray(selectedFigure, currentTurn);
+		MovementArray playerTurnArray = playerTurnArray(selectedFigure, currentHalfMove);
 		MovementArray figureColorArray = figureColorArray(currentBoard, selectedFigure);
 		MovementArray figureMovementArray = figureMovementArray(currentBoard, selectedFigure);
 		MovementArray possibleMoveArray = emptyTrueArray();
@@ -79,12 +79,12 @@ public class MovementHandler {
 		return emptyTrueArray;
 	}
 
-	public MovementArray playerTurnArray(Figure selectedFigure, int currentTurn) {
+	public MovementArray playerTurnArray(Figure selectedFigure, int currentHalfMove) {
 		
 		MovementArray playerTurnArray = emptyTrueArray();
 		
 		for (int arrayIndex = 0; arrayIndex < playerTurnArray.getLength(); arrayIndex++) {
-			if (currentTurn % 2 != selectedFigure.getFigureColor()) {
+			if (currentHalfMove % 2 != selectedFigure.getFigureColor()) {
 				playerTurnArray.setIndexToFalse(arrayIndex);
 			}
 		}

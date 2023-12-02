@@ -78,7 +78,7 @@ public class ChessGame extends GraphicsProgram {
 	
 
 	private void showCheckMoves() {
-		MovementArray checkMoveArray = game.getMovementHandler().kingInCheckArray(game.getChessBoard(),game.getSelectedFigure(), game.getCurrentTurn());
+		MovementArray checkMoveArray = game.getMovementHandler().kingInCheckArray(game.getChessBoard(),game.getSelectedFigure(), game.getCurrentHalfMove());
 		for (int kingInCheckIndex = 0; kingInCheckIndex < game.getChessBoard().getLength(); kingInCheckIndex++) {
 			if (!checkMoveArray.moveAtIndexAllowed(kingInCheckIndex)) {
 				GRect checkMoveIndicator = new GRect(MOVE_INDICATOR_SIZE,MOVE_INDICATOR_SIZE);

@@ -12,11 +12,11 @@ public class MoveSimulator {
 	private final int MAX_FIGURES_PER_PLAYER = 16;
 
 	public MoveSimulator(ChessBoard currentBoard, Figure selectedFigure,
-			int currentTurn) {
+			int currentHalfMove) {
 		simulatedBoard = currentBoard.deepCopy();
 		simulatedFigure = simulatedBoard.getFigureAt(
 				selectedFigure.getXPosition(), selectedFigure.getYPosition());
-		simulatedTurn = currentTurn + 1;
+		simulatedTurn = currentHalfMove + 1;
 	}
 
 	public void simulateMove(int simulatedTargetIndex) {
