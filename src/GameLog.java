@@ -29,6 +29,19 @@ public class GameLog {
 				+ ", NewY=" + newY);
 	}
 
+	public void logMoveFromFen(Figure figure, int startIndex) {
+		int oldX = coordinateHelper.convertIndextoX(startIndex);
+		int oldY = coordinateHelper.convertIndextoY(startIndex);
+		int id = figure.getFigureID();
+		int type = figure.getFigureType();
+		int color = figure.getFigureColor();
+		int newX = figure.getXPosition();
+		int newY = figure.getYPosition();
+		addEntry("Move: ID=" + id + ", Type=" + type + ", Color=" + color
+				+ ", OldX=" + oldX + ", OldY=" + oldY + ", NewX=" + newX
+				+ ", NewY=" + newY);
+	}
+
 	public boolean hasFigureMoved(Figure figure) {
 		int figureID = figure.getFigureID();
 		for (int index = 0; index < gameLog.size(); index++) {

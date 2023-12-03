@@ -6,10 +6,10 @@ public class MovementHandler {
 
 	}
 	
-	public MovementArray legalMoveArray(ChessBoard currentBoard, Figure selectedFigure, int currentHalfMove) {
+	public MovementArray legalMoveArray(ChessBoard currentBoard, Figure selectedFigure, int currentHalfMove, GameLog gameLog) {
 		
 		MovementArray legalMoveArray = figureMovementArray(currentBoard, selectedFigure, currentHalfMove);
-		MovementArray kingInCheckArray = kingInCheckArray(currentBoard, selectedFigure, currentHalfMove);
+		MovementArray kingInCheckArray = kingInCheckArray(currentBoard, selectedFigure, currentHalfMove, gameLog);
 		
 		for (int arrayIndex = 0; arrayIndex < legalMoveArray.getLength(); arrayIndex++) {
 			if(!kingInCheckArray.moveAtIndexAllowed(arrayIndex)) {
@@ -21,14 +21,14 @@ public class MovementHandler {
 	
 	}
 	
-	public MovementArray kingInCheckArray(ChessBoard currentBoard, Figure selectedFigure, int currentHalfMove) {
+	public MovementArray kingInCheckArray(ChessBoard currentBoard, Figure selectedFigure, int currentHalfMove, GameLog gameLog) {
 		
 		MovementArray possibleMoveArray = figureMovementArray(currentBoard, selectedFigure, currentHalfMove);
 		MovementArray kingInCheckArray = emptyTrueArray();
 		
 		for (int arrayIndex = 0; arrayIndex < kingInCheckArray.getLength(); arrayIndex++) {
 			if(possibleMoveArray.moveAtIndexAllowed(arrayIndex)) {
-				MoveSimulator moveSimulator = new MoveSimulator(currentBoard.deepCopy(), selectedFigure, currentHalfMove);
+				MoveSimulator moveSimulator = new MoveSimulator(currentBoard.deepCopy(), selectedFigure.deepCopy(), currentHalfMove, gameLog);
 				moveSimulator.simulateMove(arrayIndex);
 				if (moveSimulator.possiblePlayerMoves().moveAtIndexAllowed(moveSimulator.getSimulatedKingIndex())) {
 					kingInCheckArray.setIndexToFalse(arrayIndex);
@@ -77,7 +77,9 @@ public class MovementHandler {
 	//probably easier to just do a Figure oldEntry = getFigureFromEntry and then use methods from within Figure class instead of doing all this 
 	public void removePawnAfterEnPassant(ChessBoard currentBoard, GameLog gameLog) {
 		String secondToLastEntry = gameLog.getPriorEntry(2);
+		System.out.println(secondToLastEntry);
 		String lastEntry = gameLog.getPriorEntry(1);
+		System.out.println(lastEntry);
 		int type1 = gameLog.getFigureTypefromEntry(secondToLastEntry);
 		int type2 = gameLog.getFigureTypefromEntry(lastEntry);
 		int color1 = gameLog.getColorfromEntry(secondToLastEntry);
@@ -90,10 +92,12 @@ public class MovementHandler {
 		if (type1 == 3 && type2 == 3 && color1 == 1 && color2 == 0
 				&& yMovement1 == 2 && newX1 == newX2 && newY2 == newY1 - 1) {
 			currentBoard.removeFigure(newX1, newY1);
+			System.out.println("Removed pawn at " + newX1 + ", " + newY1);
 		}
 		if (type1 == 3 && type2 == 3 && color2 == 1 && color1 == 0
 				&& yMovement1 == -2 && newX1 == newX2 && newY2 == newY1 + 1) {
 			currentBoard.removeFigure(newX1, newY1);
+			System.out.println("Removed pawn at " + newX1 + ", " + newY1);
 		}
 	}
 

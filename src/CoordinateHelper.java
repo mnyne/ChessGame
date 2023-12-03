@@ -74,4 +74,8 @@ public class CoordinateHelper {
 		int convertX = (int) c - ASCII_LETTER_DIFF;
 		return convertX;
 	}
+
+	public int convertNotationToIndex(String notation) {
+		return convertXYtoIndex(convertNotationToX(notation), convertNotationToY(notation));
+	}
 }

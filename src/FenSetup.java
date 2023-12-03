@@ -19,7 +19,7 @@ public class FenSetup {
 	public FenSetup() {
 
 	}
-	//TODO: everything that isn't figure notation
+
 	public void setFenNotation(String fen_input) {
 		//add validity check later
 		fen = fen_input;
@@ -106,14 +106,17 @@ public class FenSetup {
 	public Figure generateFigure(int index, char figureChar) {
 		
 		int figureColor = 1;
+		int yPawnStart = 1;
 		if(figureChar < ASCII_LOWERCASE_START) {
 			figureColor = 0;
+			yPawnStart = 6;
 		}
 		
 		switch(transformCharToLowercase(figureChar)) {
 		case 'r':
 			//todo: hasMoved => castling rights
 			Figure rook = new Rook(figureColor, index);
+				setCastlingRights(rook);
 			return rook;
 		case 'n':
 			return new Knight(figureColor, index);
@@ -122,8 +125,13 @@ public class FenSetup {
 		case 'q':
 			return new Queen(figureColor, index);
 		case 'p':
-			//todo: eligibleforenpassant => en passant square
 			Figure pawn = new Pawn(figureColor, index);
+			if(yPawnStart != coordinateHelper.convertIndextoY(index)) {
+				pawn.setMovedStatus();
+			}
+			if(!enPassantTarget.equals("-")) {
+				setEnPassantEligibility(pawn, figureColor);
+			}
 			return pawn;
 		case 'k':
 			return new King(figureColor, index);
@@ -131,6 +139,58 @@ public class FenSetup {
 			// dummy figure
 			return new Pawn(-1, 0);
 		}
+	}
+
+	private void setCastlingRights(Figure rook) {
+		switch(rook.getCurrentIndex()) {
+			case 0:
+				if(castlingRightsNotation.indexOf('q') == -1) {
+					rook.setMovedStatus();
+				}
+				break;
+
+			case 7:
+				if(castlingRightsNotation.indexOf('k') == -1) {
+					rook.setMovedStatus();
+				}
+				break;
+
+			case 56:
+				if(castlingRightsNotation.indexOf('Q') == -1) {
+					rook.setMovedStatus();
+				}
+				break;
+
+			case 63:
+				if(castlingRightsNotation.indexOf('K') == -1) {
+					rook.setMovedStatus();
+				}
+
+				break;
+			default:
+				break;
+		}
+	}
+
+	private void setEnPassantEligibility(Figure pawn, int figureColor) {
+		int pawnX = pawn.getXPosition();
+		int pawnY = pawn.getYPosition();
+		int targetX = coordinateHelper.convertNotationToX(enPassantTarget);
+		int targetY = coordinateHelper.convertNotationToY(enPassantTarget);
+		if (pawnX == targetX && (pawnY-1 == targetY || pawnY+1 == targetY)) {
+			pawn.setEnPassantStatus(true);
+			addPawnMoveToLog(pawn, figureColor, targetX, targetY);
+		}
+	}
+
+	private void addPawnMoveToLog(Figure pawn, int figureColor, int targetX, int targetY) {
+		int startIndex;
+		if(figureColor == 1) {
+			startIndex = coordinateHelper.convertXYtoIndex(targetX, targetY -1);
+		} else {
+			startIndex = coordinateHelper.convertXYtoIndex(targetX, targetY +1);
+		}
+		gameLog.logMoveFromFen(pawn, startIndex);
 	}
 
 
@@ -189,9 +249,4 @@ public class FenSetup {
 		}
 		return charArray;
 	}
-
-	public void generateLogEntry() {
-		//todo: generate log entries
-	}
-	
 }

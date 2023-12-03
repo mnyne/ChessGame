@@ -9,14 +9,17 @@ public class MoveSimulator {
 	private ChessBoard simulatedBoard;
 	private int simulatedTurn;
 
+	private GameLog simulatedLog = new GameLog();
+
 	private final int MAX_FIGURES_PER_PLAYER = 16;
 
 	public MoveSimulator(ChessBoard currentBoard, Figure selectedFigure,
-			int currentHalfMove) {
+			int currentHalfMove, GameLog gameLog) {
 		simulatedBoard = currentBoard.deepCopy();
 		simulatedFigure = simulatedBoard.getFigureAt(
 				selectedFigure.getXPosition(), selectedFigure.getYPosition());
 		simulatedTurn = currentHalfMove + 1;
+		simulatedLog.addEntry(gameLog.getPriorEntry(1));
 	}
 
 	public void simulateMove(int simulatedTargetIndex) {
@@ -25,7 +28,10 @@ public class MoveSimulator {
 		int newX = coordinateHelper.convertIndextoX(simulatedTargetIndex);
 		int newY = coordinateHelper.convertIndextoY(simulatedTargetIndex);
 		simulatedBoard.moveFigure(simulatedFigure, newX, newY);
+		simulatedLog.logMove(simulatedFigure, simulatedTargetIndex);
 		simulatedBoard.removeFigure(xCache, yCache);
+		System.out.println("Simulating move");
+		movementHandler.removePawnAfterEnPassant(simulatedBoard, simulatedLog);
 	}
 	
 //todo: try to clean up that mess

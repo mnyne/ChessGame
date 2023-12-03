@@ -225,10 +225,12 @@ public class MovementValidityChecker {
 	private boolean canCastleKingside() {
 		if (!currentFigure.hasMoved() && !castlingCollisionKingside()) {
 			if (targetY == currentY && targetX == currentX + 2) {
-				Figure towerFigure = currentBoard.getFigureAt(currentX + 3,
-						currentY);
-				if (towerFigure != null && !towerFigure.hasMoved()) {
-					return true;
+				if(currentX + 2 < 8) {
+					Figure towerFigure = currentBoard.getFigureAt(currentX + 3,
+							currentY);
+					if (towerFigure != null && !towerFigure.hasMoved()) {
+						return true;
+					}
 				}
 			}
 		}
@@ -238,9 +240,11 @@ public class MovementValidityChecker {
 	private boolean canCastleQueenside() {
 		if (!currentFigure.hasMoved() && !castlingCollisionQueenside()) {
 			if (targetY == currentY && targetX == currentX - 2) {
-				Figure towerFigure = currentBoard.getFigureAt(currentX - 4, currentY);
-				if (towerFigure != null && !towerFigure.hasMoved()) {
-					return true;
+				if(currentX - 4 >= 0) {
+					Figure towerFigure = currentBoard.getFigureAt(currentX - 4, currentY);
+					if (towerFigure != null && !towerFigure.hasMoved()) {
+						return true;
+					}
 				}
 			}
 		}

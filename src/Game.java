@@ -14,7 +14,7 @@ public class Game {
 	FenSetup fenSetup = new FenSetup();
 	MovementHandler movementHandler = new MovementHandler();
 	CoordinateHelper coordinateHelper = new CoordinateHelper();
-	GameLog gameLog = new GameLog();
+	GameLog gameLog;
 
 	public Game() {
 
@@ -57,7 +57,7 @@ public class Game {
 	}
 	
 	public void updateLegalMoveArray() {
-		legalMoveArray = movementHandler.legalMoveArray(chessBoard, selectedFigure, currentHalfMove);
+		legalMoveArray = movementHandler.legalMoveArray(chessBoard, selectedFigure, currentHalfMove, gameLog);
 	}
 	
 	public void makeMove(int targetIndex) {
@@ -84,11 +84,11 @@ public class Game {
 	}
 
 	public void initializeGame() {
-		//fenSetup.setFenNotation("r6r/1b2k1bq/8/8/7B/8/8/R3K2R b KQ - 3 2");
+		//fenSetup.setFenNotation("2K2r2/4P3/8/8/8/8/8/3k4 w - - 0 1");
 		chessBoard = fenSetup.generateChessBoard();
 		currentHalfMove = fenSetup.getCurrentHalfMove();
 		halfMoveClock = fenSetup.getHalfMoveClock();
-
+		gameLog = fenSetup.getGameLog();
 	}
 	
 	
