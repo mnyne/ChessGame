@@ -92,12 +92,10 @@ public class MovementHandler {
 		if (type1 == 3 && type2 == 3 && color1 == 1 && color2 == 0
 				&& yMovement1 == 2 && newX1 == newX2 && newY2 == newY1 - 1) {
 			currentBoard.removeFigure(newX1, newY1);
-			System.out.println("Removed pawn at " + newX1 + ", " + newY1);
 		}
 		if (type1 == 3 && type2 == 3 && color2 == 1 && color1 == 0
 				&& yMovement1 == -2 && newX1 == newX2 && newY2 == newY1 + 1) {
 			currentBoard.removeFigure(newX1, newY1);
-			System.out.println("Removed pawn at " + newX1 + ", " + newY1);
 		}
 	}
 

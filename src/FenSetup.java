@@ -114,7 +114,6 @@ public class FenSetup {
 		
 		switch(transformCharToLowercase(figureChar)) {
 		case 'r':
-			//todo: hasMoved => castling rights
 			Figure rook = new Rook(figureColor, index);
 				setCastlingRights(rook);
 			return rook;

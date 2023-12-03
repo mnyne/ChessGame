@@ -30,7 +30,6 @@ public class MoveSimulator {
 		simulatedBoard.moveFigure(simulatedFigure, newX, newY);
 		simulatedLog.logMove(simulatedFigure, simulatedTargetIndex);
 		simulatedBoard.removeFigure(xCache, yCache);
-		System.out.println("Simulating move");
 		movementHandler.removePawnAfterEnPassant(simulatedBoard, simulatedLog);
 	}
 	
