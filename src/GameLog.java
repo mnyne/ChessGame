@@ -16,6 +16,7 @@ public class GameLog {
 	}
 // remove temp variables
 //todo: turn this into a Figure array instead, will make so many things easier instead of relying on strings & will make reverting moves and such easier
+	//todo: will need a way to denote capturing and castling
 	public void logMove(Figure figure, int targetIndex) {
 		int oldX = figure.getXPosition();
 		int oldY = figure.getYPosition();

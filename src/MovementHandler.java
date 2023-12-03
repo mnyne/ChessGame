@@ -77,9 +77,7 @@ public class MovementHandler {
 	//probably easier to just do a Figure oldEntry = getFigureFromEntry and then use methods from within Figure class instead of doing all this 
 	public void removePawnAfterEnPassant(ChessBoard currentBoard, GameLog gameLog) {
 		String secondToLastEntry = gameLog.getPriorEntry(2);
-		System.out.println(secondToLastEntry);
 		String lastEntry = gameLog.getPriorEntry(1);
-		System.out.println(lastEntry);
 		int type1 = gameLog.getFigureTypefromEntry(secondToLastEntry);
 		int type2 = gameLog.getFigureTypefromEntry(lastEntry);
 		int color1 = gameLog.getColorfromEntry(secondToLastEntry);

@@ -84,7 +84,7 @@ public class Game {
 	}
 
 	public void initializeGame() {
-		//fenSetup.setFenNotation("2K2r2/4P3/8/8/8/8/8/3k4 w - - 0 1");
+		//fenSetup.setFenNotation("8/8/1k6/2b5/2pP4/8/5K2/8 b - d3 0 1");
 		chessBoard = fenSetup.generateChessBoard();
 		currentHalfMove = fenSetup.getCurrentHalfMove();
 		halfMoveClock = fenSetup.getHalfMoveClock();

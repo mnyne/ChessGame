@@ -8,8 +8,6 @@ public abstract class Figure extends GObject {
 	CoordinateHelper coordinateHelper = new CoordinateHelper();
 	private int id;
 	private int figureType;
-	private int startIndex;
-	//todo: check if you actually need startIndex, if not just pass to ID directly
 	private int currentX;
 	private int currentY;
 	private final int color;
@@ -28,12 +26,11 @@ public abstract class Figure extends GObject {
 	}
 	
 	public Figure(int in_figureType, int color, int startIndex) {
-		this.startIndex = startIndex;
 		this.currentX = coordinateHelper.convertIndextoX(startIndex);
 		this.currentY = coordinateHelper.convertIndextoY(startIndex);
 		this.color = color;
 		this.figureType = in_figureType;
-		this.id = generateID();
+		this.id = generateID(startIndex);
 		this.sp = new Sprite(this.figureType, this.color);
 		this.sprite = sp.getSprite();
 	}
@@ -47,7 +44,7 @@ public abstract class Figure extends GObject {
 		currentY = coordinateHelper.convertIndextoY(currentIndex);
 	}
 	
-	private int generateID() { 
+	private int generateID(int startIndex) {
 		return (color+1) * 1000 + (figureType * 100) + startIndex;
 	}
 	
