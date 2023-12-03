@@ -47,7 +47,7 @@ public class MoveSimulator {
 		for (int arrayIndex = 0; arrayIndex < simulatedPlayerFigures.getLength(); arrayIndex++) {
 			Figure figureAtIndex = simulatedPlayerFigures.getFigureAtIndex(arrayIndex);
 			if (figureAtIndex != null) {
-				MovementArray possibleMoveForFigureAtIndex = movementHandler.possibleMoveArray(simulatedBoard, figureAtIndex,simulatedTurn);
+				MovementArray possibleMoveForFigureAtIndex = movementHandler.figureMovementArray(simulatedBoard, figureAtIndex,simulatedTurn);
 				for (int figureArrayIndex = 0; figureArrayIndex < possibleMoveForFigureAtIndex.getLength(); figureArrayIndex++) {
 					if (possibleMoveForFigureAtIndex.moveAtIndexAllowed(figureArrayIndex)) {
 						possiblePlayerMoves.setIndexToTrue(figureArrayIndex);

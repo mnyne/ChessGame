@@ -6,11 +6,9 @@ public class MovementHandler {
 
 	}
 	
-	//todo: get rid of unnecessary player turn and figure color arrays and just do an if instead
-	
 	public MovementArray legalMoveArray(ChessBoard currentBoard, Figure selectedFigure, int currentHalfMove) {
 		
-		MovementArray legalMoveArray = possibleMoveArray(currentBoard, selectedFigure, currentHalfMove);
+		MovementArray legalMoveArray = figureMovementArray(currentBoard, selectedFigure, currentHalfMove);
 		MovementArray kingInCheckArray = kingInCheckArray(currentBoard, selectedFigure, currentHalfMove);
 		
 		for (int arrayIndex = 0; arrayIndex < legalMoveArray.getLength(); arrayIndex++) {
@@ -25,7 +23,7 @@ public class MovementHandler {
 	
 	public MovementArray kingInCheckArray(ChessBoard currentBoard, Figure selectedFigure, int currentHalfMove) {
 		
-		MovementArray possibleMoveArray = possibleMoveArray(currentBoard, selectedFigure, currentHalfMove);
+		MovementArray possibleMoveArray = figureMovementArray(currentBoard, selectedFigure, currentHalfMove);
 		MovementArray kingInCheckArray = emptyTrueArray();
 		
 		for (int arrayIndex = 0; arrayIndex < kingInCheckArray.getLength(); arrayIndex++) {
@@ -41,77 +39,33 @@ public class MovementHandler {
 		return kingInCheckArray;
 	}
 
-	public MovementArray possibleMoveArray(ChessBoard currentBoard, Figure selectedFigure, int currentHalfMove) {
-		
-		MovementArray playerTurnArray = playerTurnArray(selectedFigure, currentHalfMove);
-		MovementArray figureColorArray = figureColorArray(currentBoard, selectedFigure);
-		MovementArray figureMovementArray = figureMovementArray(currentBoard, selectedFigure);
-		MovementArray possibleMoveArray = emptyTrueArray();
-		
-		for (int arrayIndex = 0; arrayIndex < possibleMoveArray.getLength(); arrayIndex++) {
-			if(!playerTurnArray.moveAtIndexAllowed(arrayIndex) || !figureColorArray.moveAtIndexAllowed(arrayIndex) || !figureMovementArray.moveAtIndexAllowed(arrayIndex)) {
-				possibleMoveArray.setIndexToFalse(arrayIndex);
-			}
-		}
-		
-		return possibleMoveArray;
-	}
-	
-	public MovementArray emptyFalseArray() {
-		
-		MovementArray emptyFalseArray = new MovementArray();
-		
-		for (int arrayIndex = 0; arrayIndex < emptyFalseArray.getLength(); arrayIndex++) {
-			emptyFalseArray.setIndexToFalse(arrayIndex);
-		}
-		
-		return emptyFalseArray;
-	}
-
 	public MovementArray emptyTrueArray() {
-		
+
 		MovementArray emptyTrueArray = new MovementArray();
-		
+
 		for (int arrayIndex = 0; arrayIndex < emptyTrueArray.getLength(); arrayIndex++) {
 			emptyTrueArray.setIndexToTrue(arrayIndex);
 		}
-		
+
 		return emptyTrueArray;
 	}
 
-	public MovementArray playerTurnArray(Figure selectedFigure, int currentHalfMove) {
-		
-		MovementArray playerTurnArray = emptyTrueArray();
-		
-		for (int arrayIndex = 0; arrayIndex < playerTurnArray.getLength(); arrayIndex++) {
-			if (currentHalfMove % 2 != selectedFigure.getFigureColor()) {
-				playerTurnArray.setIndexToFalse(arrayIndex);
+	public boolean isWrongColor (Figure selectedFigure, ChessBoard currentBoard, int targetIndex, int currentHalfMove) {
+		if(currentBoard.getFigureAtIndex(targetIndex) != null) {
+			if (currentHalfMove % 2 != selectedFigure.getFigureColor() || currentBoard.getFigureAtIndex(targetIndex).getFigureColor() == selectedFigure.getFigureColor()) {
+				return true;
 			}
 		}
-		
-		return playerTurnArray;
+		return false;
 	}
 
-	public MovementArray figureColorArray(ChessBoard currentBoard, Figure selectedFigure) {
-		
-		MovementArray figureColorArray = emptyTrueArray();
-		
-		for (int arrayIndex = 0; arrayIndex < figureColorArray.getLength(); arrayIndex++) {
-			if (currentBoard.getFigureAtIndex(arrayIndex) != null && currentBoard.getFigureAtIndex(arrayIndex).getFigureColor() == selectedFigure.getFigureColor()) {
-				figureColorArray.setIndexToFalse(arrayIndex);
-			}
-		}
-		
-		return figureColorArray;
-	}
-
-	public MovementArray figureMovementArray(ChessBoard currentBoard, Figure selectedFigure) {
+	public MovementArray figureMovementArray(ChessBoard currentBoard, Figure selectedFigure, int currentHalfMove) {
 		
 		MovementArray figureMovementArray = emptyTrueArray();
 		
 		for (int arrayIndex = 0; arrayIndex < figureMovementArray.getLength(); arrayIndex++) {
 			if (!selectedFigure.moveIsLegal(currentBoard, selectedFigure,
-					arrayIndex)) {
+					arrayIndex) || isWrongColor(selectedFigure, currentBoard, arrayIndex, currentHalfMove)) {
 				figureMovementArray.setIndexToFalse(arrayIndex);
 			}
 		}
