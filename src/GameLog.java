@@ -15,7 +15,7 @@ public class GameLog {
 		gameLog.add(entry);
 	}
 // remove temp variables
-//todo: log positions as index instead, do everything else with coordinatehelper
+//todo: turn this into a Figure array instead, will make so many things easier instead of relying on strings & will make reverting moves and such easier
 	public void logMove(Figure figure, int targetIndex) {
 		int oldX = figure.getXPosition();
 		int oldY = figure.getYPosition();

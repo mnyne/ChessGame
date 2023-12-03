@@ -2,8 +2,8 @@ public class Game {
 	
 	private final int BOARD_LENGTH = 8;
 	
-	private int currentHalfMove = 0;
-	private int currentFullMove = 1 + (currentHalfMove / 2);
+	private int currentHalfMove = 2;
+	private int currentFullMove = currentHalfMove / 2;
 	//todo: implement halfmove clock, add function to update full moves whenever halfmoves change
 	private int halfMoveClock = 0;
 	
@@ -73,7 +73,7 @@ public class Game {
 			chessBoard.removeFigure(xCache, yCache);
 			currentHalfMove += 1;
 		}
-		chessBoard.updateMovedStatusForFigures(gameLog);
+		selectedFigure.updateEnPassantEligibility(gameLog);
 		handleSpecialCasesAfterMove();
 	}
 	

@@ -47,6 +47,7 @@ public class ChessBoard {
 		int index = coordinateHelper.convertXYtoIndex(targetX, targetY);
 		chessBoard[index] = figure;
 		figure.setNewPosition(targetX, targetY);
+		figure.setMovedStatus();
 	}
 
 	public void removeFigure(int xCache, int yCache) {
@@ -64,16 +65,5 @@ public class ChessBoard {
 		}
 
 		return copy;
-	}
-	
-	public void updateMovedStatusForFigures(GameLog gameLog) {
-		for (int i = 0; i < this.chessBoard.length; i++) {
-			Figure figureToUpdate = getFigureAtIndex(i);
-			if(figureToUpdate != null) {
-				figureToUpdate.updateMovedStatus(gameLog.hasFigureMoved(figureToUpdate));
-				figureToUpdate.updateEnPassantEligibility(gameLog);
-			}
-
-		}
 	}
 }

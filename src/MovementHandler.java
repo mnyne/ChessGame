@@ -51,12 +51,11 @@ public class MovementHandler {
 	}
 
 	public boolean isWrongColor (Figure selectedFigure, ChessBoard currentBoard, int targetIndex, int currentHalfMove) {
-		if(currentBoard.getFigureAtIndex(targetIndex) != null) {
-			if (currentHalfMove % 2 != selectedFigure.getFigureColor() || currentBoard.getFigureAtIndex(targetIndex).getFigureColor() == selectedFigure.getFigureColor()) {
-				return true;
-			}
-		}
-		return false;
+		return currentHalfMove % 2 != selectedFigure.getFigureColor() || isWrongTargetColor(selectedFigure, currentBoard, targetIndex, currentHalfMove);
+	}
+
+	private boolean isWrongTargetColor (Figure selectedFigure, ChessBoard currentBoard, int targetIndex, int currentHalfMove) {
+		return currentBoard.getFigureAtIndex(targetIndex) != null && currentBoard.getFigureAtIndex(targetIndex).getFigureColor() == selectedFigure.getFigureColor();
 	}
 
 	public MovementArray figureMovementArray(ChessBoard currentBoard, Figure selectedFigure, int currentHalfMove) {
@@ -64,10 +63,11 @@ public class MovementHandler {
 		MovementArray figureMovementArray = emptyTrueArray();
 		
 		for (int arrayIndex = 0; arrayIndex < figureMovementArray.getLength(); arrayIndex++) {
-			if (!selectedFigure.moveIsLegal(currentBoard, selectedFigure,
-					arrayIndex) || isWrongColor(selectedFigure, currentBoard, arrayIndex, currentHalfMove)) {
-				figureMovementArray.setIndexToFalse(arrayIndex);
-			}
+            if (!selectedFigure.moveIsLegal(currentBoard, selectedFigure, arrayIndex)) {
+                figureMovementArray.setIndexToFalse(arrayIndex);
+            } else if (isWrongColor(selectedFigure, currentBoard, arrayIndex, currentHalfMove)) {
+                figureMovementArray.setIndexToFalse(arrayIndex);
+            }
 		}
 		
 		return figureMovementArray;

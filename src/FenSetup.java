@@ -42,7 +42,7 @@ public class FenSetup {
 		int figureColor = 1;
 		if(figureChar < ASCII_LOWERCASE_START) {
 			figureColor = 0;
-		} 
+		}
 		
 		switch(transformCharToLowercase(figureChar)) {
 		case 'r':

@@ -12,7 +12,7 @@ public abstract class Figure extends GObject {
 	//todo: check if you actually need startIndex, if not just pass to ID directly
 	private int currentX;
 	private int currentY;
-	private int color;
+	private final int color;
 	private GImage sprite;
 	private Sprite sp;
 	private boolean hasMoved = false;
@@ -81,7 +81,7 @@ public abstract class Figure extends GObject {
 	}
 
 	public String toString() {
-		String ts = "id: " + id + ", figureType: " + figureType
+		String ts = "id: " + id + ", figureType: " + figureType + ", color:" + color
 				+ ", currentX: " + currentX + ", currentY: " + currentY
 				+ ", SpriteID: " + sp.getSpriteID();
 		return ts;
@@ -112,6 +112,10 @@ public abstract class Figure extends GObject {
 
 	public int getFigureType() {
 		return figureType;
+	}
+
+	public void setMovedStatus() {
+		this.hasMoved = true;
 	}
 	
 	public void updateMovedStatus(boolean hasMoved) {
