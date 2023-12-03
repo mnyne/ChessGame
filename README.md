@@ -1,4 +1,4 @@
-# ChessGame
+# Game
 
 Eclipse project.
 
