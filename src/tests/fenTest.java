@@ -1,29 +1,47 @@
 package tests;
 
-import acm.program.Program;
-
-public class fenTest extends Program {
+public class fenTest {
 
 	private final int BOARD_LENGTH = 8;
 	private final int ASCII_NUMBER_DIFF = 48;
 	private final int ASCII_LETTER_START = 65;
 	private final int ASCII_LOWERCASE_START = 97;
 	
-	private String fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+	private String fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 1523 1987";
 
-	
-	public void run() {
-
-		char figureChar[] = figureDataArray();
-		for(int i = 0; i < figureChar.length; i++) {
-			if (figureChar[i] != '_') {
-				println("Color: " + generateFigureColor(i, figureChar[i]) + ", Type: " + getFigureTypeFromChar(figureChar[i]));
-			}
-		}
-		
-		
+	public int extractHalfMoveClock() {
+		String s = fen.substring(fen.indexOf(' ') + 1);
+		s = s.substring(s.indexOf(' ') + 1);
+		s = s.substring(s.indexOf(' ') + 1);
+		s = s.substring(s.indexOf(' ') + 1);
+		s = s.substring(s.indexOf(' ') + 1);
+		return stringToInt(s.substring(0));
 	}
-	
+
+	private int stringToInt (String input) {
+		int convertedInt = 0;
+		for(int i=0; i<input.length(); i++) {
+			char charAt = input.charAt(i);
+			int digit = (int) charAt - ASCII_NUMBER_DIFF;
+			convertedInt = convertedInt + digit * (int) Math.pow(10, (input.length() - 1 - i));
+		}
+		return convertedInt;
+	}
+	public String extractEnPassantTarget() {
+		String s = fen.substring(fen.indexOf(' ') + 1);
+		s = s.substring(s.indexOf(' ') + 1);
+		s = s.substring(s.indexOf(' ') + 1);
+		return s.substring(0, s.indexOf(' '));
+	}
+	public String extractCastlingRightsNotation() {
+		String s = fen.substring(fen.indexOf(' ') + 1);
+		s = s.substring(s.indexOf(' ') + 1);
+		return s.substring(0, s.indexOf(' '));
+	}
+	public String extractToMoveNotation() {
+		String s = fen.substring(fen.indexOf(' ')+1);
+		return s.substring(0, s.indexOf(' '));
+	}
 	public void setFenNotation(String fen_input) {
 		//add validity check later
 		fen = fen_input;

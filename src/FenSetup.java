@@ -4,11 +4,17 @@ public class FenSetup {
 	private final int ASCII_NUMBER_DIFF = 48;
 	private final int ASCII_LETTER_START = 65;
 	private final int ASCII_LOWERCASE_START = 97;
-	
-	private String fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 	private CoordinateHelper coordinateHelper = new CoordinateHelper();
 	private GameLog gameLog = new GameLog();
 	private ChessBoard chessBoard = new ChessBoard(BOARD_LENGTH * BOARD_LENGTH);
+
+	private String fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+	private String fenFigureNotation = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";
+	private String toMoveNotation = "w";
+	private String castlingRightsNotation = "KQkq";
+	private String enPassantTarget = "-";
+	private int halfMoveClock = 0;
+	private int fullMoveCounter = 1;
 	
 	public FenSetup() {
 
@@ -17,8 +23,68 @@ public class FenSetup {
 	public void setFenNotation(String fen_input) {
 		//add validity check later
 		fen = fen_input;
+		fenFigureNotation = extractFigures();
+		toMoveNotation = extractToMoveNotation();
+		castlingRightsNotation = extractCastlingRightsNotation();
+		enPassantTarget = extractEnPassantTarget();
+		halfMoveClock = extractHalfMoveClock();
+		fullMoveCounter = extractFullMoveCounter();
 	}
-	
+	public int getHalfMoveClock() {
+		return halfMoveClock;
+	}
+	public int getCurrentHalfMove() {
+		int currentHalfMove = fullMoveCounter * 2;
+		if(toMoveNotation.charAt(0) == 'b') {
+			currentHalfMove += 1;
+		}
+		return currentHalfMove;
+	}
+
+	private int extractFullMoveCounter() {
+		String s = fen.substring(fen.indexOf(' ') + 1);
+		s = s.substring(s.indexOf(' ') + 1);
+		s = s.substring(s.indexOf(' ') + 1);
+		s = s.substring(s.indexOf(' ') + 1);
+		s = s.substring(s.indexOf(' ') + 1);
+		return stringToInt(s.substring(0));
+	}
+
+	private int extractHalfMoveClock() {
+		String s = fen.substring(fen.indexOf(' ') + 1);
+		s = s.substring(s.indexOf(' ') + 1);
+		s = s.substring(s.indexOf(' ') + 1);
+		s = s.substring(s.indexOf(' ') + 1);
+		return stringToInt(s.substring(0, s.indexOf(' ')));
+	}
+
+	private int stringToInt (String input) {
+		int convertedInt = 0;
+		for(int i=0; i<input.length(); i++) {
+			char charAt = input.charAt(i);
+			int digit = (int) charAt - ASCII_NUMBER_DIFF;
+			convertedInt = convertedInt + digit * (int) Math.pow(10, (input.length() - 1 - i));
+		}
+		return convertedInt;
+	}
+	private String extractEnPassantTarget() {
+		String s = fen.substring(fen.indexOf(' ') + 1);
+		s = s.substring(s.indexOf(' ') + 1);
+		s = s.substring(s.indexOf(' ') + 1);
+		return s.substring(0, s.indexOf(' '));
+	}
+
+	private String extractCastlingRightsNotation() {
+		String s = fen.substring(fen.indexOf(' ') + 1);
+		s = s.substring(s.indexOf(' ') + 1);
+		return s.substring(0, s.indexOf(' '));
+	}
+
+	public String extractToMoveNotation() {
+		String s = fen.substring(fen.indexOf(' ') + 1);
+		return s.substring(0, s.indexOf(' '));
+	}
+
 	public ChessBoard getBoard() {
 		return chessBoard;
 	}
@@ -46,7 +112,9 @@ public class FenSetup {
 		
 		switch(transformCharToLowercase(figureChar)) {
 		case 'r':
-			return new Rook(figureColor, index);
+			//todo: hasMoved => castling rights
+			Figure rook = new Rook(figureColor, index);
+			return rook;
 		case 'n':
 			return new Knight(figureColor, index);
 		case 'b':
@@ -54,7 +122,9 @@ public class FenSetup {
 		case 'q':
 			return new Queen(figureColor, index);
 		case 'p':
-			return new Pawn(figureColor, index);
+			//todo: eligibleforenpassant => en passant square
+			Figure pawn = new Pawn(figureColor, index);
+			return pawn;
 		case 'k':
 			return new King(figureColor, index);
 		default:
@@ -71,14 +141,13 @@ public class FenSetup {
 	}
 
 	public char[] figureDataArray() {
-		String FigureData = transformEmptySpaces(extractFigureString());
+		String FigureData = transformEmptySpaces(removeDelimiters(fenFigureNotation, '/'));
 		char[] FigureDataArray = splitFigureStringIntoArray(FigureData);
 		return FigureDataArray;
 	}
 	
-	public String extractFigureString() {
-		String rawFigureData = fen.substring(0, fen.indexOf(' '));
-		return removeDelimiters(rawFigureData, '/');
+	public String extractFigures() {
+		return fen.substring(0, fen.indexOf(' '));
 	}
 	
 	public String transformEmptySpaces(String figureData) {

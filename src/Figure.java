@@ -95,20 +95,9 @@ public abstract class Figure extends GObject {
 		return id;
 	}
 
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-
-		if (obj == null || getClass() != obj.getClass()) {
-			return false;
-		}
-
-		Figure otherFigure = (Figure) obj;
-		return this.getXPosition() == otherFigure.getXPosition()
-				&& this.getYPosition() == otherFigure.getYPosition();
+	public boolean equals(Figure comparisonFig) {
+		return comparisonFig != null && this.getCurrentIndex() == comparisonFig.getCurrentIndex();
 	}
-	//todo: see if you can get away with less here
 
 	public int getFigureType() {
 		return figureType;

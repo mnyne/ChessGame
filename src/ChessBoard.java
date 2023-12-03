@@ -42,7 +42,6 @@ public class ChessBoard {
 		return s;
 	}
 
-	//todo: set moved status here, rely on log less heavily
 	public void moveFigure(Figure figure, int targetX, int targetY) {
 		int index = coordinateHelper.convertXYtoIndex(targetX, targetY);
 		chessBoard[index] = figure;
