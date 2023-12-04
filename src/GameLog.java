@@ -6,6 +6,7 @@ public class GameLog {
 	CoordinateHelper coordinateHelper = new CoordinateHelper();
 	
 	ArrayList<String> gameLog;
+	boolean loggingEnabled = true;
 
 	public GameLog() {
 		gameLog = new ArrayList<>();
@@ -18,16 +19,33 @@ public class GameLog {
 //todo: turn this into a Figure array instead, will make so many things easier instead of relying on strings & will make reverting moves and such easier
 	//todo: will need a way to denote capturing and castling
 	public void logMove(Figure figure, int targetIndex) {
-		int oldX = figure.getXPosition();
-		int oldY = figure.getYPosition();
-		int id = figure.getFigureID();
-		int type = figure.getFigureType();
-		int color = figure.getFigureColor();
-		int newX = coordinateHelper.convertIndextoX(targetIndex);
-		int newY = coordinateHelper.convertIndextoY(targetIndex);
-		addEntry("Move: ID=" + id + ", Type=" + type + ", Color=" + color
-				+ ", OldX=" + oldX + ", OldY=" + oldY + ", NewX=" + newX
-				+ ", NewY=" + newY);
+		if (loggingEnabled) {
+			int oldX = figure.getXPosition();
+			int oldY = figure.getYPosition();
+			int id = figure.getFigureID();
+			int type = figure.getFigureType();
+			int color = figure.getFigureColor();
+			int newX = coordinateHelper.convertIndextoX(targetIndex);
+			int newY = coordinateHelper.convertIndextoY(targetIndex);
+			addEntry("Move: ID=" + id + ", Type=" + type + ", Color=" + color
+					+ ", OldX=" + oldX + ", OldY=" + oldY + ", NewX=" + newX
+					+ ", NewY=" + newY + ", MovementType = 0");
+		}
+	}
+
+	//move 0: normal
+	//move 1: capture
+	//move 2: castling
+	//move 3: pawn promotes to bishop
+	//move 4: pawn promotes to knight
+	//move 5: pawn promotes to queen
+	//move 6: pawn promotes to rook
+	public void setMovementTypeForLastEntry(int movementType) {
+		if (this.getPriorEntry(1) != null) {
+			String entryToEdit = this.getPriorEntry(1);
+			entryToEdit = entryToEdit.substring(0, entryToEdit.length()-1);
+			gameLog.set(gameLog.size()-1, entryToEdit + movementType);
+		}
 	}
 
 	public void logMoveFromFen(Figure figure, int startIndex) {
@@ -60,6 +78,14 @@ public class GameLog {
 			entry = gameLog.get(gameLog.size()-steps);
 		}
 		return entry;
+	}
+
+	public String getEntryAt(int position) {
+		return gameLog.get(position);
+	}
+
+	public int getLength() {
+		return gameLog.size();
 	}
 	
 	public int getFigureIDfromEntry(String entry) {
@@ -151,5 +177,86 @@ public class GameLog {
 			newY = chara - ASCII_NUMBER_DIFF;
 		}
 		return newY;
+	}
+
+	public void clearLog() {
+		gameLog.clear();
+	}
+
+	public String getNotatedEntryAt(int index) {
+		String rawEntry = gameLog.get(index);
+		if (rawEntry.charAt(rawEntry.length()-1) == '2') {
+			if(getXMovementfromEntry(rawEntry) > 0) {
+				return "0-0";
+			}
+			if(getXMovementfromEntry(rawEntry) < 0) {
+				return "0-0-0";
+			}
+		}
+		String destinationSquare = coordinateHelper.convertCoordsToNotationString(this.getNewXfromEntry(rawEntry), this.getNewYfromEntry(rawEntry));
+		String promotionIndicator = getPromotionIndicator(rawEntry);
+		String captureIndicator = "";
+		if (rawEntry.charAt(rawEntry.length()-1) == '1') {
+			captureIndicator = "x";
+		}
+		String disambiguation = getDisambiguationString(rawEntry);
+		String pieceIndicator = getPieceNotation(rawEntry);
+		return pieceIndicator + disambiguation + captureIndicator + destinationSquare + promotionIndicator;
+	}
+
+	private String getPromotionIndicator(String rawEntry) {
+		switch(rawEntry.charAt(rawEntry.length()-1)) {
+			case '3':
+				return "B";
+			case 4:
+				return "N";
+			case 5:
+				return "Q";
+			case 6:
+				return "R";
+			default:
+				return "";
+		}
+	}
+
+	private String getDisambiguationString(String rawEntry) {
+		return coordinateHelper.convertCoordsToNotationString(getOldXfromEntry(rawEntry), getOldYfromEntry(rawEntry));
+	}
+
+	private String getPieceNotation(String rawEntry) {
+		int figureType = this.getFigureTypefromEntry(rawEntry);
+		switch(figureType) {
+			case 0:
+				return "B";
+			case 1:
+				return "K";
+			case 2:
+				return "N";
+//			case 3:
+//				if (rawEntry.charAt(rawEntry.length()-1) == '1') {
+//					String s = coordinateHelper.convertCoordsToNotationString(getOldXfromEntry(rawEntry), 0);
+//					return "" + s.charAt(0);
+//				} else {
+//					return "";
+//				}
+			case 4:
+				return "Q";
+			case 5:
+				return "R";
+			default:
+				return "";
+		}
+	}
+
+	public void disableLogging() {
+		loggingEnabled = false;
+	}
+
+	public void enableLogging() {
+		loggingEnabled = true;
+	}
+
+	public void removeLastEntry() {
+		gameLog.remove(gameLog.size()-1);
 	}
 }

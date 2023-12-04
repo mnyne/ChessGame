@@ -90,10 +90,12 @@ public class MovementHandler {
 		if (type1 == 3 && type2 == 3 && color1 == 1 && color2 == 0
 				&& yMovement1 == 2 && newX1 == newX2 && newY2 == newY1 - 1) {
 			currentBoard.removeFigure(newX1, newY1);
+			gameLog.setMovementTypeForLastEntry(1);
 		}
 		if (type1 == 3 && type2 == 3 && color2 == 1 && color1 == 0
 				&& yMovement1 == -2 && newX1 == newX2 && newY2 == newY1 + 1) {
 			currentBoard.removeFigure(newX1, newY1);
+			gameLog.setMovementTypeForLastEntry(1);
 		}
 	}
 
@@ -110,41 +112,41 @@ public class MovementHandler {
 				// topleft
 				selectedFigure = currentBoard.getFigureAt(0, 0);
 				int targetIndex = coordinateHelper.convertXYtoIndex(3, 0);
-				gameLog.logMove(selectedFigure, targetIndex);
 				currentBoard.moveFigure(selectedFigure,
 						coordinateHelper.convertIndextoX(targetIndex),
-						coordinateHelper.convertIndextoY(targetIndex));
+						coordinateHelper.convertIndextoY(targetIndex), gameLog);
 				currentBoard.removeFigure(0, 0);
+				gameLog.setMovementTypeForLastEntry(2);
 			}
 			if (xMovement == 2 && Y == 0) {
 				// topright
 				selectedFigure = currentBoard.getFigureAt(7, 0);
 				int targetIndex = coordinateHelper.convertXYtoIndex(5, 0);
-				gameLog.logMove(selectedFigure, targetIndex);
 				currentBoard.moveFigure(selectedFigure,
 						coordinateHelper.convertIndextoX(targetIndex),
-						coordinateHelper.convertIndextoY(targetIndex));
+						coordinateHelper.convertIndextoY(targetIndex), gameLog);
 				currentBoard.removeFigure(7, 0);
+				gameLog.setMovementTypeForLastEntry(2);
 			}
 			if (xMovement == -2 && Y == 7) {
 				// bottomleft
 				selectedFigure = currentBoard.getFigureAt(0, 7);
 				int targetIndex = coordinateHelper.convertXYtoIndex(3, 7);
-				gameLog.logMove(selectedFigure, targetIndex);
 				currentBoard.moveFigure(selectedFigure,
 						coordinateHelper.convertIndextoX(targetIndex),
-						coordinateHelper.convertIndextoY(targetIndex));
+						coordinateHelper.convertIndextoY(targetIndex), gameLog);
 				currentBoard.removeFigure(0, 7);
+				gameLog.setMovementTypeForLastEntry(2);
 			}
 			if (xMovement == 2 && Y == 7) {
 				// bottomright
 				selectedFigure = currentBoard.getFigureAt(7, 7);
 				int targetIndex = coordinateHelper.convertXYtoIndex(5, 7);
-				gameLog.logMove(selectedFigure, targetIndex);
 				currentBoard.moveFigure(selectedFigure,
 						coordinateHelper.convertIndextoX(targetIndex),
-						coordinateHelper.convertIndextoY(targetIndex));
+						coordinateHelper.convertIndextoY(targetIndex), gameLog);
 				currentBoard.removeFigure(7, 7);
+				gameLog.setMovementTypeForLastEntry(2);
 			}
 		}
 
@@ -160,17 +162,18 @@ public class MovementHandler {
 
 		if (type == 3 && color == 0 && newY == 0) {
 			Figure pawn = currentBoard.getFigureAt(newX, newY);
-			tradeInPawn(pawn, currentBoard);
+			tradeInPawn(pawn, currentBoard, gameLog);
+
 		}
 		if (type == 3 && color == 1 && newY == 7) {
 			Figure pawn = currentBoard.getFigureAt(newX, newY);
-			tradeInPawn(pawn, currentBoard);
+			tradeInPawn(pawn, currentBoard, gameLog);
 		}
 
 	}
 
 	// move to ChessBoard class, try to figure out how to work that into a GUI...
-	private void tradeInPawn(Figure pawn, ChessBoard currentBoard) {
+	private void tradeInPawn(Figure pawn, ChessBoard currentBoard, GameLog gameLog) {
 		// code for selection maybe later, why would you want anything but a
 		// queen in 99% of cases...
 		int x = pawn.getXPosition();
@@ -214,6 +217,7 @@ public class MovementHandler {
 					new Queen(1, coordinateHelper
 							.convertXYtoIndex(x, y)));
 		}
+		gameLog.setMovementTypeForLastEntry(5);
 	}
 
 }

@@ -42,8 +42,11 @@ public class ChessBoard {
 		return s;
 	}
 
-	public void moveFigure(Figure figure, int targetX, int targetY) {
+	public void moveFigure(Figure figure, int targetX, int targetY, GameLog gameLog) {
 		int index = coordinateHelper.convertXYtoIndex(targetX, targetY);
+		if(getFigureAtIndex(index) != null) {
+			gameLog.setMovementTypeForLastEntry(1);
+		}
 		chessBoard[index] = figure;
 		figure.setNewPosition(targetX, targetY);
 		figure.setMovedStatus();
@@ -64,5 +67,11 @@ public class ChessBoard {
 		}
 
 		return copy;
+	}
+
+	public void clearBoard() {
+		for (int i=0; i< chessBoard.length; i++) {
+			this.chessBoard[i] = null;
+		}
 	}
 }

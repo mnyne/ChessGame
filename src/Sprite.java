@@ -72,8 +72,8 @@ public class Sprite {
 		}
 		return sprite;
 	}
-	
-	public int getSpriteID() {
+
+		public int getSpriteID() {
 		return spriteid;
 	}
 

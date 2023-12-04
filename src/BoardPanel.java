@@ -10,7 +10,8 @@ public class BoardPanel extends JPanel {
     private final int MOVE_INDICATOR_SIZE = TILE_SIZE / 2 - 1;
     private final int CANVAS_SIZE = 336;
     CoordinateHelper coordinateHelper = new CoordinateHelper();
-    Game game = new Game();
+    private Game game = new Game();
+    private MovePanel movePanel = new MovePanel();
     boolean clicked = false;
     private int mouseX;
     private int mouseY;
@@ -19,8 +20,20 @@ public class BoardPanel extends JPanel {
         game.initializeGame();
         addMouseListener(new BoardMouseListener());
         setPreferredSize(new Dimension(CANVAS_SIZE, CANVAS_SIZE));
+        setMovePanel(movePanel);
     }
 
+    public void setGame (Game game) {
+        this.game = game;
+    }
+
+    public void setMovePanel(MovePanel movePanel) {
+        this.movePanel = movePanel;
+    }
+
+    public void updateMoveList() {
+        movePanel.updateGameLog(game.getGameLog());
+    }
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         drawBoardTiles(g);
@@ -103,6 +116,7 @@ public class BoardPanel extends JPanel {
     private void runSecondClick() {
         int targetIndex = coordinateHelper.convertOpticalXYtoIndex(mouseX, mouseY);
         game.makeMove(targetIndex);
+        updateMoveList();
         setCanvasForNextTurn();
     }
 
@@ -110,6 +124,15 @@ public class BoardPanel extends JPanel {
         game.setSelectedFigureToNull();
         clicked = false;
         repaint();
+    }
+
+    public void revertToMove(int index) {
+        game.revertToMove(index);
+        repaint();
+    }
+
+    public GameLog getGameLog() {
+        return game.getGameLog();
     }
 }
 

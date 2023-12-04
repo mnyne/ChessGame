@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.awt.*;
 
 
 public class GUI extends JFrame {
@@ -11,8 +12,19 @@ public class GUI extends JFrame {
         ImageIcon icon = new ImageIcon("graphics/knight1.png");
         setIconImage(icon.getImage());
 
+
+
+        setLayout(new GridLayout());
+
         BoardPanel boardPanel = new BoardPanel();
+        MovePanel movePanel = new MovePanel(boardPanel);
+
+        boardPanel.setMovePanel(movePanel);
+        JScrollPane scrollableMovePanel = new JScrollPane(movePanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
         add(boardPanel);
+        add(scrollableMovePanel);
+
     }
 
     public void showGUI() {

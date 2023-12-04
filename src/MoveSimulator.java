@@ -27,7 +27,7 @@ public class MoveSimulator {
 		int yCache = simulatedFigure.getYPosition();
 		int newX = coordinateHelper.convertIndextoX(simulatedTargetIndex);
 		int newY = coordinateHelper.convertIndextoY(simulatedTargetIndex);
-		simulatedBoard.moveFigure(simulatedFigure, newX, newY);
+		simulatedBoard.moveFigure(simulatedFigure, newX, newY, simulatedLog);
 		simulatedLog.logMove(simulatedFigure, simulatedTargetIndex);
 		simulatedBoard.removeFigure(xCache, yCache);
 		movementHandler.removePawnAfterEnPassant(simulatedBoard, simulatedLog);
