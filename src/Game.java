@@ -62,7 +62,6 @@ public class Game {
 	
 	public void makeMove(int targetIndex) {
 		//maybe circumvent the cache stuff with log once thats done
-		//todo: actual method and logging for captures
 		int xCache = selectedFigure.getXPosition();
 		int yCache = selectedFigure.getYPosition();
 		if (legalMoveArray.moveAtIndexAllowed(targetIndex)) {
@@ -72,24 +71,22 @@ public class Game {
 					coordinateHelper.convertIndextoY(targetIndex), gameLog);
 			chessBoard.removeFigure(xCache, yCache);
 			currentHalfMove += 1;
+			System.out.println("Current half move: " + currentHalfMove);
 		}
 		selectedFigure.updateEnPassantEligibility(gameLog);
 		handleSpecialCasesAfterMove(gameLog);
 	}
 
-	public void makeMove(int targetIndex, GameLog inputLog) {
-		//maybe circumvent the cache stuff with log once thats done
-		//todo: actual method and logging for captures
+	public void makeMoveWithoutChecks(int targetIndex, GameLog inputLog) {
 		int xCache = selectedFigure.getXPosition();
 		int yCache = selectedFigure.getYPosition();
-		if (legalMoveArray.moveAtIndexAllowed(targetIndex)) {
 			inputLog.logMove(selectedFigure, targetIndex);
 			chessBoard.moveFigure(selectedFigure,
 					coordinateHelper.convertIndextoX(targetIndex),
 					coordinateHelper.convertIndextoY(targetIndex), inputLog);
 			chessBoard.removeFigure(xCache, yCache);
 			currentHalfMove += 1;
-		}
+			System.out.println("Current half move: " + currentHalfMove);
 		selectedFigure.updateEnPassantEligibility(inputLog);
 		handleSpecialCasesAfterMove(inputLog);
 	}
@@ -109,21 +106,18 @@ public class Game {
 	}
 
 	public void revertToMove(int moveIndex) {
-		//currently broken, something to do with halfmove logic
+		//todo: castliing breaks things right now
 		GameLog revertLog = new GameLog();
 		chessBoard.clearBoard();
 		chessBoard = fenSetup.generateChessBoard();
 		currentHalfMove = 2;
 		gameLog.disableLogging();
 		for (int i = 0; i<=moveIndex; i++) {
-			System.out.println("currently at move " + currentHalfMove);
 			String entry = gameLog.getEntryAt(i);
-			System.out.println(entry);
 			int startIndex = coordinateHelper.convertXYtoIndex(gameLog.getOldXfromEntry(entry), gameLog.getOldYfromEntry(entry));
 			int targetIndex = coordinateHelper.convertXYtoIndex(gameLog.getNewXfromEntry(entry), gameLog.getNewYfromEntry(entry));
 			selectedFigure = chessBoard.getFigureAtIndex(startIndex);
-			makeMove(targetIndex, revertLog);
-			System.out.println("moving from " + startIndex + " to " + targetIndex);
+			makeMoveWithoutChecks(targetIndex, revertLog);
 			handleSpecialCasesAfterMove(revertLog);
 			setSelectedFigureToNull();
 		}
