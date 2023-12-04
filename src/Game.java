@@ -55,6 +55,7 @@ public class Game {
 	public ChessBoard getChessBoard() {
 		return chessBoard;
 	}
+	private int clearLogAfter = -1;
 	
 	public void updateLegalMoveArray() {
 		legalMoveArray = movementHandler.legalMoveArray(chessBoard, selectedFigure, currentHalfMove, gameLog);
@@ -65,13 +66,18 @@ public class Game {
 		int xCache = selectedFigure.getXPosition();
 		int yCache = selectedFigure.getYPosition();
 		if (legalMoveArray.moveAtIndexAllowed(targetIndex)) {
+			if(clearLogAfter != -1) {
+				for (int i = gameLog.getLength()-1; i>clearLogAfter; i--) {
+					gameLog.removeEntry(i);
+				}
+				clearLogAfter = -1;
+			}
 			gameLog.logMove(selectedFigure, targetIndex);
 			chessBoard.moveFigure(selectedFigure,
 					coordinateHelper.convertIndextoX(targetIndex),
 					coordinateHelper.convertIndextoY(targetIndex), gameLog);
 			chessBoard.removeFigure(xCache, yCache);
 			currentHalfMove += 1;
-			System.out.println("Current half move: " + currentHalfMove);
 		}
 		selectedFigure.updateEnPassantEligibility(gameLog);
 		handleSpecialCasesAfterMove(gameLog);
@@ -106,23 +112,28 @@ public class Game {
 	}
 
 	public void revertToMove(int moveIndex) {
-		//todo: castliing breaks things right now
 		GameLog revertLog = new GameLog();
 		chessBoard.clearBoard();
 		chessBoard = fenSetup.generateChessBoard();
 		currentHalfMove = 2;
 		gameLog.disableLogging();
+
 		for (int i = 0; i<=moveIndex; i++) {
-			String entry = gameLog.getEntryAt(i);
-			int startIndex = coordinateHelper.convertXYtoIndex(gameLog.getOldXfromEntry(entry), gameLog.getOldYfromEntry(entry));
-			int targetIndex = coordinateHelper.convertXYtoIndex(gameLog.getNewXfromEntry(entry), gameLog.getNewYfromEntry(entry));
-			selectedFigure = chessBoard.getFigureAtIndex(startIndex);
-			makeMoveWithoutChecks(targetIndex, revertLog);
-			handleSpecialCasesAfterMove(revertLog);
-			setSelectedFigureToNull();
+			reconstructMoveAtIndex(i, revertLog);
 		}
+		revertLog.clearLog();
 		gameLog.enableLogging();
+		clearLogAfter = moveIndex;
 	}
-	
-	
+
+	private void reconstructMoveAtIndex(int i, GameLog revertLog) {
+		String entry = gameLog.getEntryAt(i);
+		int startIndex = coordinateHelper.convertXYtoIndex(gameLog.getOldXfromEntry(entry), gameLog.getOldYfromEntry(entry));
+		int targetIndex = coordinateHelper.convertXYtoIndex(gameLog.getNewXfromEntry(entry), gameLog.getNewYfromEntry(entry));
+		selectedFigure = chessBoard.getFigureAtIndex(startIndex);
+		makeMoveWithoutChecks(targetIndex, revertLog);
+		setSelectedFigureToNull();
+	}
+
+
 }

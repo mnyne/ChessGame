@@ -256,7 +256,7 @@ public class GameLog {
 		loggingEnabled = true;
 	}
 
-	public void removeLastEntry() {
-		gameLog.remove(gameLog.size()-1);
+	public void removeEntry(int index) {
+		gameLog.remove(index);
 	}
 }

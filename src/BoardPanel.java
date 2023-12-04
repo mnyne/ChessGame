@@ -40,8 +40,10 @@ public class BoardPanel extends JPanel {
         drawFigures(g);
         if(clicked) {
             highlightSelection(g);
-            showLegalMoves(g);
-            showCheckMoves(g);
+            if(game.getSelectedFigure() != null) {
+                showLegalMoves(g);
+                showCheckMoves(g);
+            }
         }
     }
 
@@ -109,14 +111,18 @@ public class BoardPanel extends JPanel {
 
     private void highlightSelection(Graphics g) {
         g.setColor(Color.BLUE);
-        g.drawRect(game.getSelectedFigure().getOpticalX(), game
-                .getSelectedFigure().getOpticalY(), TILE_SIZE, TILE_SIZE);
+        if(game.getSelectedFigure() != null) {
+            g.drawRect(game.getSelectedFigure().getOpticalX(), game
+                    .getSelectedFigure().getOpticalY(), TILE_SIZE, TILE_SIZE);
+        }
     }
 
     private void runSecondClick() {
         int targetIndex = coordinateHelper.convertOpticalXYtoIndex(mouseX, mouseY);
-        game.makeMove(targetIndex);
-        updateMoveList();
+        if(game.getSelectedFigure() != null) {
+            game.makeMove(targetIndex);
+            updateMoveList();
+        }
         setCanvasForNextTurn();
     }
 

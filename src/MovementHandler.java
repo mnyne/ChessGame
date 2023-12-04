@@ -61,13 +61,15 @@ public class MovementHandler {
 	public MovementArray figureMovementArray(ChessBoard currentBoard, Figure selectedFigure, int currentHalfMove) {
 		
 		MovementArray figureMovementArray = emptyTrueArray();
-		
-		for (int arrayIndex = 0; arrayIndex < figureMovementArray.getLength(); arrayIndex++) {
-            if (!selectedFigure.moveIsLegal(currentBoard, selectedFigure, arrayIndex)) {
-                figureMovementArray.setIndexToFalse(arrayIndex);
-            } else if (isWrongColor(selectedFigure, currentBoard, arrayIndex, currentHalfMove)) {
-                figureMovementArray.setIndexToFalse(arrayIndex);
-            }
+
+		if(selectedFigure != null) {
+			for (int arrayIndex = 0; arrayIndex < figureMovementArray.getLength(); arrayIndex++) {
+				if (!selectedFigure.moveIsLegal(currentBoard, selectedFigure, arrayIndex)) {
+					figureMovementArray.setIndexToFalse(arrayIndex);
+				} else if (isWrongColor(selectedFigure, currentBoard, arrayIndex, currentHalfMove)) {
+					figureMovementArray.setIndexToFalse(arrayIndex);
+				}
+			}
 		}
 		
 		return figureMovementArray;
