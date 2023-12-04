@@ -179,8 +179,8 @@ public class MovementHandler {
 		int index = coordinateHelper.convertXYtoIndex(x, y);
 		currentBoard.removeFigure(x, y);
 		if (color == 0) {
-			// GImage whiteSelector = new
-			// GImage("graphics/selection_white.png");
+			// ImageIcon whiteSelector = new
+			// ImageIcon("graphics/selection_white.png");
 			// add(whiteSelector,80,80);
 			// switch(mouseInput) {
 			// case 0:

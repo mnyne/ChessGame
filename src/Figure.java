@@ -1,30 +1,18 @@
-import java.awt.Graphics;
+import javax.swing.*;
+import java.awt.*;
 
-import acm.graphics.GObject;
-import acm.graphics.GRectangle;
-import acm.graphics.GImage;
-
-public abstract class Figure extends GObject {
+public abstract class Figure {
 	CoordinateHelper coordinateHelper = new CoordinateHelper();
 	private int id;
 	private int figureType;
 	private int currentX;
 	private int currentY;
 	private final int color;
-	private GImage sprite;
+	private ImageIcon sprite;
 	private Sprite sp;
 	private boolean hasMoved = false;
 	private boolean enPassantable = false;
 
-	public GRectangle getBounds() {
-		// in because GObject stuff...
-		return new GRectangle(this.getX(), this.getY(), 42, 42);
-	}
-
-	public void paint(Graphics arg0) {
-		// in because GObject stuff...
-	}
-	
 	public Figure(int in_figureType, int color, int startIndex) {
 		this.currentX = coordinateHelper.convertIndextoX(startIndex);
 		this.currentY = coordinateHelper.convertIndextoY(startIndex);
@@ -52,8 +40,8 @@ public abstract class Figure extends GObject {
 		return coordinateHelper.convertXYtoIndex(currentX, currentY);
 	}
 
-	public GImage getSprite() {
-		return sprite;
+	public Image getSprite() {
+		return sprite.getImage();
 	}
 
 	public int getOpticalX() {

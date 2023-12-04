@@ -1,8 +1,8 @@
-import acm.graphics.GCompound;
-import acm.graphics.GImage;
+import javax.swing.*;
+import java.awt.*;
 
-public class Sprite extends GCompound {
-	GImage sprite;
+public class Sprite {
+	ImageIcon sprite;
 	int spriteid;
 
 	// 0 black bishop
@@ -28,46 +28,46 @@ public class Sprite extends GCompound {
 		}
 	}
 
-	public GImage getSprite() {
+	public ImageIcon getSprite() {
 		switch (spriteid) {
 		case 0:
-			sprite = new GImage("graphics/bishop1.png");
+			sprite = new ImageIcon("graphics/bishop1.png");
 			break;
 		case 1:
-			sprite = new GImage("graphics/king1.png");
+			sprite = new ImageIcon("graphics/king1.png");
 			break;
 		case 2:
-			sprite = new GImage("graphics/knight1.png");
+			sprite = new ImageIcon("graphics/knight1.png");
 			break;
 		case 3:
-			sprite = new GImage("graphics/pawn1.png");
+			sprite = new ImageIcon("graphics/pawn1.png");
 			break;
 		case 4:
-			sprite = new GImage("graphics/queen1.png");
+			sprite = new ImageIcon("graphics/queen1.png");
 			break;
 		case 5:
-			sprite = new GImage("graphics/rook1.png");
+			sprite = new ImageIcon("graphics/rook1.png");
 			break;
 		case 6:
-			sprite = new GImage("graphics/bishop.png");
+			sprite = new ImageIcon("graphics/bishop.png");
 			break;
 		case 7:
-			sprite = new GImage("graphics/king.png");
+			sprite = new ImageIcon("graphics/king.png");
 			break;
 		case 8:
-			sprite = new GImage("graphics/knight.png");
+			sprite = new ImageIcon("graphics/knight.png");
 			break;
 		case 9:
-			sprite = new GImage("graphics/pawn.png");
+			sprite = new ImageIcon("graphics/pawn.png");
 			break;
 		case 10:
-			sprite = new GImage("graphics/queen.png");
+			sprite = new ImageIcon("graphics/queen.png");
 			break;
 		case 11:
-			sprite = new GImage("graphics/rook.png");
+			sprite = new ImageIcon("graphics/rook.png");
 			break;
 		default:
-			sprite = new GImage("graphics/bishop.png");
+			sprite = new ImageIcon("graphics/bishop.png");
 			break;
 		}
 		return sprite;
