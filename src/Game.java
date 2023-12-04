@@ -131,6 +131,7 @@ public class Game {
 		int startIndex = coordinateHelper.convertXYtoIndex(gameLog.getOldXfromEntry(entry), gameLog.getOldYfromEntry(entry));
 		int targetIndex = coordinateHelper.convertXYtoIndex(gameLog.getNewXfromEntry(entry), gameLog.getNewYfromEntry(entry));
 		selectedFigure = chessBoard.getFigureAtIndex(startIndex);
+		//todo: figure out why this won't work if you run it with validity checks... probably something to do with player turns
 		makeMoveWithoutChecks(targetIndex, revertLog);
 		setSelectedFigureToNull();
 	}

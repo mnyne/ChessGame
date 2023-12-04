@@ -89,6 +89,7 @@ public class BoardPanel extends JPanel {
 
     private class BoardMouseListener extends MouseAdapter {
         public void mouseClicked(MouseEvent e) {
+            //todo: build in check to see if it's actually on the board
             mouseX = e.getX();
             mouseY = e.getY();
             if (!clicked) {
@@ -102,7 +103,7 @@ public class BoardPanel extends JPanel {
     private void runFirstClick() {
         int targetIndex = coordinateHelper.convertOpticalXYtoIndex(mouseX, mouseY);
         if (game.getChessBoard().getFigureAtIndex(targetIndex) != null) {
-            game.setSelectedFigure(game.getChessBoard().getFigureAtIndex(targetIndex));;
+            game.setSelectedFigure(game.getChessBoard().getFigureAtIndex(targetIndex));
             game.updateLegalMoveArray();
             clicked = true;
             repaint();

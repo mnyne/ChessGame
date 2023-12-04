@@ -7,7 +7,7 @@ public class GUI extends JFrame {
 
     public GUI() {
         setTitle("Chess Engine");
-        setSize(500, 500);
+        setSize(800, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         ImageIcon icon = new ImageIcon("graphics/knight1.png");
         setIconImage(icon.getImage());
