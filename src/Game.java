@@ -4,7 +4,7 @@ public class Game {
 	
 	private int currentHalfMove = 2;
 	private int currentFullMove = currentHalfMove / 2;
-	//todo: implement halfmove clock, add function to update full moves whenever halfmoves change
+	//todo: make game end when half move clock reaches 50
 	private int halfMoveClock = 0;
 	
 	private ChessBoard chessBoard;
@@ -47,6 +47,15 @@ public class Game {
 	public void setSelectedFigureToNull() {
 		selectedFigure = null;
 	}
+
+	public void updateHalfMoveClock() {
+		if(gameLog.getMovementTypeFromEntry(gameLog.getPriorEntry(1)) != 1
+		&& gameLog.getFigureTypefromEntry(gameLog.getPriorEntry(1)) != 3) {
+			halfMoveClock += 1;
+		} else {
+			halfMoveClock = 0;
+		}
+	}
 	
 	public Figure getSelectedFigure() {
 		return selectedFigure;
@@ -77,6 +86,7 @@ public class Game {
 					coordinateHelper.convertIndextoX(targetIndex),
 					coordinateHelper.convertIndextoY(targetIndex), gameLog);
 			chessBoard.removeFigure(xCache, yCache);
+			updateHalfMoveClock();
 			currentHalfMove += 1;
 		}
 		selectedFigure.updateEnPassantEligibility(gameLog);

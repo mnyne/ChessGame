@@ -6,12 +6,13 @@ import java.awt.event.ActionListener;
 public class MovePanel extends JPanel {
     GameLog gameLog;
     BoardPanel boardPanel;
+    private final int TILE_SIZE = 96;
 
     public MovePanel() {
 
         gameLog = new GameLog();
-        setLayout(new GridLayout(0, 2));
-        setPreferredSize(new Dimension(256, 768));
+        setLayout(new FlowLayout());
+        setPreferredSize(new Dimension(3*TILE_SIZE + TILE_SIZE/2, 0));
     }
 
     public MovePanel(BoardPanel boardPanel) {
@@ -26,9 +27,9 @@ public class MovePanel extends JPanel {
             this.gameLog.addEntry(gameLog.getEntryAt(i));
             int figureColor = gameLog.getColorfromEntry(gameLog.getEntryAt(i));
             int figureType = gameLog.getFigureTypefromEntry(gameLog.getEntryAt(i));
-
             add(new moveButton(gameLog.getNotatedEntryAt(i), figureColor, figureType, i, boardPanel));
         }
+        setPreferredSize(new Dimension(3*TILE_SIZE + TILE_SIZE/2, (gameLog.getLength()+8)/2*8*TILE_SIZE/12));
         revalidate();
         repaint();
     }
@@ -36,9 +37,9 @@ public class MovePanel extends JPanel {
     class moveButton extends JButton {
     ImageIcon icon;
     BoardPanel boardPanel;
+    private final int TILE_SIZE = 96;
     int index;
         public moveButton(String entry, int figureColor, int figureType, int index, BoardPanel boardPanel) {
-            //todo: figure out how to give these a fixed size while also keeping them scalable
             this.boardPanel = boardPanel;
             ImageIcon icon = getImageIcon(figureColor, figureType);
             setIcon(icon);
@@ -47,6 +48,8 @@ public class MovePanel extends JPanel {
             setBackground(Color.DARK_GRAY);
             this.index = index;
             addActionListener(this::actionPerformed);
+            Dimension buttonSize = new Dimension(3*TILE_SIZE/2, 8*TILE_SIZE/12);
+            setPreferredSize(buttonSize);
         }
         private ImageIcon getImageIcon(int figureColor, int figureType) {
             Sprite buttonSprite = new Sprite(figureType, figureColor);

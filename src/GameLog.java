@@ -201,7 +201,10 @@ public class GameLog {
 		String pieceIndicator = getPieceNotation(rawEntry);
 		return pieceIndicator + disambiguation + captureIndicator + destinationSquare + promotionIndicator;
 	}
-
+public int getMovementTypeFromEntry(String entry) {
+		char c = entry.charAt(entry.length()-1);
+		return (int) c - ASCII_NUMBER_DIFF;
+}
 	private String getPromotionIndicator(String rawEntry) {
 		switch(rawEntry.charAt(rawEntry.length()-1)) {
 			case '3':

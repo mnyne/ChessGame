@@ -32,6 +32,7 @@ public class Sprite {
 	}
 
 	public ImageIcon getSprite(double scaleFactor) {
+		//todo: array
 		Image temp;
 		switch (spriteid) {
 		case 0:
