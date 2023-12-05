@@ -11,6 +11,7 @@ public class MovePanel extends JPanel {
 
         gameLog = new GameLog();
         setLayout(new GridLayout(0, 2));
+        setPreferredSize(new Dimension(256, 768));
     }
 
     public MovePanel(BoardPanel boardPanel) {
@@ -37,6 +38,7 @@ public class MovePanel extends JPanel {
     BoardPanel boardPanel;
     int index;
         public moveButton(String entry, int figureColor, int figureType, int index, BoardPanel boardPanel) {
+            //todo: figure out how to give these a fixed size while also keeping them scalable
             this.boardPanel = boardPanel;
             ImageIcon icon = getImageIcon(figureColor, figureType);
             setIcon(icon);
@@ -48,7 +50,7 @@ public class MovePanel extends JPanel {
         }
         private ImageIcon getImageIcon(int figureColor, int figureType) {
             Sprite buttonSprite = new Sprite(figureType, figureColor);
-            return buttonSprite.getSprite();
+            return buttonSprite.getSprite(1);
         }
 
         public void actionPerformed(ActionEvent e) {

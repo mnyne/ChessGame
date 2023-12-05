@@ -1,6 +1,6 @@
 public class CoordinateHelper {
 
-	private final int TILE_SIZE = 42;
+	private final int TILE_SIZE = 96;
 	private final int BOARD_SIZE = 8;
 	private final int ASCII_LETTER_DIFF = 97;
 	private final int ASCII_NUMBER_DIFF = 48;

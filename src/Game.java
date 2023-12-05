@@ -92,7 +92,6 @@ public class Game {
 					coordinateHelper.convertIndextoY(targetIndex), inputLog);
 			chessBoard.removeFigure(xCache, yCache);
 			currentHalfMove += 1;
-			System.out.println("Current half move: " + currentHalfMove);
 		selectedFigure.updateEnPassantEligibility(inputLog);
 		handleSpecialCasesAfterMove(inputLog);
 	}
@@ -134,6 +133,7 @@ public class Game {
 		//todo: figure out why this won't work if you run it with validity checks... probably something to do with player turns
 		makeMoveWithoutChecks(targetIndex, revertLog);
 		setSelectedFigureToNull();
+		//todo: highlight square last piece moved from
 	}
 
 

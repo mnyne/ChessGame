@@ -12,6 +12,10 @@ public abstract class Figure {
 	private Sprite sp;
 	private boolean hasMoved = false;
 	private boolean enPassantable = false;
+	private int SPRITE_SIZE;
+	private int TILE_SIZE = 96;
+	private double SCALE_FACTOR;
+
 
 	public Figure(int in_figureType, int color, int startIndex) {
 		this.currentX = coordinateHelper.convertIndextoX(startIndex);
@@ -20,7 +24,9 @@ public abstract class Figure {
 		this.figureType = in_figureType;
 		this.id = generateID(startIndex);
 		this.sp = new Sprite(this.figureType, this.color);
-		this.sprite = sp.getSprite();
+		this.SPRITE_SIZE = sp.getRawSpriteWidth();
+		this.SCALE_FACTOR = TILE_SIZE / SPRITE_SIZE;
+		this.sprite = sp.getSprite(SCALE_FACTOR);
 	}
 	
 		// constructor for copying
@@ -50,6 +56,15 @@ public abstract class Figure {
 
 	public int getOpticalY() {
 		return coordinateHelper.convertCoordToOptical(currentY);
+	}
+
+	public int getSpriteX() {
+		int spriteOffset = (TILE_SIZE - sp.getSpriteWidth()) / 2 ;
+		return getOpticalX()+spriteOffset;
+	}
+	public int getSpriteY() {
+		int spriteOffset = (TILE_SIZE - sp.getSpriteHeight());
+		return getOpticalY()+spriteOffset;
 	}
 
 	public int getXPosition() {

@@ -4,6 +4,9 @@ import java.awt.*;
 public class Sprite {
 	ImageIcon sprite;
 	int spriteid;
+	int spriteWidth;
+	int spriteHeight;
+	private final int TILE_SIZE = 96;
 
 	// 0 black bishop
 	// 1 black king
@@ -28,53 +31,72 @@ public class Sprite {
 		}
 	}
 
-	public ImageIcon getSprite() {
+	public ImageIcon getSprite(double scaleFactor) {
+		Image temp;
 		switch (spriteid) {
 		case 0:
-			sprite = new ImageIcon("graphics/bishop1.png");
+			sprite = new ImageIcon("graphics_deja_view/bishop1.png");
 			break;
 		case 1:
-			sprite = new ImageIcon("graphics/king1.png");
+			sprite = new ImageIcon("graphics_deja_view/king1.png");
 			break;
 		case 2:
-			sprite = new ImageIcon("graphics/knight1.png");
+			sprite = new ImageIcon("graphics_deja_view/knight1.png");
 			break;
 		case 3:
-			sprite = new ImageIcon("graphics/pawn1.png");
+			sprite = new ImageIcon("graphics_deja_view/pawn1.png");
 			break;
 		case 4:
-			sprite = new ImageIcon("graphics/queen1.png");
+			sprite = new ImageIcon("graphics_deja_view/queen1.png");
 			break;
 		case 5:
-			sprite = new ImageIcon("graphics/rook1.png");
+			sprite = new ImageIcon("graphics_deja_view/rook1.png");
 			break;
 		case 6:
-			sprite = new ImageIcon("graphics/bishop.png");
+			sprite = new ImageIcon("graphics_deja_view/bishop.png");
 			break;
 		case 7:
-			sprite = new ImageIcon("graphics/king.png");
+			sprite = new ImageIcon("graphics_deja_view/king.png");
 			break;
 		case 8:
-			sprite = new ImageIcon("graphics/knight.png");
+			sprite = new ImageIcon("graphics_deja_view/knight.png");
 			break;
 		case 9:
-			sprite = new ImageIcon("graphics/pawn.png");
+			sprite = new ImageIcon("graphics_deja_view/pawn.png");
 			break;
 		case 10:
-			sprite = new ImageIcon("graphics/queen.png");
+			sprite = new ImageIcon("graphics_deja_view/queen.png");
 			break;
 		case 11:
-			sprite = new ImageIcon("graphics/rook.png");
+			sprite = new ImageIcon("graphics_deja_view/rook.png");
 			break;
 		default:
-			sprite = new ImageIcon("graphics/bishop.png");
+			sprite = new ImageIcon("graphics_deja_view/bishop.png");
 			break;
 		}
+		double scaledWidth = (int) sprite.getIconWidth() * scaleFactor;
+		double scaledHeight = (int) sprite.getIconHeight() * scaleFactor;
+		spriteWidth = (int) scaledWidth;
+		spriteHeight = (int) scaledHeight;
+		temp = sprite.getImage().getScaledInstance(spriteWidth, spriteHeight, Image.SCALE_DEFAULT);
+		sprite = new ImageIcon(temp);
 		return sprite;
 	}
 
 		public int getSpriteID() {
 		return spriteid;
+	}
+
+	public int getRawSpriteWidth() {
+		ImageIcon temp = getSprite(1);
+		return temp.getIconWidth();
+	}
+
+	public int getSpriteWidth() {
+		return spriteWidth;
+	}
+	public int getSpriteHeight() {
+		return spriteHeight;
 	}
 
 }

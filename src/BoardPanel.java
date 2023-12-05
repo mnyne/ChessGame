@@ -6,17 +6,22 @@ import java.awt.event.MouseListener;
 
 public class BoardPanel extends JPanel {
     private final int BOARD_LENGTH = 8;
-    private final int TILE_SIZE = 42;
-    private final int MOVE_INDICATOR_SIZE = TILE_SIZE / 2 - 1;
-    private final int CANVAS_SIZE = 336;
+    private final int TILE_SIZE = 96;
+    private final int MOVE_INDICATOR_SIZE = TILE_SIZE / 10 * 8;
+    private final int CANVAS_SIZE = TILE_SIZE * 8;
     CoordinateHelper coordinateHelper = new CoordinateHelper();
     private Game game = new Game();
     private MovePanel movePanel = new MovePanel();
     boolean clicked = false;
     private int mouseX;
     private int mouseY;
+    Image boardImage;
+    ImageIcon boardIcon;
+
 
     public BoardPanel() {
+        boardIcon = new ImageIcon("graphics_deja_view/board.png");
+        boardImage = boardIcon.getImage().getScaledInstance(TILE_SIZE * 8, TILE_SIZE * 8, Image.SCALE_DEFAULT);
         game.initializeGame();
         addMouseListener(new BoardMouseListener());
         setPreferredSize(new Dimension(CANVAS_SIZE, CANVAS_SIZE));
@@ -36,7 +41,12 @@ public class BoardPanel extends JPanel {
     }
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        drawBoardTiles(g);
+        if (boardIcon.getIconWidth() != -1) {
+            g.drawImage(boardImage, 0, 0, this);
+        } else {
+            drawBoardTiles(g);
+        }
+
         drawFigures(g);
         if(clicked) {
             highlightSelection(g);
@@ -69,7 +79,7 @@ public class BoardPanel extends JPanel {
     private void drawFigures(Graphics g) {
         for (int i = 0; i < game.getChessBoard().getLength(); i++) {
             if (game.getChessBoard().getFigureAtIndex(i) != null) {
-                g.drawImage(game.getChessBoard().getFigureAtIndex(i).getSprite(), game.getChessBoard().getFigureAtIndex(i).getOpticalX(),game.getChessBoard().getFigureAtIndex(i).getOpticalY(), this);
+                g.drawImage(game.getChessBoard().getFigureAtIndex(i).getSprite(), game.getChessBoard().getFigureAtIndex(i).getSpriteX(),game.getChessBoard().getFigureAtIndex(i).getSpriteY(), this);
             }
         }
     }
@@ -89,13 +99,14 @@ public class BoardPanel extends JPanel {
 
     private class BoardMouseListener extends MouseAdapter {
         public void mouseClicked(MouseEvent e) {
-            //todo: build in check to see if it's actually on the board
             mouseX = e.getX();
             mouseY = e.getY();
-            if (!clicked) {
-                runFirstClick();
-            } else {
-                runSecondClick();
+            if (mouseX < TILE_SIZE * BOARD_LENGTH && mouseY < TILE_SIZE * BOARD_LENGTH) {
+                if (!clicked) {
+                    runFirstClick();
+                } else {
+                    runSecondClick();
+                }
             }
         }
     }

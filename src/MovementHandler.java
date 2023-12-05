@@ -185,7 +185,7 @@ public class MovementHandler {
 		currentBoard.removeFigure(x, y);
 		if (color == 0) {
 			// ImageIcon whiteSelector = new
-			// ImageIcon("graphics/selection_white.png");
+			// ImageIcon("graphics_deja_view/selection_white.png");
 			// add(whiteSelector,80,80);
 			// switch(mouseInput) {
 			// case 0:
