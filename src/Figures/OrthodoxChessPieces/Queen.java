@@ -1,3 +1,10 @@
+package Figures.OrthodoxChessPieces;
+
+import Figures.Figure;
+import Game.ChessBoard;
+import Game.GameLog;
+import Game.MovementValidityChecker;
+
 public class Queen extends Figure {
 	public Queen(int color, int startIndex) {
 		super(4, color, startIndex);

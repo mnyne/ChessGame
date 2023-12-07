@@ -1,3 +1,8 @@
+package Game;
+
+import Figures.Figure;
+import Tools.CoordinateHelper;
+
 public class MovementValidityChecker {
 
 	CoordinateHelper coordinateHelper = new CoordinateHelper();
@@ -15,7 +20,7 @@ public class MovementValidityChecker {
 	private int yDiffRaw;
 
 	public MovementValidityChecker(ChessBoard chessBoard, Figure currentFigure,
-			int targetIndex) {
+								   int targetIndex) {
 		this.currentBoard = chessBoard;
 		this.currentFigure = currentFigure;
 
@@ -46,7 +51,7 @@ public class MovementValidityChecker {
 	}
 
 	public boolean diagonalMove() {
-		if (xDiff == yDiff && !diagonalCollision()) {
+		if (xDiff == yDiff) {
 			return true;
 		}
 		return false;
@@ -54,9 +59,7 @@ public class MovementValidityChecker {
 
 	public boolean orthogonalMove() {
 		if (xDiff == 0 || yDiff == 0) {
-			if (!orthogonalCollision()) {
 				return true;
-			}
 		}
 		return false;
 	}
@@ -93,6 +96,13 @@ public class MovementValidityChecker {
 
 	public boolean hasLength(int moveLength) {
 		if (xDiff <= moveLength && yDiff <= moveLength) {
+			return true;
+		}
+		return false;
+	}
+
+	public boolean hasExactLength(int moveLength) {
+		if (xDiff == moveLength || yDiff == moveLength) {
 			return true;
 		}
 		return false;

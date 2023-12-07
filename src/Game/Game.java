@@ -1,3 +1,9 @@
+package Game;
+
+import Figures.Figure;
+import Tools.CoordinateHelper;
+import Tools.FenSetup;
+
 public class Game {
 	
 	private final int BOARD_LENGTH = 8;
@@ -10,14 +16,17 @@ public class Game {
 	private ChessBoard chessBoard;
 	private Figure selectedFigure;
 	private MovementArray legalMoveArray;
+	private int gameType;
 	
 	FenSetup fenSetup = new FenSetup();
 	MovementHandler movementHandler = new MovementHandler();
 	CoordinateHelper coordinateHelper = new CoordinateHelper();
 	GameLog gameLog;
 
-	public Game() {
-
+	public Game(int gameType) {
+		//0: regular starting grid from fen
+		//1: game with custom figures
+	this.gameType = gameType;
 	}
 	
 	public GameLog getGameLog() {
@@ -87,10 +96,10 @@ public class Game {
 					coordinateHelper.convertIndextoY(targetIndex), gameLog);
 			chessBoard.removeFigure(xCache, yCache);
 			updateHalfMoveClock();
+			selectedFigure.updateEnPassantEligibility(gameLog);
+			handleSpecialCasesAfterMove(gameLog);
 			currentHalfMove += 1;
 		}
-		selectedFigure.updateEnPassantEligibility(gameLog);
-		handleSpecialCasesAfterMove(gameLog);
 	}
 
 	public void makeMoveWithoutChecks(int targetIndex, GameLog inputLog) {
@@ -113,11 +122,17 @@ public class Game {
 	}
 
 	public void initializeGame() {
-		//fenSetup.setFenNotation("8/8/1k6/2b5/2pP4/8/5K2/8 b - d3 0 1");
-		chessBoard = fenSetup.generateChessBoard();
-		currentHalfMove = fenSetup.getCurrentHalfMove();
-		halfMoveClock = fenSetup.getHalfMoveClock();
-		gameLog = fenSetup.getGameLog();
+		if(gameType == 0) {
+			//fenSetup.setFenNotation("8/8/1k6/2b5/2pP4/8/5K2/8 b - d3 0 1");
+			chessBoard = fenSetup.generateChessBoard();
+			currentHalfMove = fenSetup.getCurrentHalfMove();
+			halfMoveClock = fenSetup.getHalfMoveClock();
+			gameLog = fenSetup.getGameLog();
+		}
+		//if(gameType ==1) {
+		//	chessBoard = chessBoard.generateStartingGrid();
+		//}
+
 	}
 
 	public void revertToMove(int moveIndex) {

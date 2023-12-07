@@ -1,3 +1,10 @@
+package Figures;
+
+import GUI.Sprite;
+import Game.ChessBoard;
+import Game.GameLog;
+import Tools.CoordinateHelper;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -37,7 +44,8 @@ public abstract class Figure {
 		currentX = coordinateHelper.convertIndextoX(currentIndex);
 		currentY = coordinateHelper.convertIndextoY(currentIndex);
 	}
-	
+
+	//todo: make figureTypes triple digits
 	private int generateID(int startIndex) {
 		return (color+1) * 1000 + (figureType * 100) + startIndex;
 	}

@@ -1,3 +1,10 @@
+package Game;
+
+import Figures.Figure;
+import Figures.OrthodoxChessPieces.Queen;
+import Tools.CoordinateHelper;
+import Tools.MoveSimulator;
+
 public class MovementHandler {
 	
 	CoordinateHelper coordinateHelper = new CoordinateHelper();
@@ -75,8 +82,8 @@ public class MovementHandler {
 		return figureMovementArray;
 	}
 
-	// move to separate capturing method, probably within ChessBoard class
-	//probably easier to just do a Figure oldEntry = getFigureFromEntry and then use methods from within Figure class instead of doing all this 
+	// move to separate capturing method, probably within Game.ChessBoard class
+	//probably easier to just do a Figures.Figure oldEntry = getFigureFromEntry and then use methods from within Figures.Figure class instead of doing all this
 	public void removePawnAfterEnPassant(ChessBoard currentBoard, GameLog gameLog) {
 		String secondToLastEntry = gameLog.getPriorEntry(2);
 		String lastEntry = gameLog.getPriorEntry(1);
@@ -101,8 +108,8 @@ public class MovementHandler {
 		}
 	}
 
-	// move to separate capturing method, probably within ChessBoard class
-	//probably easier to just do a Figure oldEntry = getFigureFromEntry and then use methods from within Figure class instead of doing all this 
+	// move to separate capturing method, probably within Game.ChessBoard class
+	//probably easier to just do a Figures.Figure oldEntry = getFigureFromEntry and then use methods from within Figures.Figure class instead of doing all this
 	public void moveTowerAfterCastling(ChessBoard currentBoard, GameLog gameLog) {
 		Figure selectedFigure;
 		String lastEntry = gameLog.getPriorEntry(1);
@@ -154,7 +161,7 @@ public class MovementHandler {
 
 	}
 
-	// move to ChessBoard class
+	// move to Game.ChessBoard class
 	public void handlePawnAtBorder(ChessBoard currentBoard, GameLog gameLog) {
 		String lastEntry = gameLog.getPriorEntry(1);
 		int type = gameLog.getFigureTypefromEntry(lastEntry);
@@ -174,7 +181,7 @@ public class MovementHandler {
 
 	}
 
-	// move to ChessBoard class, try to figure out how to work that into a GUI...
+	// move to Game.ChessBoard class, try to figure out how to work that into a GUI.GUI...
 	private void tradeInPawn(Figure pawn, ChessBoard currentBoard, GameLog gameLog) {
 		// code for selection maybe later, why would you want anything but a
 		// queen in 99% of cases...
@@ -189,19 +196,19 @@ public class MovementHandler {
 			// add(whiteSelector,80,80);
 			// switch(mouseInput) {
 			// case 0:
-			// chessBoard.addFigure(index, new Queen("white",
+			// chessBoard.addFigure(index, new Figures.OrthodoxChessPieces.Queen("white",
 			// ch.convertCoordsToNotationString(x,y)));
 			// break;
 			// case 1:
-			// chessBoard.addFigure(index, new Rook("white",
+			// chessBoard.addFigure(index, new Figures.OrthodoxChessPieces.Rook("white",
 			// ch.convertCoordsToNotationString(x,y)));
 			// break;
 			// case 2:
-			// chessBoard.addFigure(index, new Bishop("white",
+			// chessBoard.addFigure(index, new Figures.OrthodoxChessPieces.Bishop("white",
 			// ch.convertCoordsToNotationString(x,y)));
 			// break;
 			// case 3:
-			// chessBoard.addFigure(index, new Knight("white",
+			// chessBoard.addFigure(index, new Figures.OrthodoxChessPieces.Knight("white",
 			// ch.convertCoordsToNotationString(x,y)));
 			// break;
 			// default:

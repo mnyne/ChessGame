@@ -1,3 +1,10 @@
+package Figures.OrthodoxChessPieces;
+
+import Figures.Figure;
+import Game.ChessBoard;
+import Game.GameLog;
+import Game.MovementValidityChecker;
+
 public class Knight extends Figure {
 	public Knight(int color, int startIndex) {
         super(2, color, startIndex);

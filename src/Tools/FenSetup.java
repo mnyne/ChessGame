@@ -1,3 +1,12 @@
+package Tools;
+
+import Figures.*;
+import Figures.FairyChessPieces.Chaturanga.Ferz;
+import Figures.FairyChessPieces.Chaturanga.Alfil;
+import Figures.OrthodoxChessPieces.*;
+import Game.ChessBoard;
+import Game.GameLog;
+
 public class FenSetup {
 
 	private final int BOARD_LENGTH = 8;

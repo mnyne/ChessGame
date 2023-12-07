@@ -1,3 +1,5 @@
+package GUI;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -27,7 +29,7 @@ public class Sprite {
 	public Sprite(int figureType, int color) {
 		spriteid = figureType;
 		if (color == 0) {
-			spriteid = spriteid + 6;
+			spriteid = spriteid + 1000;
 		}
 	}
 
@@ -54,22 +56,40 @@ public class Sprite {
 			sprite = new ImageIcon("graphics_deja_view/rook1.png");
 			break;
 		case 6:
-			sprite = new ImageIcon("graphics_deja_view/bishop.png");
+			sprite = new ImageIcon("graphics_deja_view/alfil1.png");
 			break;
 		case 7:
-			sprite = new ImageIcon("graphics_deja_view/king.png");
+			sprite = new ImageIcon("graphics_deja_view/ferz1.png");
 			break;
 		case 8:
+			sprite = new ImageIcon("graphics/pawn1.png");
+			break;
+		case 1000:
+			sprite = new ImageIcon("graphics_deja_view/bishop.png");
+			break;
+		case 1001:
+			sprite = new ImageIcon("graphics_deja_view/king.png");
+			break;
+		case 1002:
 			sprite = new ImageIcon("graphics_deja_view/knight.png");
 			break;
-		case 9:
+		case 1003:
 			sprite = new ImageIcon("graphics_deja_view/pawn.png");
 			break;
-		case 10:
+		case 1004:
 			sprite = new ImageIcon("graphics_deja_view/queen.png");
 			break;
-		case 11:
+		case 1005:
 			sprite = new ImageIcon("graphics_deja_view/rook.png");
+			break;
+		case 1006:
+			sprite = new ImageIcon("graphics_deja_view/alfil.png");
+			break;
+		case 1007:
+			sprite = new ImageIcon("graphics_deja_view/ferz.png");
+			break;
+		case 1008:
+			sprite = new ImageIcon("graphics/pawn.png");
 			break;
 		default:
 			sprite = new ImageIcon("graphics_deja_view/bishop.png");

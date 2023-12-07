@@ -1,3 +1,10 @@
+package Figures.OrthodoxChessPieces;
+
+import Figures.Figure;
+import Game.ChessBoard;
+import Game.GameLog;
+import Game.MovementValidityChecker;
+
 public class Bishop extends Figure {
 	public Bishop(int color, int startIndex) {
 		super(0, color, startIndex);

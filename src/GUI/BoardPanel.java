@@ -1,8 +1,15 @@
+package GUI;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import Figures.Figure;
+import Game.Game;
+import Game.MovementArray;
+import Game.GameLog;
+import Tools.CoordinateHelper;
 
 public class BoardPanel extends JPanel {
     private final int BOARD_LENGTH = 8;
@@ -10,7 +17,7 @@ public class BoardPanel extends JPanel {
     private final int MOVE_INDICATOR_SIZE = TILE_SIZE / 10 * 8;
     private final int CANVAS_SIZE = TILE_SIZE * 8;
     CoordinateHelper coordinateHelper = new CoordinateHelper();
-    private Game game = new Game();
+    private Game game = new Game(0);
     private MovePanel movePanel = new MovePanel();
     boolean clicked = false;
     private int mouseX;
@@ -70,7 +77,7 @@ public class BoardPanel extends JPanel {
     private void showLegalMoves(Graphics g) {
         for (int legalMoveIndex = 0; legalMoveIndex < game.getChessBoard().getLength(); legalMoveIndex++) {
             if (game.getLegalMoveArray().moveAtIndexAllowed(legalMoveIndex)) {
-                g.setColor(Color.GREEN);
+                g.setColor(new Color(0x79D221));
                 g.drawRect(coordinateHelper.convertIndextoOpticalX(legalMoveIndex)+ ((TILE_SIZE - MOVE_INDICATOR_SIZE) / 2),coordinateHelper.convertIndextoOpticalY(legalMoveIndex)+ ((TILE_SIZE - MOVE_INDICATOR_SIZE) / 2), MOVE_INDICATOR_SIZE, MOVE_INDICATOR_SIZE);
             }
         }

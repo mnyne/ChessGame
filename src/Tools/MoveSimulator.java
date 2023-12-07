@@ -1,4 +1,11 @@
-//for later; get your movement code into MovementHandler first
+package Tools;//for later; get your movement code into Game.MovementHandler first
+
+import Figures.Figure;
+import Game.ChessBoard;
+import Game.GameLog;
+import Game.MovementArray;
+import Game.MovementHandler;
+import Tools.CoordinateHelper;
 
 public class MoveSimulator {
 

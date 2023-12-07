@@ -1,3 +1,8 @@
+package Game;
+
+import Figures.Figure;
+import Tools.CoordinateHelper;
+
 public class ChessBoard {
 	CoordinateHelper coordinateHelper = new CoordinateHelper();
 	private Figure[] chessBoard;

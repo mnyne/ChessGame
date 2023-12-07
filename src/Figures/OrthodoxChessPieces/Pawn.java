@@ -1,3 +1,10 @@
+package Figures.OrthodoxChessPieces;
+
+import Figures.Figure;
+import Game.ChessBoard;
+import Game.GameLog;
+import Game.MovementValidityChecker;
+
 public class Pawn extends Figure {
 
 	public Pawn(int color, int startIndex) {

@@ -1,3 +1,5 @@
+package Tools;
+
 public class CoordinateHelper {
 
 	private final int TILE_SIZE = 96;

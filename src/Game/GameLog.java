@@ -1,3 +1,8 @@
+package Game;
+
+import Figures.Figure;
+import Tools.CoordinateHelper;
+
 import java.util.ArrayList;
 
 public class GameLog {
@@ -20,8 +25,8 @@ public class GameLog {
 		if (loggingEnabled) {
 			int oldX = figure.getXPosition();
 			int oldY = figure.getYPosition();
-			int id = figure.getFigureID();
-			int type = figure.getFigureType();
+			String id = padToSixDigits(figure.getFigureID());
+			String type = padToThreeDigits(figure.getFigureType());
 			int color = figure.getFigureColor();
 			int newX = coordinateHelper.convertIndextoX(targetIndex);
 			int newY = coordinateHelper.convertIndextoY(targetIndex);
@@ -29,6 +34,37 @@ public class GameLog {
 					+ ", OldX=" + oldX + ", OldY=" + oldY + ", NewX=" + newX
 					+ ", NewY=" + newY + ", MovementType = 0");
 		}
+	}
+
+	private String padToThreeDigits(int figureType) {
+		String s = "" + figureType;
+		if(s.length() == 1) {
+			s = "00" + s;
+		}
+		if(s.length() == 2) {
+			s = "0" + s;
+		}
+		return s;
+	}
+
+	private String padToSixDigits(int figureID) {
+		String s = "" + figureID;
+		if(s.length() == 1) {
+			s = "00000" + s;
+		}
+		if(s.length() == 2) {
+			s = "0000" + s;
+		}
+		if(s.length() == 3) {
+			s = "000" + s;
+		}
+		if(s.length() == 4) {
+			s = "00" + s;
+		}
+		if(s.length() == 5) {
+			s = "0" + s;
+		}
+		return s;
 	}
 
 	//move 0: normal
@@ -71,7 +107,7 @@ public class GameLog {
 	
 
 	public String getPriorEntry(int steps) {
-		String entry = "DUMY: ID=0000, TYPE=0, COLOR=0, OLDX=0, OLDY=0, NEWX=0, NEWY=0";
+		String entry = "DUMY: ID=000000, TYPE=000, COLOR=0, OLDX=0, OLDY=0, NEWX=0, NEWY=0";
 		if (gameLog.size() > steps-1) {
 			entry = gameLog.get(gameLog.size()-steps);
 		}
@@ -92,7 +128,9 @@ public class GameLog {
 			int int2 = convertCharToInt(entry.charAt(10));
 			int int3 = convertCharToInt(entry.charAt(11));
 			int int4 = convertCharToInt(entry.charAt(12));
-			return (int1 * 1000) + (int2 * 100) + (int3 * 10) + int4;
+			int int5 = convertCharToInt(entry.charAt(13));
+			int int6 = convertCharToInt(entry.charAt(14));
+			return (int1 * 100000) + (int2 * 10000) + (int3 * 1000) + (int4 * 100) + (int5 * 10) + (int6);
 		}
 		return 0;
 	}
@@ -103,14 +141,17 @@ public class GameLog {
 
 	public int getColorfromEntry(String entry) {
 		if (entry != null) {
-			return convertCharToInt(entry.charAt(29));
+			return convertCharToInt(entry.charAt(33));
 		}
 		return -1;
 	}
 
 	public int getFigureTypefromEntry(String entry) {
 		if (entry != null) {
-			return convertCharToInt(entry.charAt(20));
+			int int1 = convertCharToInt(entry.charAt(22));
+			int int2 = convertCharToInt(entry.charAt(23));
+			int int3 = convertCharToInt(entry.charAt(24));
+			return (int1 * 100) + (int2 * 10) + int3;
 		}
 		return -1;
 	}
@@ -119,8 +160,8 @@ public class GameLog {
 	public int getXMovementfromEntry(String entry) {
 		int xMovement = 0;
 		if (entry != null) {
-			int chara = (int) entry.charAt(37);
-			int charb = (int) entry.charAt(53);
+			int chara = (int) entry.charAt(41);
+			int charb = (int) entry.charAt(57);
 			int oldX = chara - ASCII_NUMBER_DIFF;
 			int newX = charb - ASCII_NUMBER_DIFF;
 			xMovement = newX - oldX;
@@ -132,8 +173,8 @@ public class GameLog {
 	public int getYMovementfromEntry(String entry) {
 		int yMovement = 0;
 		if (entry != null) {
-			int chara = (int) entry.charAt(45);
-			int charb = (int) entry.charAt(61);
+			int chara = (int) entry.charAt(49);
+			int charb = (int) entry.charAt(65);
 			int oldY = chara - ASCII_NUMBER_DIFF;
 			int newY = charb - ASCII_NUMBER_DIFF;
 			yMovement = newY - oldY;
@@ -144,7 +185,7 @@ public class GameLog {
 	public int getOldXfromEntry(String entry) {
 		int oldX = 0;
 		if (entry != null) {
-			int chara = (int) entry.charAt(37);
+			int chara = (int) entry.charAt(41);
 			oldX = chara - ASCII_NUMBER_DIFF;
 		}
 		return oldX;
@@ -153,7 +194,7 @@ public class GameLog {
 	public int getNewXfromEntry(String entry) {
 		int newX = 0;
 		if (entry != null) {
-			int chara = (int) entry.charAt(53);
+			int chara = (int) entry.charAt(57);
 			newX = chara - ASCII_NUMBER_DIFF;
 		}
 		return newX;
@@ -162,7 +203,7 @@ public class GameLog {
 	public int getOldYfromEntry(String entry) {
 		int oldY = 0;
 		if (entry != null) {
-			int chara = (int) entry.charAt(45);
+			int chara = (int) entry.charAt(49);
 			oldY = chara - ASCII_NUMBER_DIFF;
 		}
 		return oldY;
@@ -171,7 +212,7 @@ public class GameLog {
 	public int getNewYfromEntry(String entry) {
 		int newY = 0;
 		if (entry != null) {
-			int chara = (int) entry.charAt(61);
+			int chara = (int) entry.charAt(65);
 			newY = chara - ASCII_NUMBER_DIFF;
 		}
 		return newY;

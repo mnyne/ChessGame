@@ -1,3 +1,10 @@
+package Figures.OrthodoxChessPieces;
+
+import Figures.Figure;
+import Game.ChessBoard;
+import Game.GameLog;
+import Game.MovementValidityChecker;
+
 public class Rook extends Figure {
 	public Rook(int color, int startIndex) {
 		super(5, color, startIndex);

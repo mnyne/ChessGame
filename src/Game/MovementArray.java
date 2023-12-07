@@ -1,3 +1,5 @@
+package Game;
+
 public class MovementArray {
 	private final int BOARD_LENGTH = 8;
 	private boolean[] moveAtIndexAllowed;
