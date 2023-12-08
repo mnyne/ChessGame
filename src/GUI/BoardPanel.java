@@ -35,17 +35,39 @@ public class BoardPanel extends JPanel {
         setMovePanel(movePanel);
     }
 
+    /**
+     * Sets the game object for this instance.
+     *
+     * @param  game  the game object to be set
+     */
     public void setGame (Game game) {
         this.game = game;
     }
 
+    /**
+     * Sets the move panel for this object.
+     *
+     * @param  movePanel  the move panel to be set
+     */
     public void setMovePanel(MovePanel movePanel) {
         this.movePanel = movePanel;
     }
 
+    /**
+     * Updates the move list by calling the `updateGameLog` method of the `movePanel`
+     * object, passing in the `gameLog` obtained from the `game` object.
+     *
+     * @return None
+     */
     public void updateMoveList() {
         movePanel.updateGameLog(game.getGameLog());
     }
+
+    /**
+     * Paints the component using the specified Graphics object.
+     *
+     * @param  g  the Graphics object used for painting
+     */
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         if (boardIcon.getIconWidth() != -1) {
@@ -64,6 +86,11 @@ public class BoardPanel extends JPanel {
         }
     }
 
+    /**
+     * Renders the check moves on the graphics object.
+     *
+     * @param  g   the graphics object to render on
+     */
     private void showCheckMoves(Graphics g) {
         MovementArray checkMoveArray = game.getMovementHandler().kingInCheckArray(game.getChessBoard(),game.getSelectedFigure(), game.getCurrentHalfMove(), game.getGameLog());
         for (int kingInCheckIndex = 0; kingInCheckIndex < game.getChessBoard().getLength(); kingInCheckIndex++) {
@@ -74,6 +101,11 @@ public class BoardPanel extends JPanel {
         }
     }
 
+    /**
+     * Displays the legal moves on the chessboard.
+     *
+     * @param  g  the Graphics object to draw the legal moves
+     */
     private void showLegalMoves(Graphics g) {
         for (int legalMoveIndex = 0; legalMoveIndex < game.getChessBoard().getLength(); legalMoveIndex++) {
             if (game.getLegalMoveArray().moveAtIndexAllowed(legalMoveIndex)) {
@@ -83,6 +115,11 @@ public class BoardPanel extends JPanel {
         }
     }
 
+    /**
+     * Draws all the figures on the chessboard.
+     *
+     * @param  g  the graphics object to draw the figures on
+     */
     private void drawFigures(Graphics g) {
         for (int i = 0; i < game.getChessBoard().getLength(); i++) {
             if (game.getChessBoard().getFigureAtIndex(i) != null) {
@@ -91,6 +128,11 @@ public class BoardPanel extends JPanel {
         }
     }
 
+    /**
+     * Draws the board tiles using the given Graphics object.
+     *
+     * @param  g  the Graphics object used for drawing
+     */
     private void drawBoardTiles(Graphics g) {
         for (int x = 0; x < BOARD_LENGTH; x++) {
             for (int y = 0; y < BOARD_LENGTH; y++) {
@@ -105,6 +147,12 @@ public class BoardPanel extends JPanel {
     }
 
     private class BoardMouseListener extends MouseAdapter {
+
+        /**
+         * Handles the mouse click event.
+         *
+         * @param  e  the MouseEvent object representing the click event
+         */
         public void mouseClicked(MouseEvent e) {
             mouseX = e.getX();
             mouseY = e.getY();
@@ -118,6 +166,11 @@ public class BoardPanel extends JPanel {
         }
     }
 
+    /**
+     * Runs the first click event.
+     *
+     * @return None
+     */
     private void runFirstClick() {
         int targetIndex = coordinateHelper.convertOpticalXYtoIndex(mouseX, mouseY);
         if (game.getChessBoard().getFigureAtIndex(targetIndex) != null) {
@@ -128,6 +181,11 @@ public class BoardPanel extends JPanel {
         }
     }
 
+    /**
+     * Highlights the selected figure on the graphics.
+     *
+     * @param  g  the Graphics object to draw on
+     */
     private void highlightSelection(Graphics g) {
         g.setColor(Color.BLUE);
         if(game.getSelectedFigure() != null) {
@@ -136,6 +194,11 @@ public class BoardPanel extends JPanel {
         }
     }
 
+    /**
+     * Perform the actions associated with the second click event.
+     *
+     * @return           none
+     */
     private void runSecondClick() {
         int targetIndex = coordinateHelper.convertOpticalXYtoIndex(mouseX, mouseY);
         if(game.getSelectedFigure() != null) {
@@ -145,17 +208,31 @@ public class BoardPanel extends JPanel {
         setCanvasForNextTurn();
     }
 
+    /**
+     * Resets the canvas for the next turn.
+     *
+     */
     private void setCanvasForNextTurn() {
         game.setSelectedFigureToNull();
         clicked = false;
         repaint();
     }
 
+    /**
+     * Reverts the game to a previous move at the specified index.
+     *
+     * @param  index  the index of the move to revert to
+     */
     public void revertToMove(int index) {
         game.revertToMove(index);
         repaint();
     }
 
+    /**
+     * Retrieves the game log.
+     *
+     * @return  the game log
+     */
     public GameLog getGameLog() {
         return game.getGameLog();
     }

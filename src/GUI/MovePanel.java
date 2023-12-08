@@ -23,6 +23,11 @@ public class MovePanel extends JPanel {
         this.boardPanel = boardPanel;
     }
 
+    /**
+     * Updates the game log with the provided game log.
+     *
+     * @param  gameLog  the game log to update with
+     */
     public void updateGameLog(GameLog gameLog) {
         this.gameLog.clearLog();
         removeAll();
@@ -54,11 +59,24 @@ public class MovePanel extends JPanel {
             Dimension buttonSize = new Dimension(3*TILE_SIZE/2, 8*TILE_SIZE/12);
             setPreferredSize(buttonSize);
         }
+
+        /**
+         * Retrieves the image icon for a given figure color and type.
+         *
+         * @param  figureColor  the color of the figure
+         * @param  figureType   the type of the figure
+         * @return              the image icon for the specified figure
+         */
         private ImageIcon getImageIcon(int figureColor, int figureType) {
             Sprite buttonSprite = new Sprite(figureType, figureColor);
             return buttonSprite.getSprite(1);
         }
 
+        /**
+         * Performs an action when an event is triggered.
+         *
+         * @param  e	The event that triggered the action.
+         */
         public void actionPerformed(ActionEvent e) {
             if(e.getSource() instanceof moveButton) {
                 boardPanel.revertToMove(index);

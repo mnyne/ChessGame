@@ -17,10 +17,21 @@ public class GameLog {
 		gameLog = new ArrayList<>();
 	}
 
+	/**
+	 * Adds an entry to the game log.
+	 *
+	 * @param  entry  the entry to be added to the game log
+	 */
 	public void addEntry(String entry) {
 		gameLog.add(entry);
 	}
 
+	/**
+	 * Logs the move of a figure.
+	 *
+	 * @param  figure       the figure object to be moved
+	 * @param  targetIndex  the index of the target position
+	 */
 	public void logMove(Figure figure, int targetIndex) {
 		if (loggingEnabled) {
 			int oldX = figure.getXPosition();
@@ -36,6 +47,12 @@ public class GameLog {
 		}
 	}
 
+	/**
+	 * Pad the given value to three digits.
+	 *
+	 * @param  figureType  the value to be padded
+	 * @return             the value padded to three digits
+	 */
 	private String padToThreeDigits(int figureType) {
 		String s = "" + figureType;
 		if(s.length() == 1) {
@@ -47,6 +64,12 @@ public class GameLog {
 		return s;
 	}
 
+	/**
+	 * Pads a given figure ID to six digits.
+	 *
+	 * @param  figureID	the figure ID to be padded
+	 * @return         	the padded figure ID as a string
+	 */
 	private String padToSixDigits(int figureID) {
 		String s = "" + figureID;
 		if(s.length() == 1) {
@@ -67,6 +90,11 @@ public class GameLog {
 		return s;
 	}
 
+	/**
+	 * Sets the movement type for the last entry in the game log.
+	 *
+	 * @param  movementType  the movement type to set
+	 */
 	//move 0: normal
 	//move 1: capture
 	//move 2: castling
@@ -82,6 +110,12 @@ public class GameLog {
 		}
 	}
 
+	/**
+	 * Logs the move of a figure from a given FEN position.
+	 *
+	 * @param  figure      the figure being moved
+	 * @param  startIndex  the starting index of the figure
+	 */
 	public void logMoveFromFen(Figure figure, int startIndex) {
 		int oldX = coordinateHelper.convertIndextoX(startIndex);
 		int oldY = coordinateHelper.convertIndextoY(startIndex);
@@ -95,6 +129,12 @@ public class GameLog {
 				+ ", NewY=" + newY);
 	}
 
+	/**
+	 * Determines if a specific figure has moved during the game.
+	 *
+	 * @param  figure  the figure to check
+	 * @return         true if the figure has moved, false otherwise
+	 */
 	public boolean hasFigureMoved(Figure figure) {
 		int figureID = figure.getFigureID();
 		for (int index = 0; index < gameLog.size(); index++) {
@@ -104,8 +144,13 @@ public class GameLog {
 		}
 		return false;
 	}
-	
 
+	/**
+	 * Retrieves the prior entry from the game log based on the number of steps.
+	 *
+	 * @param  steps  the number of steps to go back in the game log
+	 * @return        the prior entry from the game log, or a default entry if not available
+	 */
 	public String getPriorEntry(int steps) {
 		String entry = "DUMY: ID=000000, TYPE=000, COLOR=0, OLDX=0, OLDY=0, NEWX=0, NEWY=0";
 		if (gameLog.size() > steps-1) {
@@ -114,14 +159,31 @@ public class GameLog {
 		return entry;
 	}
 
+	/**
+	 * Retrieves the entry at the specified position in the game log.
+	 *
+	 * @param  position  the position of the entry to retrieve
+	 * @return           the entry at the specified position
+	 */
 	public String getEntryAt(int position) {
 		return gameLog.get(position);
 	}
 
+	/**
+	 * Returns the length of the gameLog.
+	 *
+	 * @return the length of the gameLog
+	 */
 	public int getLength() {
 		return gameLog.size();
 	}
-	
+
+	/**
+	 * Retrieves the figure ID from the given entry.
+	 *
+	 * @param  entry  the entry from which the figure ID is retrieved
+	 * @return        the figure ID retrieved from the entry
+	 */
 	public int getFigureIDfromEntry(String entry) {
 		if (entry != null) {
 			int int1 = convertCharToInt(entry.charAt(9));
@@ -134,7 +196,13 @@ public class GameLog {
 		}
 		return 0;
 	}
-	
+
+	/**
+	 * Converts a character to an integer.
+	 *
+	 * @param  input  the character to be converted
+	 * @return        the corresponding integer value
+	 */
 	private int convertCharToInt(char input) {
 		return input - ASCII_NUMBER_DIFF;
 	}
@@ -146,6 +214,12 @@ public class GameLog {
 		return -1;
 	}
 
+	/**
+	 * Calculates the figure type from the given entry.
+	 *
+	 * @param  entry  the string representation of the entry
+	 * @return        the figure type extracted from the entry
+	 */
 	public int getFigureTypefromEntry(String entry) {
 		if (entry != null) {
 			int int1 = convertCharToInt(entry.charAt(22));
@@ -155,7 +229,12 @@ public class GameLog {
 		}
 		return -1;
 	}
-	
+	/**
+	 * Calculates the X movement from the given entry.
+	 *
+	 * @param  entry  the entry string from which to calculate the X movement
+	 * @return        the X movement calculated from the entry string
+	 */
 //duplicate code to coordinateHelper
 	public int getXMovementfromEntry(String entry) {
 		int xMovement = 0;
@@ -168,7 +247,13 @@ public class GameLog {
 		}
 		return xMovement;
 	}
-	
+
+	/**
+	 * Returns the y-movement from the given entry string.
+	 *
+	 * @param  entry  the entry string from which to extract the y-movement
+	 * @return        the y-movement value calculated from the entry string
+	 */
 //duplicate code to coordinateHelper
 	public int getYMovementfromEntry(String entry) {
 		int yMovement = 0;
@@ -182,6 +267,12 @@ public class GameLog {
 		return yMovement;
 	}
 
+	/**
+	 * Retrieves the oldX value from the given entry.
+	 *
+	 * @param  entry  the entry from which to retrieve the oldX value
+	 * @return        the oldX value
+	 */
 	public int getOldXfromEntry(String entry) {
 		int oldX = 0;
 		if (entry != null) {
@@ -191,6 +282,12 @@ public class GameLog {
 		return oldX;
 	}
 
+	/**
+	 * Retrieves the new X value from the given entry.
+	 *
+	 * @param  entry  the entry from which to retrieve the new X value
+	 * @return        the new X value calculated from the given entry
+	 */
 	public int getNewXfromEntry(String entry) {
 		int newX = 0;
 		if (entry != null) {
@@ -200,6 +297,12 @@ public class GameLog {
 		return newX;
 	}
 
+	/**
+	 * Retrieves the old Y value from the given entry.
+	 *
+	 * @param  entry  the entry containing the value
+	 * @return        the old Y value
+	 */
 	public int getOldYfromEntry(String entry) {
 		int oldY = 0;
 		if (entry != null) {
@@ -209,6 +312,12 @@ public class GameLog {
 		return oldY;
 	}
 
+	/**
+	 * Returns the new Y value based on the given entry.
+	 *
+	 * @param  entry  the entry to calculate the new Y value from
+	 * @return        the new Y value
+	 */
 	public int getNewYfromEntry(String entry) {
 		int newY = 0;
 		if (entry != null) {
@@ -218,10 +327,21 @@ public class GameLog {
 		return newY;
 	}
 
+	/**
+	 * Clears the game log.
+	 *
+	 * @return None
+	 */
 	public void clearLog() {
 		gameLog.clear();
 	}
 
+	/**
+	 * Retrieves the notated entry at the specified index in the game log.
+	 *
+	 * @param  index  the index of the entry to retrieve
+	 * @return        the notated entry at the specified index
+	 */
 	public String getNotatedEntryAt(int index) {
 		String rawEntry = gameLog.get(index);
 		if (rawEntry.charAt(rawEntry.length()-1) == '2') {
@@ -242,10 +362,24 @@ public class GameLog {
 		String pieceIndicator = getPieceNotation(rawEntry);
 		return pieceIndicator + disambiguation + captureIndicator + destinationSquare + promotionIndicator;
 	}
+
+	/**
+	 * Returns the movement type from the given entry.
+	 *
+	 * @param  entry  the entry from which to extract the movement type
+	 * @return        the movement type as an integer
+	 */
 public int getMovementTypeFromEntry(String entry) {
 		char c = entry.charAt(entry.length()-1);
 		return (int) c - ASCII_NUMBER_DIFF;
 }
+
+	/**
+	 * Returns the promotion indicator based on the last character of the raw entry.
+	 *
+	 * @param  rawEntry the raw entry string
+	 * @return the promotion indicator ('B' for '3', 'N' for 4, 'Q' for 5, 'R' for 6, and empty string for other characters)
+	 */
 	private String getPromotionIndicator(String rawEntry) {
 		switch(rawEntry.charAt(rawEntry.length()-1)) {
 			case '3':
@@ -261,10 +395,22 @@ public int getMovementTypeFromEntry(String entry) {
 		}
 	}
 
+	/**
+	 * Returns a disambiguation string for the given raw entry.
+	 *
+	 * @param  rawEntry  the raw entry to get the disambiguation string for
+	 * @return           the disambiguation string
+	 */
 	private String getDisambiguationString(String rawEntry) {
 		return coordinateHelper.convertCoordsToNotationString(getOldXfromEntry(rawEntry), getOldYfromEntry(rawEntry));
 	}
 
+	/**
+	 * Generates the piece notation for a given raw entry.
+	 *
+	 * @param  rawEntry	the raw entry to convert
+	 * @return         	the piece notation corresponding to the raw entry
+	 */
 	private String getPieceNotation(String rawEntry) {
 		int figureType = this.getFigureTypefromEntry(rawEntry);
 		switch(figureType) {
@@ -290,14 +436,26 @@ public int getMovementTypeFromEntry(String entry) {
 		}
 	}
 
+	/**
+	 * Disables logging.
+	 */
 	public void disableLogging() {
 		loggingEnabled = false;
 	}
 
+	/**
+	 * Enables logging.
+	 *
+	 */
 	public void enableLogging() {
 		loggingEnabled = true;
 	}
 
+	/**
+	 * Removes the entry at the specified index from the game log.
+	 *
+	 * @param  index  the index of the entry to be removed
+	 */
 	public void removeEntry(int index) {
 		gameLog.remove(index);
 	}

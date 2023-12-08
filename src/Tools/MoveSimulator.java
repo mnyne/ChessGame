@@ -29,6 +29,11 @@ public class MoveSimulator {
 		simulatedLog.addEntry(gameLog.getPriorEntry(1));
 	}
 
+	/**
+	 * Simulates a move in the chess game.
+	 *
+	 * @param  simulatedTargetIndex  the index of the target position on the board
+	 */
 	public void simulateMove(int simulatedTargetIndex) {
 		int xCache = simulatedFigure.getXPosition();
 		int yCache = simulatedFigure.getYPosition();
@@ -41,6 +46,11 @@ public class MoveSimulator {
 	}
 	
 //todo: try to clean up that mess
+	/**
+	 * Generates a new ChessBoard object that contains only the figures of the player whose turn it is.
+	 *
+	 * @return   The ChessBoard object containing the player's figures.
+	 */
 	public ChessBoard simulatedPlayerFigures() {
 		ChessBoard simulatedPlayerFigures = new ChessBoard(MAX_FIGURES_PER_PLAYER);
 		int figureIndex = 0;
@@ -53,6 +63,11 @@ public class MoveSimulator {
 		return simulatedPlayerFigures;
 	}
 
+	/**
+	 * Generates the array of possible moves for the player.
+	 *
+	 * @return         	The array of possible player moves.
+	 */
 	public MovementArray possiblePlayerMoves() {
 		ChessBoard simulatedPlayerFigures = simulatedPlayerFigures();
 		MovementArray possiblePlayerMoves = new MovementArray();
@@ -70,6 +85,11 @@ public class MoveSimulator {
 		return possiblePlayerMoves;
 	}
 
+	/**
+	 * Retrieves the index of the simulated king on the board.
+	 *
+	 * @return 	the index of the simulated king
+	 */
 	public int getSimulatedKingIndex() {
 		int simulatedKingIndex = 0;
 		for (int boardIndex = 0; boardIndex < simulatedBoard.getLength(); boardIndex++) {

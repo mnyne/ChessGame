@@ -33,6 +33,12 @@ public class Sprite {
 		}
 	}
 
+	/**
+	 * Retrieves the sprite image for the given scale factor.
+	 *
+	 * @param  scaleFactor   the scale factor to apply to the sprite image
+	 * @return         		the ImageIcon representing the sprite image
+	 */
 	public ImageIcon getSprite(double scaleFactor) {
 		//todo: array
 		Image temp;
@@ -104,18 +110,39 @@ public class Sprite {
 		return sprite;
 	}
 
+	/**
+	 * Retrieves the sprite ID.
+	 *
+	 * @return the sprite ID
+	 */
 		public int getSpriteID() {
 		return spriteid;
 	}
 
+	/**
+	 * Retrieves the width of the raw sprite.
+	 *
+	 * @return the width of the raw sprite
+	 */
 	public int getRawSpriteWidth() {
 		ImageIcon temp = getSprite(1);
 		return temp.getIconWidth();
 	}
 
+	/**
+	 * Gets the width of the sprite.
+	 *
+	 * @return the width of the sprite
+	 */
 	public int getSpriteWidth() {
 		return spriteWidth;
 	}
+
+	/**
+	 * Retrieves the height of the sprite.
+	 *
+	 * @return the height of the sprite
+	 */
 	public int getSpriteHeight() {
 		return spriteHeight;
 	}

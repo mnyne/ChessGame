@@ -12,7 +12,16 @@ public class MovementHandler {
 	public MovementHandler() {
 
 	}
-	
+
+	/**
+	 * Generates a MovementArray containing the legal moves for the selectedFigure on the currentBoard.
+	 *
+	 * @param  currentBoard      the current ChessBoard
+	 * @param  selectedFigure    the selected Figure
+	 * @param  currentHalfMove   the current half move
+	 * @param  gameLog           the GameLog
+	 * @return                   the MovementArray containing the legal moves
+	 */
 	public MovementArray legalMoveArray(ChessBoard currentBoard, Figure selectedFigure, int currentHalfMove, GameLog gameLog) {
 		
 		MovementArray legalMoveArray = figureMovementArray(currentBoard, selectedFigure, currentHalfMove);
@@ -27,7 +36,16 @@ public class MovementHandler {
 	return legalMoveArray;
 	
 	}
-	
+
+	/**
+	 * Generates an array of movements that would put the king in check.
+	 *
+	 * @param  currentBoard   the current chess board
+	 * @param  selectedFigure the selected figure
+	 * @param  currentHalfMove the current half move
+	 * @param  gameLog        the game log
+	 * @return                the array of movements that would put the king in check
+	 */
 	public MovementArray kingInCheckArray(ChessBoard currentBoard, Figure selectedFigure, int currentHalfMove, GameLog gameLog) {
 		
 		MovementArray possibleMoveArray = figureMovementArray(currentBoard, selectedFigure, currentHalfMove);
@@ -46,6 +64,11 @@ public class MovementHandler {
 		return kingInCheckArray;
 	}
 
+	/**
+	 * Generates an empty `MovementArray` object with all indices set to `true`.
+	 *
+	 * @return  an empty `MovementArray` object with all indices set to `true`
+	 */
 	public MovementArray emptyTrueArray() {
 
 		MovementArray emptyTrueArray = new MovementArray();
@@ -57,14 +80,40 @@ public class MovementHandler {
 		return emptyTrueArray;
 	}
 
+	/**
+	 * Checks if the color of the selected figure is wrong or if the target color is wrong.
+	 *
+	 * @param  selectedFigure  the figure that was selected
+	 * @param  currentBoard    the current chess board
+	 * @param  targetIndex     the index of the target
+	 * @param  currentHalfMove the current half move
+	 * @return                 true if the color is wrong, false otherwise
+	 */
 	public boolean isWrongColor (Figure selectedFigure, ChessBoard currentBoard, int targetIndex, int currentHalfMove) {
 		return currentHalfMove % 2 != selectedFigure.getFigureColor() || isWrongTargetColor(selectedFigure, currentBoard, targetIndex, currentHalfMove);
 	}
 
+	/**
+	 * Checks if the selected figure's target color is wrong.
+	 *
+	 * @param  selectedFigure  the selected figure
+	 * @param  currentBoard    the current chess board
+	 * @param  targetIndex     the target index
+	 * @param  currentHalfMove the current half move
+	 * @return                 true if the target color is wrong, false otherwise
+	 */
 	private boolean isWrongTargetColor (Figure selectedFigure, ChessBoard currentBoard, int targetIndex, int currentHalfMove) {
 		return currentBoard.getFigureAtIndex(targetIndex) != null && currentBoard.getFigureAtIndex(targetIndex).getFigureColor() == selectedFigure.getFigureColor();
 	}
 
+	/**
+	 * Generates a movement array for a given chess figure on the current chess board.
+	 *
+	 * @param  currentBoard     the current chess board
+	 * @param  selectedFigure   the selected figure to generate the movement array for
+	 * @param  currentHalfMove  the current half move
+	 * @return                  the generated movement array
+	 */
 	public MovementArray figureMovementArray(ChessBoard currentBoard, Figure selectedFigure, int currentHalfMove) {
 		
 		MovementArray figureMovementArray = emptyTrueArray();
@@ -82,6 +131,12 @@ public class MovementHandler {
 		return figureMovementArray;
 	}
 
+	/**
+	 * Removes a pawn from the chessboard after an en passant move.
+	 *
+	 * @param  currentBoard  the current state of the chessboard
+	 * @param  gameLog       the log of previous game moves
+	 */
 	// move to separate capturing method, probably within Game.ChessBoard class
 	//probably easier to just do a Figures.Figure oldEntry = getFigureFromEntry and then use methods from within Figures.Figure class instead of doing all this
 	public void removePawnAfterEnPassant(ChessBoard currentBoard, GameLog gameLog) {
@@ -110,6 +165,12 @@ public class MovementHandler {
 
 	// move to separate capturing method, probably within Game.ChessBoard class
 	//probably easier to just do a Figures.Figure oldEntry = getFigureFromEntry and then use methods from within Figures.Figure class instead of doing all this
+	/**
+	 * Moves the tower after castling on the chess board.
+	 *
+	 * @param  currentBoard  the current state of the chess board
+	 * @param  gameLog       the log of the game
+	 */
 	public void moveTowerAfterCastling(ChessBoard currentBoard, GameLog gameLog) {
 		Figure selectedFigure;
 		String lastEntry = gameLog.getPriorEntry(1);
@@ -162,6 +223,12 @@ public class MovementHandler {
 	}
 
 	// move to Game.ChessBoard class
+	/**
+	 * Handles the situation when a pawn reaches the border of the chessboard.
+	 *
+	 * @param  currentBoard  the current state of the chessboard
+	 * @param  gameLog       the log of moves made in the game
+	 */
 	public void handlePawnAtBorder(ChessBoard currentBoard, GameLog gameLog) {
 		String lastEntry = gameLog.getPriorEntry(1);
 		int type = gameLog.getFigureTypefromEntry(lastEntry);
@@ -182,6 +249,13 @@ public class MovementHandler {
 	}
 
 	// move to Game.ChessBoard class, try to figure out how to work that into a GUI.GUI...
+	/**
+	 * Trades in a pawn for a queen on the chessboard.
+	 *
+	 * @param  pawn       the pawn to be traded in
+	 * @param  currentBoard  the current chessboard
+	 * @param  gameLog  the game log
+	 */
 	private void tradeInPawn(Figure pawn, ChessBoard currentBoard, GameLog gameLog) {
 		// code for selection maybe later, why would you want anything but a
 		// queen in 99% of cases...
