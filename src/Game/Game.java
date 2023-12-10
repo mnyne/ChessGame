@@ -253,7 +253,6 @@ public class Game {
 		//todo: figure out why this won't work if you run it with validity checks... probably something to do with player turns
 		makeMoveWithoutChecks(targetIndex, revertLog);
 		setSelectedFigureToNull();
-		//todo: highlight square last piece moved from
 	}
 
 

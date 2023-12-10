@@ -22,8 +22,10 @@ public class BoardPanel extends JPanel {
     boolean clicked = false;
     private int mouseX;
     private int mouseY;
+    private int revertIndex;
     Image boardImage;
     ImageIcon boardIcon;
+    private boolean moveUndone = false;
 
 
     public BoardPanel() {
@@ -83,6 +85,10 @@ public class BoardPanel extends JPanel {
                 showLegalMoves(g);
                 showCheckMoves(g);
             }
+        }
+        if(moveUndone) {
+            highlightLastSquare(g);
+            moveUndone = false;
         }
     }
 
@@ -144,6 +150,17 @@ public class BoardPanel extends JPanel {
                 g.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
             }
         }
+    }
+
+    /**
+     * Highlights the last square on the game board.
+     *
+     * @param  g  the graphics object used for drawing
+     */
+    private void highlightLastSquare(Graphics g) {
+        g.setColor(Color.BLUE);
+        int squareIndex = coordinateHelper.convertXYtoIndex(getGameLog().getOldXfromEntry(getGameLog().getEntryAt(revertIndex)), getGameLog().getOldYfromEntry(getGameLog().getEntryAt(revertIndex)));
+        g.drawRect(coordinateHelper.convertIndextoOpticalX(squareIndex)+ ((TILE_SIZE - MOVE_INDICATOR_SIZE) / 2),coordinateHelper.convertIndextoOpticalY(squareIndex)+ ((TILE_SIZE - MOVE_INDICATOR_SIZE) / 2), MOVE_INDICATOR_SIZE, MOVE_INDICATOR_SIZE);
     }
 
     private class BoardMouseListener extends MouseAdapter {
@@ -225,6 +242,8 @@ public class BoardPanel extends JPanel {
      */
     public void revertToMove(int index) {
         game.revertToMove(index);
+        revertIndex = index;
+        moveUndone = true;
         repaint();
     }
 
