@@ -149,6 +149,17 @@ public class CoordinateHelper {
 		return convertY;
 	}
 
+	public String convertXToNotation(int x) {
+		x += ASCII_LETTER_DIFF;
+		char xNotation = (char) x;
+		return "" + xNotation;
+	}
+
+	public String convertYToNotation(int y) {
+		int yNotation = BOARD_SIZE - y;
+		return "" + yNotation;
+	}
+
 	/**
 	 * Converts a notation string to an integer value.
 	 *

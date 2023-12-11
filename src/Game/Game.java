@@ -151,15 +151,23 @@ public class Game {
 				}
 				clearLogAfter = -1;
 			}
-			gameLog.logMove(selectedFigure, targetIndex);
+			gameLog.logMove(chessBoard, selectedFigure, selectedFigure.getFigureColor(), targetIndex);
 			chessBoard.moveFigure(selectedFigure,
 					coordinateHelper.convertIndextoX(targetIndex),
 					coordinateHelper.convertIndextoY(targetIndex), gameLog);
 			chessBoard.removeFigure(xCache, yCache);
 			updateHalfMoveClock();
-			selectedFigure.updateEnPassantEligibility(gameLog);
+			updateEnPassantEligibility(gameLog);
 			handleSpecialCasesAfterMove(gameLog);
 			currentHalfMove += 1;
+		}
+	}
+
+	public void updateEnPassantEligibility(GameLog gameLog) {
+		for (int i = 0; i<chessBoard.getLength(); i++) {
+			if (chessBoard.getFigureAtIndex(i) != null) {
+				chessBoard.getFigureAtIndex(i).updateEnPassantEligibility(gameLog);
+			}
 		}
 	}
 
@@ -172,7 +180,7 @@ public class Game {
 	public void makeMoveWithoutChecks(int targetIndex, GameLog inputLog) {
 		int xCache = selectedFigure.getXPosition();
 		int yCache = selectedFigure.getYPosition();
-			inputLog.logMove(selectedFigure, targetIndex);
+			inputLog.logMove(chessBoard, selectedFigure, selectedFigure.getFigureColor(), targetIndex);
 			chessBoard.moveFigure(selectedFigure,
 					coordinateHelper.convertIndextoX(targetIndex),
 					coordinateHelper.convertIndextoY(targetIndex), inputLog);

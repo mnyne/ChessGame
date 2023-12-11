@@ -5,8 +5,11 @@ import Figures.OrthodoxChessPieces.Queen;
 import Tools.CoordinateHelper;
 import Tools.MoveSimulator;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 public class MovementHandler {
-	
+
 	CoordinateHelper coordinateHelper = new CoordinateHelper();
 
 	public MovementHandler() {
@@ -16,43 +19,43 @@ public class MovementHandler {
 	/**
 	 * Generates a MovementArray containing the legal moves for the selectedFigure on the currentBoard.
 	 *
-	 * @param  currentBoard      the current ChessBoard
-	 * @param  selectedFigure    the selected Figure
-	 * @param  currentHalfMove   the current half move
-	 * @param  gameLog           the GameLog
-	 * @return                   the MovementArray containing the legal moves
+	 * @param currentBoard    the current ChessBoard
+	 * @param selectedFigure  the selected Figure
+	 * @param currentHalfMove the current half move
+	 * @param gameLog         the GameLog
+	 * @return the MovementArray containing the legal moves
 	 */
 	public MovementArray legalMoveArray(ChessBoard currentBoard, Figure selectedFigure, int currentHalfMove, GameLog gameLog) {
-		
+
 		MovementArray legalMoveArray = figureMovementArray(currentBoard, selectedFigure, currentHalfMove);
 		MovementArray kingInCheckArray = kingInCheckArray(currentBoard, selectedFigure, currentHalfMove, gameLog);
-		
+
 		for (int arrayIndex = 0; arrayIndex < legalMoveArray.getLength(); arrayIndex++) {
-			if(!kingInCheckArray.moveAtIndexAllowed(arrayIndex)) {
+			if (!kingInCheckArray.moveAtIndexAllowed(arrayIndex)) {
 				legalMoveArray.setIndexToFalse(arrayIndex);
 			}
 		}
-		
-	return legalMoveArray;
-	
+
+		return legalMoveArray;
+
 	}
 
 	/**
 	 * Generates an array of movements that would put the king in check.
 	 *
-	 * @param  currentBoard   the current chess board
-	 * @param  selectedFigure the selected figure
-	 * @param  currentHalfMove the current half move
-	 * @param  gameLog        the game log
-	 * @return                the array of movements that would put the king in check
+	 * @param currentBoard    the current chess board
+	 * @param selectedFigure  the selected figure
+	 * @param currentHalfMove the current half move
+	 * @param gameLog         the game log
+	 * @return the array of movements that would put the king in check
 	 */
 	public MovementArray kingInCheckArray(ChessBoard currentBoard, Figure selectedFigure, int currentHalfMove, GameLog gameLog) {
-		
+
 		MovementArray possibleMoveArray = figureMovementArray(currentBoard, selectedFigure, currentHalfMove);
 		MovementArray kingInCheckArray = emptyTrueArray();
-		
+
 		for (int arrayIndex = 0; arrayIndex < kingInCheckArray.getLength(); arrayIndex++) {
-			if(possibleMoveArray.moveAtIndexAllowed(arrayIndex)) {
+			if (possibleMoveArray.moveAtIndexAllowed(arrayIndex)) {
 				MoveSimulator moveSimulator = new MoveSimulator(currentBoard.deepCopy(), selectedFigure.deepCopy(), currentHalfMove, gameLog);
 				moveSimulator.simulateMove(arrayIndex);
 				if (moveSimulator.possiblePlayerMoves().moveAtIndexAllowed(moveSimulator.getSimulatedKingIndex())) {
@@ -60,14 +63,14 @@ public class MovementHandler {
 				}
 			}
 		}
-		
+
 		return kingInCheckArray;
 	}
 
 	/**
 	 * Generates an empty `MovementArray` object with all indices set to `true`.
 	 *
-	 * @return  an empty `MovementArray` object with all indices set to `true`
+	 * @return an empty `MovementArray` object with all indices set to `true`
 	 */
 	public MovementArray emptyTrueArray() {
 
@@ -83,42 +86,42 @@ public class MovementHandler {
 	/**
 	 * Checks if the color of the selected figure is wrong or if the target color is wrong.
 	 *
-	 * @param  selectedFigure  the figure that was selected
-	 * @param  currentBoard    the current chess board
-	 * @param  targetIndex     the index of the target
-	 * @param  currentHalfMove the current half move
-	 * @return                 true if the color is wrong, false otherwise
+	 * @param selectedFigure  the figure that was selected
+	 * @param currentBoard    the current chess board
+	 * @param targetIndex     the index of the target
+	 * @param currentHalfMove the current half move
+	 * @return true if the color is wrong, false otherwise
 	 */
-	public boolean isWrongColor (Figure selectedFigure, ChessBoard currentBoard, int targetIndex, int currentHalfMove) {
+	public boolean isWrongColor(Figure selectedFigure, ChessBoard currentBoard, int targetIndex, int currentHalfMove) {
 		return currentHalfMove % 2 != selectedFigure.getFigureColor() || isWrongTargetColor(selectedFigure, currentBoard, targetIndex, currentHalfMove);
 	}
 
 	/**
 	 * Checks if the selected figure's target color is wrong.
 	 *
-	 * @param  selectedFigure  the selected figure
-	 * @param  currentBoard    the current chess board
-	 * @param  targetIndex     the target index
-	 * @param  currentHalfMove the current half move
-	 * @return                 true if the target color is wrong, false otherwise
+	 * @param selectedFigure  the selected figure
+	 * @param currentBoard    the current chess board
+	 * @param targetIndex     the target index
+	 * @param currentHalfMove the current half move
+	 * @return true if the target color is wrong, false otherwise
 	 */
-	private boolean isWrongTargetColor (Figure selectedFigure, ChessBoard currentBoard, int targetIndex, int currentHalfMove) {
+	private boolean isWrongTargetColor(Figure selectedFigure, ChessBoard currentBoard, int targetIndex, int currentHalfMove) {
 		return currentBoard.getFigureAtIndex(targetIndex) != null && currentBoard.getFigureAtIndex(targetIndex).getFigureColor() == selectedFigure.getFigureColor();
 	}
 
 	/**
 	 * Generates a movement array for a given chess figure on the current chess board.
 	 *
-	 * @param  currentBoard     the current chess board
-	 * @param  selectedFigure   the selected figure to generate the movement array for
-	 * @param  currentHalfMove  the current half move
-	 * @return                  the generated movement array
+	 * @param currentBoard    the current chess board
+	 * @param selectedFigure  the selected figure to generate the movement array for
+	 * @param currentHalfMove the current half move
+	 * @return the generated movement array
 	 */
 	public MovementArray figureMovementArray(ChessBoard currentBoard, Figure selectedFigure, int currentHalfMove) {
-		
+
 		MovementArray figureMovementArray = emptyTrueArray();
 
-		if(selectedFigure != null) {
+		if (selectedFigure != null) {
 			for (int arrayIndex = 0; arrayIndex < figureMovementArray.getLength(); arrayIndex++) {
 				if (!selectedFigure.moveIsLegal(currentBoard, selectedFigure, arrayIndex)) {
 					figureMovementArray.setIndexToFalse(arrayIndex);
@@ -127,15 +130,15 @@ public class MovementHandler {
 				}
 			}
 		}
-		
+
 		return figureMovementArray;
 	}
 
 	/**
 	 * Removes a pawn from the chessboard after an en passant move.
 	 *
-	 * @param  currentBoard  the current state of the chessboard
-	 * @param  gameLog       the log of previous game moves
+	 * @param currentBoard the current state of the chessboard
+	 * @param gameLog      the log of previous game moves
 	 */
 	// move to separate capturing method, probably within Game.ChessBoard class
 	//probably easier to just do a Figures.Figure oldEntry = getFigureFromEntry and then use methods from within Figures.Figure class instead of doing all this
@@ -165,11 +168,12 @@ public class MovementHandler {
 
 	// move to separate capturing method, probably within Game.ChessBoard class
 	//probably easier to just do a Figures.Figure oldEntry = getFigureFromEntry and then use methods from within Figures.Figure class instead of doing all this
+
 	/**
 	 * Moves the tower after castling on the chess board.
 	 *
-	 * @param  currentBoard  the current state of the chess board
-	 * @param  gameLog       the log of the game
+	 * @param currentBoard the current state of the chess board
+	 * @param gameLog      the log of the game
 	 */
 	public void moveTowerAfterCastling(ChessBoard currentBoard, GameLog gameLog) {
 		Figure selectedFigure;
@@ -223,11 +227,12 @@ public class MovementHandler {
 	}
 
 	// move to Game.ChessBoard class
+
 	/**
 	 * Handles the situation when a pawn reaches the border of the chessboard.
 	 *
-	 * @param  currentBoard  the current state of the chessboard
-	 * @param  gameLog       the log of moves made in the game
+	 * @param currentBoard the current state of the chessboard
+	 * @param gameLog      the log of moves made in the game
 	 */
 	public void handlePawnAtBorder(ChessBoard currentBoard, GameLog gameLog) {
 		String lastEntry = gameLog.getPriorEntry(1);
@@ -249,12 +254,13 @@ public class MovementHandler {
 	}
 
 	// move to Game.ChessBoard class, try to figure out how to work that into a GUI.GUI...
+
 	/**
 	 * Trades in a pawn for a queen on the chessboard.
 	 *
-	 * @param  pawn       the pawn to be traded in
-	 * @param  currentBoard  the current chessboard
-	 * @param  gameLog  the game log
+	 * @param pawn         the pawn to be traded in
+	 * @param currentBoard the current chessboard
+	 * @param gameLog      the game log
 	 */
 	private void tradeInPawn(Figure pawn, ChessBoard currentBoard, GameLog gameLog) {
 		// code for selection maybe later, why would you want anything but a
@@ -302,5 +308,6 @@ public class MovementHandler {
 		}
 		gameLog.setMovementTypeForLastEntry(5);
 	}
+
 
 }

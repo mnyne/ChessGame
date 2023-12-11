@@ -3,6 +3,8 @@ package Game;
 import Figures.Figure;
 import Tools.CoordinateHelper;
 
+import java.util.ArrayList;
+
 public class ChessBoard {
 	CoordinateHelper coordinateHelper = new CoordinateHelper();
 	private Figure[] chessBoard;
@@ -14,8 +16,8 @@ public class ChessBoard {
 	/**
 	 * Adds a figure to the chess board at the specified index.
 	 *
-	 * @param  index   the index at which to add the figure
-	 * @param  figure  the figure to be added
+	 * @param index  the index at which to add the figure
+	 * @param figure the figure to be added
 	 */
 	public void addFigure(int index, Figure figure) {
 		chessBoard[index] = figure;
@@ -24,8 +26,8 @@ public class ChessBoard {
 	/**
 	 * Retrieves the figure at the specified index in the chess board.
 	 *
-	 * @param  index  the index of the figure to retrieve
-	 * @return        the figure at the specified index
+	 * @param index the index of the figure to retrieve
+	 * @return the figure at the specified index
 	 */
 	public Figure getFigureAtIndex(int index) {
 		return chessBoard[index];
@@ -43,9 +45,9 @@ public class ChessBoard {
 	/**
 	 * Retrieves the figure located at the specified coordinates.
 	 *
-	 * @param  x  the x-coordinate of the position
-	 * @param  y  the y-coordinate of the position
-	 * @return    the figure at the specified coordinates
+	 * @param x the x-coordinate of the position
+	 * @param y the y-coordinate of the position
+	 * @return the figure at the specified coordinates
 	 */
 	public Figure getFigureAt(int x, int y) {
 		int index = coordinateHelper.convertXYtoIndex(x, y);
@@ -55,9 +57,9 @@ public class ChessBoard {
 	/**
 	 * Retrieves the figure located at the specified coordinates.
 	 *
-	 * @param  x  the x-coordinate of the position
-	 * @param  y  the y-coordinate of the position
-	 * @return    the figure at the specified coordinates
+	 * @param x the x-coordinate of the position
+	 * @param y the y-coordinate of the position
+	 * @return the figure at the specified coordinates
 	 */
 	public Figure getClickedFigure(int x, int y) {
 		int index = coordinateHelper.convertOpticalXYtoIndex(x, y);
@@ -67,7 +69,7 @@ public class ChessBoard {
 	/**
 	 * Returns a string representation of the object.
 	 *
-	 * @return  a string representation of the object
+	 * @return a string representation of the object
 	 */
 	public String toString() {
 		String s = "";
@@ -86,14 +88,14 @@ public class ChessBoard {
 	/**
 	 * Moves a given figure to the specified target coordinates on the chessboard.
 	 *
-	 * @param  figure   the figure to be moved
-	 * @param  targetX  the target X coordinate
-	 * @param  targetY  the target Y coordinate
-	 * @param  gameLog  the game log to record the movement
+	 * @param figure  the figure to be moved
+	 * @param targetX the target X coordinate
+	 * @param targetY the target Y coordinate
+	 * @param gameLog the game log to record the movement
 	 */
 	public void moveFigure(Figure figure, int targetX, int targetY, GameLog gameLog) {
 		int index = coordinateHelper.convertXYtoIndex(targetX, targetY);
-		if(getFigureAtIndex(index) != null) {
+		if (getFigureAtIndex(index) != null) {
 			gameLog.setMovementTypeForLastEntry(1);
 		}
 		chessBoard[index] = figure;
@@ -104,8 +106,8 @@ public class ChessBoard {
 	/**
 	 * Removes a figure from the chess board at the specified coordinates.
 	 *
-	 * @param  xCache  the x-coordinate of the figure to be removed
-	 * @param  yCache  the y-coordinate of the figure to be removed
+	 * @param xCache the x-coordinate of the figure to be removed
+	 * @param yCache the y-coordinate of the figure to be removed
 	 */
 	public void removeFigure(int xCache, int yCache) {
 		int oldindex = coordinateHelper.convertXYtoIndex(xCache, yCache);
@@ -115,7 +117,7 @@ public class ChessBoard {
 	/**
 	 * Creates a deep copy of the ChessBoard object.
 	 *
-	 * @return         	Returns a new ChessBoard object that is a deep copy of the original.
+	 * @return Returns a new ChessBoard object that is a deep copy of the original.
 	 */
 	public ChessBoard deepCopy() {
 		ChessBoard copy = new ChessBoard(this.chessBoard.length);
@@ -135,7 +137,7 @@ public class ChessBoard {
 	 * @return None
 	 */
 	public void clearBoard() {
-		for (int i=0; i< chessBoard.length; i++) {
+		for (int i = 0; i < chessBoard.length; i++) {
 			this.chessBoard[i] = null;
 		}
 	}

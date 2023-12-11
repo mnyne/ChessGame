@@ -32,7 +32,7 @@ public class GameLog {
 	 * @param  figure       the figure object to be moved
 	 * @param  targetIndex  the index of the target position
 	 */
-	public void logMove(Figure figure, int targetIndex) {
+	public void logMove(ChessBoard chessBoard, Figure figure, int playerColor, int targetIndex) {
 		if (loggingEnabled) {
 			int oldX = figure.getXPosition();
 			int oldY = figure.getYPosition();
@@ -41,9 +41,10 @@ public class GameLog {
 			int color = figure.getFigureColor();
 			int newX = coordinateHelper.convertIndextoX(targetIndex);
 			int newY = coordinateHelper.convertIndextoY(targetIndex);
+			String disambiguationString = getDisambiguationString(chessBoard, figure, figure.getFigureColor(), figure.getFigureType(), targetIndex);
 			addEntry("Move: ID=" + id + ", Type=" + type + ", Color=" + color
 					+ ", OldX=" + oldX + ", OldY=" + oldY + ", NewX=" + newX
-					+ ", NewY=" + newY + ", MovementType = 0");
+					+ ", NewY=" + newY + ", Disambiguation=" + disambiguationString + ", MovementType = 0");
 		}
 	}
 
@@ -358,9 +359,22 @@ public class GameLog {
 		if (rawEntry.charAt(rawEntry.length()-1) == '1') {
 			captureIndicator = "x";
 		}
-		String disambiguation = getDisambiguationString(rawEntry);
+		String disambiguation = getDisambiguationFromEntry(rawEntry);
 		String pieceIndicator = getPieceNotation(rawEntry);
 		return pieceIndicator + disambiguation + captureIndicator + destinationSquare + promotionIndicator;
+	}
+
+	private String getDisambiguationFromEntry(String rawEntry) {
+		char chara = rawEntry.charAt(83);
+		char charb = rawEntry.charAt(84);
+		String disambiguation = "";
+			if (chara != '0') {
+			disambiguation += chara;
+		}
+		if (charb != '0') {
+			disambiguation += charb;
+		}
+		return disambiguation;
 	}
 
 	/**
@@ -395,14 +409,40 @@ public int getMovementTypeFromEntry(String entry) {
 		}
 	}
 
-	/**
-	 * Returns a disambiguation string for the given raw entry.
-	 *
-	 * @param  rawEntry  the raw entry to get the disambiguation string for
-	 * @return           the disambiguation string
-	 */
-	private String getDisambiguationString(String rawEntry) {
-		return coordinateHelper.convertCoordsToNotationString(getOldXfromEntry(rawEntry), getOldYfromEntry(rawEntry));
+
+	private String getDisambiguationString(ChessBoard chessBoard, Figure currentFigure, int playerColor, int figureType, int targetIndex) {
+		ArrayList<Figure> figures = getEligibleFigures(chessBoard, playerColor, figureType, targetIndex);
+		ArrayList<Integer> xCoordinates = new ArrayList<>();
+		ArrayList<Integer> yCoordinates = new ArrayList<>();
+		int xNotation = 0;
+		int yNotation = 0;
+		if(figures.size() == 1) {
+			return "00";
+		}
+		for (int i = 0; i < figures.size(); i++) {
+			xCoordinates.add(figures.get(i).getXPosition());
+			yCoordinates.add(figures.get(i).getYPosition());
+		}
+		if (differentCoordinates(yCoordinates)) {
+			yNotation = coordinateHelper.convertIndextoY(currentFigure.getCurrentIndex());
+			return "0" + coordinateHelper.convertYToNotation(yNotation);
+		} else if (differentCoordinates(xCoordinates)) {
+			xNotation = coordinateHelper.convertIndextoX(currentFigure.getCurrentIndex());
+			return coordinateHelper.convertXToNotation(xNotation) + "0";
+		} else {
+			yNotation = coordinateHelper.convertIndextoY(currentFigure.getCurrentIndex());
+			xNotation = coordinateHelper.convertIndextoX(currentFigure.getCurrentIndex());
+			return coordinateHelper.convertXToNotation(xNotation) + coordinateHelper.convertYToNotation(yNotation);
+		}
+	}
+
+	private boolean differentCoordinates(ArrayList<Integer> Coordinates) {
+		for (int i = 0; i < Coordinates.size(); i++) {
+			if (Coordinates.get(i) != Coordinates.get(0)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -458,5 +498,55 @@ public int getMovementTypeFromEntry(String entry) {
 	 */
 	public void removeEntry(int index) {
 		gameLog.remove(index);
+	}
+
+	/**
+	 * Generates an ArrayList of Figure objects based on the player color and figure type.
+	 *
+	 * @param  playerColor  the color of the player
+	 * @param  figureType   the type of the figure
+	 * @return              an ArrayList of Figure objects that match the player color and figure type
+	 */
+	public ArrayList<Figure> generateFigureArray(ChessBoard chessBoard, int playerColor, int figureType) {
+		ArrayList<Figure> figures = new ArrayList<>();
+		for (int i = 0; i < chessBoard.getLength(); i++) {
+			Figure currentFigure = chessBoard.getFigureAtIndex(i);
+			if (currentFigure != null && currentFigure.getFigureColor() == playerColor && currentFigure.getFigureType() == figureType) {
+				figures.add(currentFigure);
+			}
+		}
+		return figures;
+	}
+
+
+	public ArrayList<Figure> getEligibleFigures(ChessBoard chessBoard, int playerColor, int figureType, int targetIndex) {
+		MovementHandler movementHandler = new MovementHandler();
+
+		ArrayList<Figure> figures = generateFigureArray(chessBoard, playerColor, figureType);
+		ArrayList<Figure> eligibleFigures = new ArrayList<>();
+		for (int i = 0; i < figures.size(); i++) {
+			MovementArray legalMoveArray = movementHandler.legalMoveArray(chessBoard, figures.get(i), playerColor, this);
+			if (legalMoveArray.moveAtIndexAllowed(targetIndex)) {
+				eligibleFigures.add(figures.get(i));
+			}
+		}
+
+		return eligibleFigures;
+	}
+
+	public void logSimulatedMove(ChessBoard chessBoard, Figure figure, int figureColor, int targetIndex) {
+		if (loggingEnabled) {
+			int oldX = figure.getXPosition();
+			int oldY = figure.getYPosition();
+			String id = padToSixDigits(figure.getFigureID());
+			String type = padToThreeDigits(figure.getFigureType());
+			int color = figure.getFigureColor();
+			int newX = coordinateHelper.convertIndextoX(targetIndex);
+			int newY = coordinateHelper.convertIndextoY(targetIndex);
+			String disambiguationString = "00";
+			addEntry("Move: ID=" + id + ", Type=" + type + ", Color=" + color
+					+ ", OldX=" + oldX + ", OldY=" + oldY + ", NewX=" + newX
+					+ ", NewY=" + newY + ", Disambiguation=" + disambiguationString + ", MovementType = 0");
+		}
 	}
 }
