@@ -77,7 +77,7 @@ public class BoardPanel extends JPanel {
         } else {
             drawBoardTiles(g);
         }
-
+        updateMoveList();
         drawFigures(g);
         if(clicked) {
             highlightSelection(g);

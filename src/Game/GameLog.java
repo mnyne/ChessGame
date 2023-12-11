@@ -120,14 +120,14 @@ public class GameLog {
 	public void logMoveFromFen(Figure figure, int startIndex) {
 		int oldX = coordinateHelper.convertIndextoX(startIndex);
 		int oldY = coordinateHelper.convertIndextoY(startIndex);
-		int id = figure.getFigureID();
-		int type = figure.getFigureType();
+		String id = padToSixDigits(figure.getFigureID());
+		String type = padToThreeDigits(figure.getFigureType());
 		int color = figure.getFigureColor();
 		int newX = figure.getXPosition();
 		int newY = figure.getYPosition();
 		addEntry("Move: ID=" + id + ", Type=" + type + ", Color=" + color
 				+ ", OldX=" + oldX + ", OldY=" + oldY + ", NewX=" + newX
-				+ ", NewY=" + newY);
+				+ ", NewY=" + newY + ", Disambiguation=" + "00" + ", MovementType = 0");
 	}
 
 	/**
@@ -423,10 +423,10 @@ public int getMovementTypeFromEntry(String entry) {
 			xCoordinates.add(figures.get(i).getXPosition());
 			yCoordinates.add(figures.get(i).getYPosition());
 		}
-		if (differentCoordinates(yCoordinates)) {
+		if (differentCoordinates(yCoordinates) && !differentCoordinates(xCoordinates)) {
 			yNotation = coordinateHelper.convertIndextoY(currentFigure.getCurrentIndex());
 			return "0" + coordinateHelper.convertYToNotation(yNotation);
-		} else if (differentCoordinates(xCoordinates)) {
+		} else if (differentCoordinates(xCoordinates) && !differentCoordinates(yCoordinates)) {
 			xNotation = coordinateHelper.convertIndextoX(currentFigure.getCurrentIndex());
 			return coordinateHelper.convertXToNotation(xNotation) + "0";
 		} else {

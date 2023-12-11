@@ -219,7 +219,12 @@ public class Game {
 			chessBoard = fenSetup.generateChessBoard();
 			currentHalfMove = fenSetup.getCurrentHalfMove();
 			halfMoveClock = fenSetup.getHalfMoveClock();
-			gameLog = fenSetup.getGameLog();
+			gameLog = new GameLog();
+
+			if (fenSetup.hasEnPassant()) {
+				selectedFigure = fenSetup.getEnPassantPawn();
+				makeMoveWithoutChecks(fenSetup.getTargetSquare(), gameLog);
+			}
 		}
 		//if(gameType ==1) {
 		//	chessBoard = chessBoard.generateStartingGrid();
@@ -236,7 +241,7 @@ public class Game {
 		GameLog revertLog = new GameLog();
 		chessBoard.clearBoard();
 		chessBoard = fenSetup.generateChessBoard();
-		currentHalfMove = 2;
+		currentHalfMove = fenSetup.getCurrentHalfMove();
 		gameLog.disableLogging();
 
 		for (int i = 0; i<=moveIndex; i++) {

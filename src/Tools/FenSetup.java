@@ -24,6 +24,9 @@ public class FenSetup {
 	private String enPassantTarget = "-";
 	private int halfMoveClock = 0;
 	private int fullMoveCounter = 1;
+	private int targetSquare;
+	private boolean enPassant = false;
+	Figure enPassantPawn;
 	
 	public FenSetup() {
 
@@ -63,6 +66,9 @@ public class FenSetup {
 		int currentHalfMove = fullMoveCounter * 2;
 		if(toMoveNotation.charAt(0) == 'b') {
 			currentHalfMove += 1;
+		}
+		if(enPassant) {
+			currentHalfMove -= 1;
 		}
 		return currentHalfMove;
 	}
@@ -174,7 +180,19 @@ public class FenSetup {
 				chessBoard.addFigure(i, generateFigure(i, figureChar[i]));
 			}
 		}
+		if(!enPassantTarget.equals("-")) {
+			int cacheX = enPassantPawn.getXPosition();
+			int cacheY = enPassantPawn.getYPosition();
+			targetSquare = coordinateHelper.convertXYtoIndex(cacheX, cacheY);
+			chessBoard.moveFigure(enPassantPawn, gameLog.getOldXfromEntry(gameLog.getPriorEntry(1)), gameLog.getOldYfromEntry(gameLog.getPriorEntry(1)), gameLog);
+			chessBoard.removeFigure(cacheX, cacheY);
+			enPassant = true;
+		}
 		return chessBoard;
+	}
+
+	public boolean hasEnPassant() {
+		return enPassant;
 	}
 
 	/**
@@ -253,6 +271,7 @@ public class FenSetup {
 
 				break;
 			default:
+				rook.setMovedStatus();
 				break;
 		}
 	}
@@ -264,12 +283,13 @@ public class FenSetup {
 	 * @param  figureColor  the color of the figure
 	 */
 	private void setEnPassantEligibility(Figure pawn, int figureColor) {
+
 		int pawnX = pawn.getXPosition();
 		int pawnY = pawn.getYPosition();
 		int targetX = coordinateHelper.convertNotationToX(enPassantTarget);
 		int targetY = coordinateHelper.convertNotationToY(enPassantTarget);
 		if (pawnX == targetX && (pawnY-1 == targetY || pawnY+1 == targetY)) {
-			pawn.setEnPassantStatus(true);
+			enPassantPawn = pawn;
 			addPawnMoveToLog(pawn, figureColor, targetX, targetY);
 		}
 	}
@@ -382,5 +402,13 @@ public class FenSetup {
 			charArray[index] = figurePlacementData.charAt(index);
 		}
 		return charArray;
+	}
+
+	public Figure getEnPassantPawn() {
+		return enPassantPawn;
+	}
+
+	public int getTargetSquare() {
+		return targetSquare;
 	}
 }
