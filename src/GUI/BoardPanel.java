@@ -5,11 +5,14 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
+
 import Figures.Figure;
 import Game.Game;
 import Game.MovementArray;
 import Game.GameLog;
 import Tools.CoordinateHelper;
+import Tools.PGNParser;
 
 public class BoardPanel extends JPanel {
     private final int BOARD_LENGTH = 8;
@@ -23,6 +26,7 @@ public class BoardPanel extends JPanel {
     private int mouseX;
     private int mouseY;
     private int revertIndex;
+    private boolean PGN = false;
     Image boardImage;
     ImageIcon boardIcon;
     private boolean moveUndone = false;
@@ -254,6 +258,10 @@ public class BoardPanel extends JPanel {
      */
     public GameLog getGameLog() {
         return game.getGameLog();
+    }
+
+    public void importPGN(ArrayList<String[]> parsedPGN, PGNParser parser) {
+        game.initializeGame(parsedPGN, parser);
     }
 }
 

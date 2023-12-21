@@ -3,6 +3,9 @@ package Game;
 import Figures.Figure;
 import Tools.CoordinateHelper;
 import Tools.FenSetup;
+import Tools.PGNParser;
+
+import java.util.ArrayList;
 
 public class Game {
 	
@@ -18,6 +21,7 @@ public class Game {
 	private MovementArray legalMoveArray;
 	private int gameType;
 	private int clearLogAfter = -1;
+	private boolean PGNImport = true;
 
 	FenSetup fenSetup = new FenSetup();
 	MovementHandler movementHandler = new MovementHandler();
@@ -229,7 +233,19 @@ public class Game {
 		//if(gameType ==1) {
 		//	chessBoard = chessBoard.generateStartingGrid();
 		//}
+	}
 
+	public void initializeGame(ArrayList<String[]> parsedPGN, PGNParser parser) {
+		chessBoard.clearBoard();
+		chessBoard = fenSetup.generateChessBoard();
+		currentHalfMove = fenSetup.getCurrentHalfMove();
+		for (int i = 0; i< parsedPGN.size(); i++) {
+			makeMoveFromPGN(parsedPGN.get(i), parser);
+		}
+	}
+
+	private void makeMoveFromPGN(String[] moveInfo, PGNParser parser) {
+		//code for converting PGN to moves
 	}
 
 	/**

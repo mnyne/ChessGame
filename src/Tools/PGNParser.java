@@ -1,3 +1,5 @@
+package Tools;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,10 +54,6 @@ public class PGNParser {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        for (int i = 0; i < gamesInPGN.size(); i++) {
-            System.out.println(gamesInPGN.get(i));
-        }
-        System.out.println("Nr. of games: " + gamesInPGN.size());
     }
 
 
@@ -81,7 +79,6 @@ public class PGNParser {
     }
 
     private String removeTurnNumbers(String moves) {
-        System.out.println(moves);
         StringTokenizer tokenize = new StringTokenizer(moves, ". ");
         StringBuilder finalString = new StringBuilder();
         while (tokenize.hasMoreTokens()) {
@@ -91,5 +88,49 @@ public class PGNParser {
             }
         }
         return finalString.toString();
+    }
+
+    public String[] splitMoveIntoSegments(String entry)  {
+        //e4 Qe4xd5 gxf3
+        entry = entry.replace("+", "");
+        entry = entry.replace("#", "");
+
+        String castling = "";
+        if(entry.equals("O-O")) {
+            castling = "kingside";
+        } else if(entry.equals("O-O-O")) {
+            castling = "queenside";
+        }
+
+        char fig;
+
+        char TS1 = entry.charAt(entry.length()-2);
+        char TS2 = entry.charAt(entry.length()-1);
+        entry = entry.substring(0, entry.length()-2);
+
+        if(!entry.isEmpty() && Character.isUpperCase(entry.charAt(0))) {
+            fig = entry.charAt(0);
+            entry = entry.substring(1);
+        } else {
+            fig = 'P';
+        }
+        entry = entry.replaceAll("x", "");
+        String identifier = entry;
+
+        //0 figure, 1 target, 2 identifier, 3 castling
+
+        if(!castling.isEmpty()) {
+            fig = 'K';
+            TS1 = ' ';
+            TS2 = ' ';
+            identifier = "";
+        }
+
+        String[] move = new String[4];
+        move[0] = "" + fig;
+        move[1] = "" + TS1 + "" + TS2;
+        move[2] = identifier;
+        move[3] = castling;
+        return move;
     }
 }

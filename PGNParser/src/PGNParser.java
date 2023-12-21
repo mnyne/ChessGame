@@ -120,6 +120,13 @@ public class PGNParser {
         entry = entry.replaceAll("x", "");
         String identifier = entry;
 
+        if(!castling.isEmpty()) {
+            fig = 'K';
+            TS1 = ' ';
+            TS2 = ' ';
+            identifier = "";
+        }
+
         //0 figure, 1 target, 2 identifier, 3 castling
 
 

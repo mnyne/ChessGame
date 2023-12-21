@@ -1,7 +1,10 @@
 package GUI;
 
+import Tools.PGNParser;
+
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 import static javax.swing.SwingConstants.NORTH;
 
@@ -9,6 +12,7 @@ import static javax.swing.SwingConstants.NORTH;
 public class GUI extends JFrame {
     private final int BOARD_LENGTH = 8;
     private final int TILE_SIZE = 96;
+    private PGNParser parser = new PGNParser("Kasparov.pgn");
 
     public GUI() {
 
@@ -46,6 +50,15 @@ public class GUI extends JFrame {
 
 
         boardPanel.setMovePanel(movePanel);
+
+        //test
+        ArrayList<String> pgnMoves = parser.getMovesFromGame(0);
+        ArrayList<String[]> splitMoves = new ArrayList<String[]>();
+        for (int i = 0; i<pgnMoves.size(); i++) {
+            splitMoves.add(parser.splitMoveIntoSegments(pgnMoves.get(i)));
+        }
+        boardPanel.importPGN(splitMoves, parser);
+
         add(boardPanel, boardPanelConstraints);
         JScrollPane scrollableMovePanel = new JScrollPane(movePanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         scrollableMovePanel.setPreferredSize(new Dimension(4*TILE_SIZE, 8*TILE_SIZE));

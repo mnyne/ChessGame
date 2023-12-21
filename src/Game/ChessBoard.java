@@ -4,6 +4,7 @@ import Figures.Figure;
 import Tools.CoordinateHelper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ChessBoard {
 	CoordinateHelper coordinateHelper = new CoordinateHelper();
@@ -139,6 +140,33 @@ public class ChessBoard {
 	public void clearBoard() {
 		for (int i = 0; i < chessBoard.length; i++) {
 			this.chessBoard[i] = null;
+		}
+	}
+
+	public ArrayList<Figure> search(int figureType, int figureColor) {
+		ArrayList<Figure> figures = new ArrayList<Figure>();
+		for (int i = 0; i< chessBoard.length; i++) {
+			Figure fig = getFigureAtIndex(i);
+			if (fig != null && fig.getFigureColor() == figureColor && fig.getFigureType() == figureType) {
+				figures.add(fig);
+			}
+		}
+		return figures;
+	}
+
+	public ArrayList<Figure> search(String all, int figureColor) {
+		if (all.equals("all")) {
+			ArrayList<Figure> figures = new ArrayList<Figure>();
+			for (int i = 0; i < chessBoard.length; i++) {
+				Figure fig = getFigureAtIndex(i);
+				if (fig != null && fig.getFigureColor() == figureColor) {
+					figures.add(fig);
+				}
+			}
+			return figures;
+		}
+		else {
+			return null;
 		}
 	}
 }
