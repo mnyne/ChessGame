@@ -337,7 +337,7 @@ public class MovementValidityChecker {
 		}
 		return false;
 	}
-
+//todo: squares between king and rook cant be under attack, more movesimulator antics
 	/**
 	 * Determines if the current figure can castle kingside.
 	 *

@@ -12,7 +12,7 @@ import static javax.swing.SwingConstants.NORTH;
 public class GUI extends JFrame {
     private final int BOARD_LENGTH = 8;
     private final int TILE_SIZE = 96;
-    private PGNParser parser = new PGNParser("Kasparov.pgn");
+    private PGNParser parser = new PGNParser("Carlsen.pgn");
 
     public GUI() {
 
