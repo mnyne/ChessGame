@@ -1,4 +1,4 @@
-# Game.Game
+# ChessGame
 
 ABANDONED PROJECT
 
