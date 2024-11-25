@@ -6,4 +6,4 @@ A simple chess game for two players. Does not come with an AI or anything, but h
 
 Old Chess pieces by Lucas312 over at OpenGameArt.org, currently used design by Deja View at itch.io. Kudos!
 
-Comments courtesy of AI, code is hand-written.
+Documentation courtesy of AI, actual code is hand-written.
